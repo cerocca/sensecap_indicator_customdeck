@@ -243,3 +243,5 @@ static void ui_event_screen_xxx(lv_event_t *e) {
 - [ ] **CHANGELOG.md** aggiornato (sezione `[Unreleased]`)
 - [ ] **README.md** aggiornato se cambiano schermate o funzionalità
 - [ ] **Caricare CLAUDE.md aggiornato nel Project** su Claude.ai (sostituire il file esistente)
+- [ ] Al momento della release: rinomina `[Unreleased]` in `[x.y.z] — data`,
+      crea tag Git: `git tag -a vx.y.z -m "Release x.y.z" && git push origin vx.y.z`
