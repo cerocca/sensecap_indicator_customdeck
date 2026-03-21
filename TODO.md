@@ -24,6 +24,8 @@
 - [ ] LocalServer Dashboard: valutare aggiunta top 3 processi per CPU e/o RAM (via Glances API /api/4/processlist)
 - [ ] Uniformare documentazione: scegliere tutto italiano o tutto inglese
       (attualmente CLAUDE.md e TODO.md in italiano, README.md e SETUP.md in inglese)
+- [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
+      a .gitignore (consigliato) o pulirlo da riferimenti personali
 - [ ] Valutare sostituzione schermata AI con schermata Weather (meteo locale):
       OpenWeatherMap API gratuita, icone meteo via font custom LVGL o image array,
       temperatura attuale + condizione + umidità + vento + previsione 3-5 giorni
