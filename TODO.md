@@ -1,11 +1,12 @@
 # SenseCAP Indicator Deck — TODO
 
 ## In corso
-- [ ] Restart firmware da base pulita (indicator_basis)
+- [ ] Screen Hue — toggle ON/OFF + slider luminosità
 
 ## Release 0.1
-- [ ] Navigazione circolare bidirezionale (tutte le schermate vuote)
-- [ ] Screen Settings — tab Wi-Fi + Hue + Server + Proxy + AI con NVS
+- [x] Restart firmware da base pulita (indicator_basis)
+- [x] Navigazione circolare bidirezionale (tutte le schermate vuote)
+- [x] Screen Settings — tab Wi-Fi + Hue + Server + Proxy + AI con NVS
 - [ ] Screen Hue — toggle ON/OFF + slider luminosità
 - [ ] Screen Sibilla — Glances + Uptime Kuma via proxy
 - [ ] Screen Launcher — 4 pulsanti proxy Mac
@@ -20,7 +21,15 @@
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico
 - [ ] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
 - [ ] Sistema configurazione per nuovi utenti (quali schermate abilitare)
+- [ ] Sibilla: valutare aggiunta top 3 processi per CPU e/o RAM (via Glances API /api/4/processlist)
 
 ## Futuro (hardware Grove richiesto)
-- [ ] Microfono + speaker Grove → schermata AI funzionale
-- [ ] Wake word o tap → microfono → Whisper → Claude API → TTS
+
+- [ ] Valutare scheda esterna XIAO (ESP32-S3 o RP2040) come coprocessore audio:
+      microfono + speaker I2S gestiti da XIAO, comunicazione con SI via Grove UART.
+      XIAO → Grove 2 (UART) → RP2040 SI → UART interno → ESP32-S3 → Claude API.
+      Approccio analogo all'architettura interna SI (RP2040 come bridge sensori).
+
+**Nota:** Visti i limiti hardware del SI (GPIO Grove su RP2040,
+conflitto Wi-Fi/BT per audio), la schermata AI potrebbe essere rimossa
+in una release futura. Per ora resta come placeholder tastiera touch + Claude API via HTTPS.

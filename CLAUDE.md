@@ -4,12 +4,16 @@
 Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).  
 Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).  
 Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)  
-Path locale: `/Users/ciru/sensecap_indicator_cirutech`  
+Path locale: `/Users/ciru/sensecap_indicator_cirutech`
 Build:
 ```bash
 source ~/esp/esp-idf/export.sh   # ogni nuovo terminale
-cd sensecap_indicator_deck && idf.py build flash monitor
+cd firmware && idf.py build flash monitor
 ```
+Porta seriale: `/dev/cu.usbserial-1110`
+Flash esplicito: `idf.py -p /dev/cu.usbserial-1110 flash monitor`
+
+> **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build` per far rilevare i nuovi file a CMake.
 
 ---
 
@@ -22,6 +26,7 @@ cd sensecap_indicator_deck && idf.py build flash monitor
 5. Buffer HTTP: minimo **2048 bytes** (1024 causa parse failure silenzioso su `/api/4/fs`).
 6. Struct grandi in task FreeRTOS: sempre `static` — evita stack overflow.
 7. Pattern reference per nuovi task HTTP polling: `indicator_glances.c`.
+8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`) — non inizializzare tutto al boot nel main task.
 
 ---
 
@@ -31,7 +36,7 @@ cd sensecap_indicator_deck && idf.py build flash monitor
 Swipe LEFT = avanti, swipe RIGHT = indietro.
 
 ```
-clock ↔ sensors ↔ settings ↔ hue ↔ sibilla ↔ launcher ↔ ai ↔ (torna a clock)
+clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai ↔ (torna a clock)
 ```
 
 ### Schermate
@@ -39,7 +44,7 @@ clock ↔ sensors ↔ settings ↔ hue ↔ sibilla ↔ launcher ↔ ai ↔ (torn
 |---|---|---|---|
 | 1 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 2 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità |
-| 3 | `screen_settings` | Custom (sostituisce originale Seeed) | Tab: Wi-Fi · Hue · Server · Proxy |
+| 3 | `screen_settings_custom` | Custom (sostituisce originale Seeed) | Tab: Wi-Fi · Hue · Server · Proxy · AI |
 | 4 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
 | 5 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
 | 6 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
@@ -47,23 +52,28 @@ clock ↔ sensors ↔ settings ↔ hue ↔ sibilla ↔ launcher ↔ ai ↔ (torn
 
 ### Struttura file
 ```
-sensecap_indicator_deck/
-├── CMakeLists.txt                  # EXTRA_COMPONENT_DIRS = ../components
-├── sdkconfig.defaults              # fix PSRAM XIP + mbedTLS dynamic — NON toccare
-├── partitions.csv
-└── main/
-    ├── app_main.c
-    ├── ui/
-    │   ├── ui_manager.c/.h         # navigazione schermate
-    │   ├── screen_settings.c/.h    # settings custom (Wi-Fi + config)
-    │   ├── screen_hue.c/.h
-    │   ├── screen_sibilla.c/.h
-    │   ├── screen_launcher.c/.h
-    │   └── screen_ai.c/.h
-    └── model/
-        ├── indicator_glances.c/.h
-        ├── indicator_uptime_kuma.c/.h
-        └── indicator_hue.c/.h
+/Users/ciru/sensecap_indicator_cirutech/   ← root repo
+├── CLAUDE.md
+├── TODO.md
+├── README.md
+├── sdkconfig.defaults                     # fix PSRAM XIP + mbedTLS dynamic — NON toccare
+└── firmware/                              ← codice firmware
+    ├── CMakeLists.txt                     # EXTRA_COMPONENT_DIRS = ../components
+    ├── partitions.csv
+    └── main/
+        ├── app_main.c
+        ├── app_config.h                   # defaults NVS + chiavi NVS (NON usare NVS key > 15 char)
+        ├── ui/
+        │   ├── ui_manager.c/.h            # navigazione schermate + init tutte le custom
+        │   ├── screen_settings_custom.c/.h  # settings custom (5 tab: Wi-Fi·Hue·Server·Proxy·AI)
+        │   ├── screen_hue.c/.h
+        │   ├── screen_sibilla.c/.h
+        │   ├── screen_launcher.c/.h
+        │   └── screen_ai.c/.h
+        └── model/
+            ├── indicator_glances.c/.h
+            ├── indicator_uptime_kuma.c/.h
+            └── indicator_hue.c/.h
 ```
 
 ---
@@ -76,18 +86,21 @@ Tutti i valori configurabili (IP, porte, API key, nomi luci, label launcher) son
 
 ## Schermata 3 — Settings (custom)
 
-Sostituisce la schermata settings originale Seeed nella navigazione.  
-Layout: **tab orizzontali** nella parte alta, contenuto sotto.
+File: `screen_settings_custom.c/.h` — sostituisce la schermata settings originale Seeed nella navigazione.
+Layout: **tabview LVGL** (44px header), 5 tab orizzontali.
 
 | Tab | Contenuto |
 |---|---|
-| **Wi-Fi** | SSID + password (comportamento originale Seeed preservato) |
-| **Hue** | IP Bridge, API key, nomi 4 luci |
-| **Server** | IP Sibilla, porta Glances |
-| **Proxy** | IP + porta proxy Mac |
-| **AI** | Claude API key, endpoint (per uso futuro con hardware Grove) |
+| **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna a settings_custom via `ui_screen_last`) |
+| **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
+| **Server** | IP Sibilla, porta Glances → NVS |
+| **Proxy** | IP + porta proxy Mac → NVS |
+| **AI** | Claude API key, endpoint → NVS |
 
-Valori modificati salvati in **NVS** e letti all'avvio.
+- Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
+- Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
+- `ui_screen_last` in `ui.c` è **non-static** (necessario per permettere il return da `ui_screen_wifi`).
+- Tutti i default e le chiavi NVS centralizzati in `main/app_config.h` (chiavi max 15 char).
 
 ---
 
@@ -168,9 +181,15 @@ y=278+i×22  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non u
 `sdkconfig` ha precedenza su `sdkconfig.defaults`. Se corrotto (device si resetta in loop standalone):
 ```bash
 cd sensecap_indicator_deck && rm sdkconfig && idf.py build
-grep -E "SPIRAM_XIP_FROM_PSRAM|MEMPROT_FEATURE|MBEDTLS_DYNAMIC_BUFFER" sdkconfig
+grep -E "SPIRAM_XIP_FROM_PSRAM|MEMPROT_FEATURE|MBEDTLS_DYNAMIC_BUFFER|MAIN_TASK_STACK|UART_ISR" sdkconfig
 ```
-Valori attesi: `XIP_FROM_PSRAM=y` · `MEMPROT_FEATURE=n` · `DYNAMIC_BUFFER=y`
+Valori attesi: `XIP_FROM_PSRAM=y` · `MEMPROT_FEATURE=n` · `DYNAMIC_BUFFER=y` · `MAIN_TASK_STACK_SIZE=16384` · `UART_ISR_IN_IRAM=y` · `STA_DISCONNECTED_PM_ENABLE=n`
+
+### Bug Seeed — VIEW_EVENT_WIFI_ST null-check (fixato)
+In `indicator_view.c`, il handler `VIEW_EVENT_WIFI_ST` lasciava `p_src = NULL` quando
+`p_st->is_connected = true` ma `wifi_rssi_level_get()` restituiva un valore fuori da {1,2,3}.
+La chiamata `lv_img_set_src(obj, NULL)` causava `LoadProhibited` in `handler_execute`.
+Fix applicato: guard `if (p_src != NULL)` prima dei 7 `lv_img_set_src`.
 
 ### TLS simultanee — heap ESP32
 Default mbedTLS alloca 16KB+4KB per connessione → `mbedtls_ssl_setup -0x7F00` (heap esaurito).  
@@ -185,6 +204,52 @@ Fix in `sdkconfig.defaults`:
 CONFIG_SPIRAM_XIP_FROM_PSRAM=y
 CONFIG_ESP_SYSTEM_MEMPROT_FEATURE=n
 ```
+
+### Stack overflow main task — LVGL object creation
+Init di 5+ schermate LVGL custom crea 60+ oggetti con call chain profonde → silent stack overflow.
+Il crash si manifesta più tardi (backtrace corrotto, `VIEW_EVENT_DISPLAY_CFG`, `IllegalInstruction`) — non al momento della vera causa.
+Fix in `sdkconfig.defaults`: `CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384` (8192 non sufficiente per 5 schermate custom).
+**Regola**: schermate con molti widget usano il pattern lazy init (vedi sotto).
+
+### Lazy init — schermate pesanti (pattern obbligatorio)
+Schermate con molti oggetti LVGL non vanno inizializzate completamente al boot nel main task.
+Pattern: split `screen_xxx_init()` in due funzioni:
+- `screen_xxx_init()` — lightweight: solo `lv_obj_create(NULL)` + stile base. Chiamata al boot da `ui_manager_init()`. Garantisce che il puntatore sia non-NULL (necessario per `_ui_screen_change` da handler Seeed).
+- `screen_xxx_populate()` — heavy: tabview, widget, eventi. Chiamata lazily al primo swipe verso la schermata.
+
+Pattern in `ui_manager.c`:
+```c
+static bool s_xxx_populated = false;
+static void ensure_xxx_populated(void) {
+    if (!s_xxx_populated) { screen_xxx_populate(); s_xxx_populated = true; }
+}
+```
+La populate avviene nello stesso event dispatch del gesture → prima che `lv_timer_handler` esegua l'animazione → contenuto visibile al primo frame.
+Per gestire la navigate da Seeed (handler registrato prima del nostro): aggiungere un handler su `ui_screen_sensor` in `ui_manager_init()` che chiama solo `ensure_xxx_populated()` senza navigare. Il handler Seeed (che naviga) è già registrato e gira per primo; il nostro popola nello stesso tick.
+
+### Wi-Fi power management crash (esp_phy_enable / ppTask / pm_dream)
+Crash in `esp_phy_enable → pm_dream → ppTask` durante wake dal sleep mode Wi-Fi.
+Fix obbligatorio in **due posti**:
+1. `sdkconfig.defaults`: `CONFIG_ESP_WIFI_STA_DISCONNECTED_PM_ENABLE=n`
+2. `indicator_wifi.c`: `esp_wifi_set_ps(WIFI_PS_NONE)` dopo **ogni** `esp_wifi_start()` (scan, connect, reconnect, init con/senza SSID)
+
+```c
+ESP_ERROR_CHECK(esp_wifi_start());
+esp_wifi_set_ps(WIFI_PS_NONE);   // obbligatorio — crash senza
+```
+
+Senza entrambi i fix il device crasha sporadicamente dopo la connessione Wi-Fi.
+
+### CONFIG_UART_ISR_IN_IRAM — incompatibile con SPIRAM_XIP_FROM_PSRAM
+**NON aggiungere** `CONFIG_UART_ISR_IN_IRAM=y` con `SPIRAM_XIP_FROM_PSRAM=y`.
+Causa boot loop immediato (app non parte, nessun log). Il WDT `sys_evt` stuck in `uart_tx_char` ha una causa diversa — non è un problema di ISR IRAM.
+`CONFIG_UART_ISR_IN_IRAM=y` rimane in `sdkconfig.defaults` ma solo perché il device è stabile; se genera problemi futuri, rimuovere.
+
+### Flash incompleto — "invalid segment length 0xffffffff"
+Se `idf.py flash` viene interrotto (es. pipe rotta con `head`, Ctrl+C, timeout), il binario in flash è troncato.
+Il bootloader carica i segmenti iniziali ma poi legge `0xffffffff` come lunghezza del segmento successivo → `E (xxx) boot: Factory app partition is not bootable` → boot loop.
+**Non** è un crash del firmware — basta ri-flashare completamente.
+Regola: non usare `| head` su `idf.py flash`, non interrompere il processo di scrittura.
 
 ### Navigazione swipe LVGL — guard anti-reentrant
 Obbligatorio in ogni gesture handler. Senza di esso swipe doppio durante animazione blocca la navigazione.  
@@ -206,7 +271,7 @@ static void ui_event_screen_xxx(lv_event_t *e) {
 
 ## Ordine di implementazione
 
-1. **Setup** — dal repo Seeed copiare **solo** `examples/indicator_basis/` come base (non tutta la cartella `examples/`), verifica build pulita, flash base funzionante
+1. **Setup** — dal repo Seeed copiare **solo** `examples/indicator_basis/` in `firmware/` (non tutta la cartella `examples/`), verifica build pulita, flash base funzionante
 2. **Analisi** — mappare navigazione esistente, pulsante fisico, comportamenti UI prima di toccare nulla
 3. **Navigazione** — aggiungere schermate vuote nello stack senza rompere nulla, verificare swipe
 4. **Screen Settings** — tab Wi-Fi (comportamento Seeed) + tab Hue/Server/Proxy con NVS
