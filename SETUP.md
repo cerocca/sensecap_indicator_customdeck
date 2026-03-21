@@ -67,10 +67,10 @@ Apri `firmware/main/app_config.h` e imposta i tuoi valori:
 
 ### Launcher — label pulsanti
 ```c
-#define LAUNCHER_1_LABEL  "GitHub"
-#define LAUNCHER_2_LABEL  "Strava"
-#define LAUNCHER_3_LABEL  "Garmin"
-#define LAUNCHER_4_LABEL  "Intervals"
+#define LAUNCHER_1_LABEL  "Website1"
+#define LAUNCHER_2_LABEL  "Website2"
+#define LAUNCHER_3_LABEL  "Website3"
+#define LAUNCHER_4_LABEL  "Website4"
 ```
 Configura gli URL corrispondenti nel proxy Python.
 
@@ -84,6 +84,8 @@ cd firmware
 idf.py build
 idf.py -p /dev/cu.usbserial-1110 flash monitor
 ```
+
+> Porta seriale usata su questo setup: `/dev/cu.usbserial-1110`
 
 > Sostituisci `/dev/cu.usbserial-1110` con la porta seriale del tuo dispositivo.  
 > Su Linux: tipicamente `/dev/ttyUSB0` o `/dev/ttyACM0`.

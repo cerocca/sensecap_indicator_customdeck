@@ -3,15 +3,12 @@
 ## Progetto
 Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).  
 Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).  
-Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)  
-Path locale: `/Users/ciru/sensecap_indicator_cirutech`  
+Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)
 Build:
 ```bash
 source ~/esp/esp-idf/export.sh   # ogni nuovo terminale
 cd firmware && idf.py build flash monitor
 ```
-Porta seriale: `/dev/cu.usbserial-1110`  
-Flash esplicito: `idf.py -p /dev/cu.usbserial-1110 flash monitor`
 
 > **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build`.
 
