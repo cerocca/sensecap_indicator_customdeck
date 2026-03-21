@@ -180,7 +180,7 @@ y=278+i×22  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non u
 ### sdkconfig — non rigenerare da zero
 `sdkconfig` ha precedenza su `sdkconfig.defaults`. Se corrotto (device si resetta in loop standalone):
 ```bash
-cd sensecap_indicator_deck && rm sdkconfig && idf.py build
+cd firmware && rm sdkconfig && idf.py build
 grep -E "SPIRAM_XIP_FROM_PSRAM|MEMPROT_FEATURE|MBEDTLS_DYNAMIC_BUFFER|MAIN_TASK_STACK|UART_ISR" sdkconfig
 ```
 Valori attesi: `XIP_FROM_PSRAM=y` · `MEMPROT_FEATURE=n` · `DYNAMIC_BUFFER=y` · `MAIN_TASK_STACK_SIZE=16384` · `UART_ISR_IN_IRAM=y` · `STA_DISCONNECTED_PM_ENABLE=n`
@@ -243,7 +243,7 @@ Senza entrambi i fix il device crasha sporadicamente dopo la connessione Wi-Fi.
 ### CONFIG_UART_ISR_IN_IRAM — incompatibile con SPIRAM_XIP_FROM_PSRAM
 **NON aggiungere** `CONFIG_UART_ISR_IN_IRAM=y` con `SPIRAM_XIP_FROM_PSRAM=y`.
 Causa boot loop immediato (app non parte, nessun log). Il WDT `sys_evt` stuck in `uart_tx_char` ha una causa diversa — non è un problema di ISR IRAM.
-`CONFIG_UART_ISR_IN_IRAM=y` rimane in `sdkconfig.defaults` ma solo perché il device è stabile; se genera problemi futuri, rimuovere.
+NON aggiungere mai questa opzione a `sdkconfig.defaults`.
 
 ### Flash incompleto — "invalid segment length 0xffffffff"
 Se `idf.py flash` viene interrotto (es. pipe rotta con `head`, Ctrl+C, timeout), il binario in flash è troncato.
