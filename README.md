@@ -54,9 +54,9 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 | 2 | **Sensors** | Original | Live CO2, tVOC, temperature, humidity readings |
 | 3 | **Settings** | Custom | Wi-Fi + all integrations config (tabs), values saved to NVS |
 | 4 | **Hue Control** | Custom | Toggle + brightness slider for 4 Philips Hue lights |
-| 5 | **Sibilla Dashboard** | Custom | LAN server monitoring via Glances API + Uptime Kuma |
+| 5 | **LocalServer Dashboard** | Custom | LAN server monitoring via Glances API + Uptime Kuma |
 | 6 | **Launcher** | Custom | 4 buttons to open URLs on Mac via local Python proxy |
-| 7 | **AI** | Custom | Text interface for AI interaction (voice via Grove, future) |
+| 7 | **AI** | Custom | Text interface for AI interaction (placeholder) |
 
 ---
 
@@ -72,7 +72,7 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 - Polling every 5 seconds via local Hue Bridge (HTTPS, self-signed cert)
 - Visual feedback on network error
 
-### Sibilla Dashboard
+### LocalServer Dashboard
 - Real-time CPU, RAM, disk usage and load average via [Glances](https://nicolargo.github.io/glances/) REST API
 - Server uptime display
 - Service status (UP/DOWN) via Uptime Kuma, delivered through a local Python proxy
@@ -84,7 +84,7 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 
 ### AI (placeholder)
 - Touch keyboard interface for AI text interaction
-- Future: voice input/output via Grove microphone and speaker
+- Future: voice input/output via external coprocessor (see roadmap)
 
 ---
 

@@ -1,0 +1,2116 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (27) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (44) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (49) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (53) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (58) boot: Enabling RNG early entropy source...[0m
+[0;32mI (64) boot: Partition Table:[0m
+[0;32mI (67) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (74) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (82) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (89) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (97) boot: End of partition table[0m
+[0;32mI (101) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (251) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (255) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (258) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (404) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (434) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (434) boot: Disabling RNG early entropy source...[0m
+[0;33mW (446) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (446) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (455) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (464) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (469) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (474) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (480) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (485) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (490) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (496) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (501) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (507) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (512) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (518) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (524) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (535) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (535) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (539) esp_psram: Speed: 120MHz[0m
+[0;32mI (595) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (653) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (654) cpu_start: Multicore app[0m
+[0;32mI (887) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (895) cpu_start: Pro cpu start user code[0m
+[0;32mI (896) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (896) app_init: Application information:[0m
+[0;32mI (898) app_init: Project name:     indicator_basis[0m
+[0;32mI (904) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (909) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (915) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (921) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (925) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (930) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (935) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (940) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (947) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (953) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (959) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (966) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (972) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (980) spi_flash: detected chip: winbond[0m
+[0;32mI (984) spi_flash: flash io: qio[0m
+[0;33mW (988) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (999) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1007) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1014) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1021) main_task: Started on CPU0[0m
+[0;32mI (1026) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1034) main_task: Calling app_main()[0m
+[0;32mI (1038) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1113) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1117) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1123) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1134) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1158) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1173) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1173) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1587) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1694) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1779) sensor-model: sensor history data read successful[0m
+[0;32mI (1780) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1781) pp: pp rom version: e7ae62f[0m
+[0;32mI (1803) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1805) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1808) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1809) wifi:wifi certification version: v7.0[0m
+[0;32mI (1813) wifi:config NVS flash: enabled[0m
+[0;32mI (1816) wifi:config nano formating: disabled[0m
+[0;32mI (1820) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1825) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1829) wifi:Init management short buffer num: 32[0m
+[0;32mI (1834) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1838) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1842) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1846) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1850) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1854) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1858) wifi_init: rx ba win: 6[0m
+[0;32mI (1862) wifi_init: accept mbox: 6[0m
+[0;32mI (1866) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1870) wifi_init: udp mbox: 6[0m
+[0;32mI (1874) wifi_init: tcp mbox: 6[0m
+[0;32mI (1877) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1882) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1886) wifi_init: tcp mss: 1440[0m
+[0;32mI (1890) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1895) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1900) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1905) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1940) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1940) wifi:enable tsf[0m
+[0;32mI (1941) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1942) time: cfg read successful[0m
+[0;32mI (1945) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1947) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1958) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1964) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1970) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1981) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1982) wifi:security: WPA2-PSK, phy: bgn, rssi: -50[0m
+[0;32mI (1984) wifi:pm start, type: 1[0m
+
+[0;32mI (1986) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1994) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2003) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2008) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2009) display: cfg read successful[0m
+[0;32mI (2013) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2022) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2024) wifi:[0;32mI (2027) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (2033) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+
+[0;32mI (2132) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2945) time: need update time view[0m
+[0;32mI (2945) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (2946) time: Thu Jan  1 01:00:02 1970[0m
+[0;32mI (3003) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (3003) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (3006) wifi-model: Last network exception, check network...[0m
+[0;32mI (3884) ntp: Notification of a time synchronization event[0m
+[0;32mI (3884) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (3945) time: need update time view[0m
+[0;32mI (3945) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (3946) time: Sat Mar 21 10:46:38 2026[0m
+[0;32mI (7880) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7880) view: update tvoc:0[0m
+[0;32mI (7883) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7883) view: update co2:520[0m
+
+--- 1.1.1.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 457ms
+[0;32mI (8012) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (8014) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (8018) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (8023) city: start Get city and time zone[0m
+[0;32mI (8054) city: DNS lookup succeeded. IP=208.95.112.1[0m
+[0;32mI (8054) city: ... allocated socket[0m
+[0;32mI (8175) city: ... connected[0m
+[0;32mI (8176) city: ... socket send success[0m
+[0;32mI (8176) city: ... set socket receiving timeout success[0m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               [0;32mI (8404) city: ... done reading from socket. Last read return=0 errno=128.[0m
+[0;32mI (8419) city: Get succesfully[0m
+[0;32mI (8422) city: ip       : 151.41.119.231[0m
+[0;32mI (8426) city: city     : Florence[0m
+[0;32mI (8430) city: timezone : Europe/Rome[0m
+[0;32mI (8435) city: Get time zone...[0m
+[0;32mI (8439) view: event: VIEW_EVENT_CITY[0m
+[0;32mI (9236) city: Connection established...[0m
+[0;32mI (9236) city: 124 bytes written[0m
+[0;32mI (9237) city: Reading HTTP response...[0m
+HTTP/1.1 200 OK
+Server: nginx/1.29.4
+Date: Sat, 21 Mar 2026 09:46:43 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+3fd
+{"timeZone":"Europe/Rome","currentLocalTime":"2026-03-21T10:46:43.6360506","currentUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"standardUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"hasDayLightSaving":true,"isDayLightSavingActive":false,"dstInterval":{"dstName":"CEST","dstOffsetToUtc":{"seconds":7200,"milliseconds":7200000,"ticks":72000000000,"nanoseconds":7200000000000},"dstOffsetToStandardTime":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"dstStart":"2026-03-29T01:00:00Z","dstEnd":"2026-10-25T01:00:00Z","dstDuration":{"days":210,"nanosecondOfDay":0,"hours":0,"minutes":0,"seconds":0,"milliseconds":0,"subsecondTicks":0,"subsecondNanoseconds":0,"bclCompatibleTicks":181440000000000,"totalDays":210,"totalHours":5040,"totalMinutes":302400,"totalSeconds":18144000,"totalMilliseconds":18144000000,"totalTicks":181440000000000,"totalNanoseconds":18144000000000000}}}
+0
+
+[0;31mE (9361) i2c: i2c_master_read_byte(1353): i2c ack type error[0m
+[0;32mI (9371) city: local_utc_offset:3600s[0m
+[0;32mI (9380) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (11780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:46:46 2026[0m
+[0;32mI (11780) sensor-model: Temp History day data valid[0m
+[0;32mI (11783) sensor-model: Temp History week data valid[0m
+[0;32mI (11788) sensor-model: Humidity History day data valid[0m
+[0;32mI (11794) sensor-model: Humidity History week data valid[0m
+[0;32mI (11800) sensor-model: CO2 index:0, data:554, time:1773997200[0m
+[0;32mI (11807) sensor-model: CO2 index:1, data:539, time:1774000800[0m
+[0;32mI (11813) sensor-model: CO2 index:2, data:533, time:1774004400[0m
+[0;32mI (11820) sensor-model: CO2 index:3, data:524, time:1774008000[0m
+[0;32mI (11826) sensor-model: CO2 index:4, data:513, time:1774011600[0m
+[0;32mI (11833) sensor-model: CO2 index:5, data:501, time:1774015200[0m
+[0;32mI (11839) sensor-model: CO2 index:6, data:488, time:1774018800[0m
+[0;32mI (11846) sensor-model: CO2 index:7, data:502, time:1774022400[0m
+[0;32mI (11852) sensor-model: CO2 index:8, data:621, time:1774026000[0m
+[0;32mI (11859) sensor-model: CO2 History day data valid[0m
+[0;32mI (11864) sensor-model: CO2, index:1, min:638, max:887, time:1773532800[0m
+[0;32mI (11872) sensor-model: CO2, index:5, min:751, max:821, time:1773878400[0m
+[0;32mI (11879) sensor-model: CO2 History week data valid[0m
+[0;32mI (11885) sensor-model: TVOC index:0, data:53, time:1773997200[0m
+[0;32mI (11891) sensor-model: TVOC index:1, data:84, time:1774000800[0m
+[0;32mI (11898) sensor-model: TVOC index:2, data:101, time:1774004400[0m
+[0;32mI (11904) sensor-model: TVOC index:3, data:101, time:1774008000[0m
+[0;32mI (11911) sensor-model: TVOC index:4, data:100, time:1774011600[0m
+[0;32mI (11917) sensor-model: TVOC index:5, data:100, time:1774015200[0m
+[0;32mI (11924) sensor-model: TVOC index:6, data:101, time:1774018800[0m
+[0;32mI (11931) sensor-model: TVOC index:7, data:97, time:1774022400[0m
+[0;32mI (11937) sensor-model: TVOC index:8, data:63, time:1774026000[0m
+[0;32mI (11944) sensor-model: TVOC History day data valid[0m
+[0;32mI (11949) sensor-model: TVOC, index:1, min:0, max:115, time:1773532800[0m
+[0;32mI (11957) sensor-model: TVOC, index:5, min:0, max:107, time:1773878400[0m
+[0;32mI (11964) sensor-model: TVOC History week data valid[0m
+[0;32mI (11969) sensor-model: update day history data[0m
+[0;32mI (11976) sensor-model: sensor history data save successful[0m
+[0;32mI (11981) sensor-model: update week history data[0m
+[0;32mI (11988) sensor-model: sensor history data save successful[0m
+[0;32mI (12851) ntp: Notification of a time synchronization event[0m
+[0;32mI (12852) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (13128) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13128) view: update tvoc:0[0m
+[0;32mI (13131) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13131) view: update co2:499[0m
+[0;32mI (18377) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18377) view: update tvoc:0[0m
+[0;32mI (18379) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18379) view: update co2:485[0m
+[0;32mI (21780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:46:56 2026[0m
+[0;32mI (23625) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23625) view: update tvoc:0[0m
+[0;32mI (23627) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23627) view: update co2:473[0m
+[0;32mI (25945) time: need update time view[0m
+[0;32mI (25945) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (25946) time: Sat Mar 21 10:47:00 2026[0m
+[0;32mI (28873) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28873) view: update tvoc:0[0m
+[0;32mI (28876) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28876) view: update co2:479[0m
+[0;32mI (31780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:06 2026[0m
+[0;32mI (34179) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34180) view: update tvoc:0[0m
+[0;32mI (34180) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34182) view: update co2:468[0m
+[0;32mI (39370) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39370) view: update tvoc:0[0m
+[0;32mI (39372) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39372) view: update co2:465[0m
+[0;32mI (40868) btn: click, off[0m
+[0;32mI (41780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:16 2026[0m
+[0;32mI (41918) btn: click, on[0m
+[0;32mI (43133) btn: click, off[0m
+[0;32mI (43918) btn: click, on[0m
+[0;32mI (44618) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44618) view: update tvoc:0[0m
+[0;32mI (44620) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44620) view: update co2:458[0m
+[0;32mI (49866) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49866) view: update tvoc:0[0m
+[0;32mI (49869) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49869) view: update co2:458[0m
+[0;32mI (51780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:26 2026[0m
+[0;32mI (55114) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55114) view: update tvoc:0[0m
+[0;32mI (55117) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55117) view: update co2:459[0m
+[0;32mI (60362) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60362) view: update tvoc:0[0m
+[0;32mI (60365) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60365) view: update co2:460[0m
+[0;32mI (61780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:36 2026[0m
+[0;32mI (65611) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65611) view: update tvoc:0[0m
+[0;32mI (65613) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65613) view: update co2:461[0m
+[0;32mI (70859) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70859) view: update tvoc:0[0m
+[0;32mI (70861) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70861) view: update co2:460[0m
+[0;32mI (71780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:46 2026[0m
+[0;32mI (76107) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76107) view: update tvoc:0[0m
+[0;32mI (76110) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76110) view: update co2:461[0m
+[0;32mI (81355) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81355) view: update tvoc:0[0m
+[0;32mI (81358) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81358) view: update co2:461[0m
+[0;32mI (81780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:47:56 2026[0m
+[0;32mI (85945) time: need update time view[0m
+[0;32mI (85945) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (85946) time: Sat Mar 21 10:48:00 2026[0m
+[0;32mI (86603) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86603) view: update tvoc:0[0m
+[0;32mI (86606) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86606) view: update co2:461[0m
+[0;32mI (91780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:06 2026[0m
+[0;32mI (91852) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91852) view: update tvoc:0[0m
+[0;32mI (91854) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91854) view: update co2:460[0m
+[0;32mI (97100) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97100) view: update tvoc:0[0m
+[0;32mI (97102) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97102) view: update co2:461[0m
+[0;32mI (101780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:16 2026[0m
+[0;32mI (102348) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102348) view: update tvoc:0[0m
+[0;32mI (102351) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102351) view: update co2:461[0m
+[0;32mI (107596) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107596) view: update tvoc:0[0m
+[0;32mI (107599) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107599) view: update co2:462[0m
+[0;32mI (111780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:26 2026[0m
+[0;32mI (112845) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112845) view: update tvoc:0[0m
+[0;32mI (112847) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112848) view: update co2:461[0m
+[0;32mI (118093) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (118093) view: update tvoc:0[0m
+[0;32mI (118095) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (118096) view: update co2:462[0m
+[0;32mI (121780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:36 2026[0m
+[0;32mI (123341) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (123341) view: update tvoc:0[0m
+[0;32mI (123344) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (123344) view: update co2:462[0m
+[0;32mI (128589) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (128589) view: update tvoc:0[0m
+[0;32mI (128592) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (128592) view: update co2:462[0m
+[0;32mI (131780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:46 2026[0m
+[0;32mI (133837) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (133837) view: update tvoc:0[0m
+[0;32mI (133840) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (133840) view: update co2:463[0m
+[0;32mI (139086) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (139086) view: update tvoc:0[0m
+[0;32mI (139088) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (139089) view: update co2:462[0m
+[0;32mI (141780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:48:56 2026[0m
+[0;32mI (144334) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (144334) view: update tvoc:0[0m
+[0;32mI (144336) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (144337) view: update co2:463[0m
+[0;32mI (145945) time: need update time view[0m
+[0;32mI (145945) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (145946) time: Sat Mar 21 10:49:00 2026[0m
+[0;32mI (149582) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (149582) view: update tvoc:0[0m
+[0;32mI (149585) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (149585) view: update co2:464[0m
+[0;32mI (151780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:49:06 2026[0m
+[0;32mI (154830) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (154830) view: update tvoc:0[0m
+[0;32mI (154833) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (154833) view: update co2:464[0m
+[0;32mI (160078) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (160078) view: update tvoc:0[0m
+[0;32mI (160081) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (160081) view: update co2:465[0m
+[0;32mI (161780) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 10:49:16 2026[0m
+[0;32mI (165327) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (165327) view: update tvoc:0[0m
+[0;32mI (165329) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (165330) view: update co2:466[0m
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x420a19bc: 00f01d12 81004176 08a2ffe8
+Core  0 register dump:
+PC      : 0x420a19c0  PS      : 0x00060a30  A0      : 0x820a2512  A1      : 0x3fcd1e10  
+A2      : 0x3fcaaa28  A3      : 0x00000000  A4      : 0x09bdbb88  A5      : 0x3fca4654  
+A6      : 0x00000000  A7      : 0x3fca4654  A8      : 0x8038b538  A9      : 0x09bcc6a7  
+A10     : 0x00000002  A11     : 0x00000000  A12     : 0x0142063d  A13     : 0x00060823  
+A14     : 0x3fcc68c0  A15     : 0x4037ecdc  SAR     : 0x0000001b  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x420a19bd:0x3fcd1e10 0x420a250f:0x3fcd1e40 0x420a9c61:0x3fcd1e60 0x420dffb1:0x3fcd1e80 0x40389d89:0x3fcd1ea0
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1910) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+[0;32mI (1911) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1912) time: cfg read successful[0m
+[0;32mI (1916) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1917) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1928) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1934) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1940) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1949) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1949) wifi:security: WPA2-PSK, phy: bgn, rssi: -50[0m
+[0;32mI (1952) wifi:pm start, type: 1[0m
+
+[0;32mI (1955) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1963) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1971) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (1977) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1983) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1983) display: cfg read successful[0m
+[0;32mI (1991) wifi:<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (1987) time: event: VIEW_EVENT_WIFI_ST[0m[0m
+
+[0;32mI (2003) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2012) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2013) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2916) time: need update time view[0m
+[0;32mI (2916) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (2916) time: Sat Mar 21 10:49:22 2026[0m
+[0;32mI (2977) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (2977) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (2980) wifi-model: Last network exception, check network...[0m
+
+assert failed: spinlock_release spinlock.h:190 (core_owner_id == lock->owner)
+
+
+Backtrace: 0x4037615a:0x3fcb92a0 0x403809dd:0x3fcb92c0 0x40389179:0x3fcb92e0 0x4038172b:0x3fcb9400 0x4037cc4b:0x3fcb9420 0x42046d30:0x3fcb9440 0x42013453:0x3fcb9470
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1911) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+Guru Meditation Error: Core  0 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x420e0565  PS      : 0x00060830  A0      : 0x820e06bf  A1      : 0x3fccf860  
+A2      : 0x3fccec5c  A3      : 0xffffffff  A4      : 0x3fccfa30  A5      : 0x00000000  
+A6      : 0x3fca45f0  A7      : 0x00000000  A8      : 0xffffffff  A9      : 0x00000001  
+A10     : 0x3fcec128  A11     : 0x00000001  A12     : 0x0000002b  A13     : 0x3fcec128  
+A14     : 0xffffffff  A15     : 0x3fccecc4  SAR     : 0x00000000  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0xffffffff  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0x00000000  
+
+
+Backtrace: 0x420e0562:0x3fccf860 0x420e06bc:0x3fccf8c0
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1913) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1913) wifi:enable tsf[0m
+Guru Meditation Error: Core  0 panic'ed (InstrFetchProhibited). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x00000000  PS      : 0x00060833  A0      : 0x00000000  A1      : 0x3fcad9c0  
+A2      : 0x00000000  A3      : 0x00000001  A4      : 0x000e5251  A5      : 0x00000000  
+A6      : 0x00000000  A7      : 0x3fcba520  A8      : 0x8204c3cc  A9      : 0x000007d0  
+A10     : 0x3fcba520  A11     : 0x00000001  A12     : 0x403799a0  A13     : 0x00000000  
+A14     : 0x000dbd5b  A15     : 0x00000000  SAR     : 0x0000000b  EXCCAUSE: 0x00000014  
+EXCVADDR: 0x00000000  LBEG    : 0x00000000  LEND    : 0x00000000  LCOUNT  : 0x00000000  
+
+
+Backtrace: 0xfffffffd:0x3fcad9c0
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1911) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+[0;32mI (1912) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1913) time: cfg read successful[0m
+[0;32mI (1916) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1918) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1929) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1935) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1940) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1949) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1949) wifi:security: WPA2-PSK, phy: bgn, rssi: -50[0m
+[0;32mI (1953) wifi:pm start, type: 1[0m
+
+[0;32mI (1955) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1963) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1972) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1977) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1978) display: cfg read successful[0m
+[0;32mI (1983) wifi:[0;32mI (1982) time: event: VIEW_EVENT_WIFI_ST[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (1992) city: event: VIEW_EVENT_WIFI_ST[0m
+
+[0;32mI (2011) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2012) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2014) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x8 (TG1WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403761bb
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (267) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (271) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (274) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (419) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (450) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (462) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (471) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (479) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (489) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (495) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (501) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (506) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (511) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (516) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (522) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (528) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (540) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (551) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (551) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (555) esp_psram: Speed: 120MHz[0m
+[0;32mI (611) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (669) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (669) cpu_start: Multicore app[0m
+[0;32mI (903) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (911) cpu_start: Pro cpu start user code[0m
+[0;32mI (911) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (911) app_init: Application information:[0m
+[0;32mI (914) app_init: Project name:     indicator_basis[0m
+[0;32mI (920) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (925) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (931) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (936) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (941) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (946) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (951) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (956) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (963) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (969) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (975) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (981) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (988) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (995) spi_flash: detected chip: winbond[0m
+[0;32mI (1000) spi_flash: flash io: qio[0m
+[0;33mW (1004) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1023) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1030) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1037) main_task: Started on CPU0[0m
+[0;32mI (1042) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1050) main_task: Calling app_main()[0m
+[0;32mI (1054) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1095) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1098) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1104) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1116) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1155) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1155) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1568) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1676) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1761) sensor-model: sensor history data read successful[0m
+[0;32mI (1762) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1763) pp: pp rom version: e7ae62f[0m
+[0;32mI (1785) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1787) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1790) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1791) wifi:wifi certification version: v7.0[0m
+[0;32mI (1795) wifi:config NVS flash: enabled[0m
+[0;32mI (1798) wifi:config nano formating: disabled[0m
+[0;32mI (1802) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1807) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1812) wifi:Init management short buffer num: 32[0m
+[0;32mI (1816) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1820) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1824) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1828) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1832) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1836) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1840) wifi_init: rx ba win: 6[0m
+[0;32mI (1844) wifi_init: accept mbox: 6[0m
+[0;32mI (1848) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1852) wifi_init: udp mbox: 6[0m
+[0;32mI (1856) wifi_init: tcp mbox: 6[0m
+[0;32mI (1860) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1864) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1868) wifi_init: tcp mss: 1440[0m
+[0;32mI (1872) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1877) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1882) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1887) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1923) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1923) wifi:enable tsf[0m
+Guru Meditation Error: Core  0 panic'ed (StoreProhibited). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x420c2327  PS      : 0x00060030  A0      : 0x8037b5c8  A1      : 0x3fcd1d80  
+A2      : 0x3fcef3d8  A3      : 0x3fcab174  A4      : 0x00060820  A5      : 0x3fce9648  
+A6      : 0xffffffff  A7      : 0x3fce9670  A8      : 0x820c2325  A9      : 0x3fcd1d60  
+A10     : 0x0000006a  A11     : 0x00000000  A12     : 0x00000000  A13     : 0x000000fc  
+A14     : 0xffffffff  A15     : 0x0000cdcd  SAR     : 0x00000018  EXCCAUSE: 0x0000001d  
+EXCVADDR: 0x8037b7b8  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x420c2324:0x3fcd1d80 0x4037b5c5:0x3fcd1da0 0x4037b3a7:0x3fcd1dc0 0x420ac687:0x3fcd1de0 0x420e2b69:0x3fcd1e00 0x4003ad27:0x3fcd1e20 0x420a1c48:0x3fcd1e40 0x420a1d2a:0x3fcd1e60 0x42094b97:0x3fcd1e80 0x40389da1:0x3fcd1ea0
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1911) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+GuruESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x7 (TG0WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x42002f40
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (267) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (271) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (274) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (419) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (450) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (462) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (471) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (479) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (489) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (495) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (501) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (506) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (511) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (516) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (522) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (528) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (540) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (551) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (551) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (555) esp_psram: Speed: 120MHz[0m
+[0;32mI (611) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (669) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (669) cpu_start: Multicore app[0m
+[0;32mI (903) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (911) cpu_start: Pro cpu start user code[0m
+[0;32mI (911) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (911) app_init: Application information:[0m
+[0;32mI (914) app_init: Project name:     indicator_basis[0m
+[0;32mI (920) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (925) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (931) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (936) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (941) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (946) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (951) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (956) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (963) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (969) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (975) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (981) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (988) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (995) spi_flash: detected chip: winbond[0m
+[0;32mI (1000) spi_flash: flash io: qio[0m
+[0;33mW (1004) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1023) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1030) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1037) main_task: Started on CPU0[0m
+[0;32mI (1042) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1050) main_task: Calling app_main()[0m
+[0;32mI (1054) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1095) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1098) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1104) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1116) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1155) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1155) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1568) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1676) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1761) sensor-model: sensor history data read successful[0m
+[0;32mI (1762) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1763) pp: pp rom version: e7ae62f[0m
+[0;32mI (1785) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1787) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1790) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1791) wifi:wifi certification version: v7.0[0m
+[0;32mI (1795) wifi:config NVS flash: enabled[0m
+[0;32mI (1798) wifi:config nano formating: disabled[0m
+[0;32mI (1802) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1807) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1811) wifi:Init management short buffer num: 32[0m
+[0;32mI (1816) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1820) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1824) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1828) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1832) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1836) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1840) wifi_init: rx ba win: 6[0m
+[0;32mI (1844) wifi_init: accept mbox: 6[0m
+[0;32mI (1848) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1852) wifi_init: udp mbox: 6[0m
+[0;32mI (1856) wifi_init: tcp mbox: 6[0m
+[0;32mI (1860) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1864) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1868) wifi_init: tcp mss: 1440[0m
+[0;32mI (1872) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1877) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1882) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1887) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1922) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1922) wifi:enable tsf[0m
+[0;32mI (1923) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1924) time: cfg read successful[0m
+[0;32mI (1928) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1929) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1940) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1946) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1952) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1961) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1961) wifi:security: WPA2-PSK, phy: bgn, rssi: -51[0m
+[0;32mI (1964) wifi:pm start, type: 1[0m
+
+[0;32mI (1967) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1975) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1983) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1989) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1994) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1998) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2003) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (1989) display: cfg read successful[0m
+[0;32mI (2011) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2024) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2928) time: need update time view[0m
+[0;32mI (2928) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (2928) time: Sat Mar 21 10:49:38 2026[0m
+[0;32mI (3041) wifi:<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0m
+[0;32mI (3983) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (3983) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (3985) wifi-model: Last network exception, check network...[0m
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x65ffa0b2  PS      : 0x00060e30  A0      : 0x00000000  A1      : 0x3fcb9470  
+A2      : 0x00000000  A3      : 0x00000000  A4      : 0x3fca6dc8  A5      : 0x3fca6dd4  
+A6      : 0x3fca6dc4  A7      : 0xffffffff  A8      : 0x82013438  A9      : 0x3fcb9430  
+A10     : 0x00000001  A11     : 0x00000000  A12     : 0x00000001  A13     : 0x3fcb8db0  
+A14     : 0xffffffff  A15     : 0x3fcb8dd8  SAR     : 0x0000000c  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x00000000  LEND    : 0x00000000  LCOUNT  : 0x00000000  
+
+
+Backtrace: 0x65ffa0af:0x3fcb9470 |<-CORRUPTED
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1909) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1909) wifi:enable tsf[0m
+[0;32mI (1910) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1911) time: cfg read successful[0m
+[0;32mI (1915) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1916) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1927) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1933) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1939) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1948) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1948) wifi:security: WPA2-PSK, phy: bgn, rssi: -50[0m
+[0;32mI (1951) wifi:pm start, type: 1[0m
+
+[0;32mI (1954) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1962) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1971) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1976) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1976) display: cfg read successful[0m
+[0;32mI (1982) wifi:[0;32mI (1981) time: event: VIEW_EVENT_WIFI_ST[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (1991) city: event: VIEW_EVENT_WIFI_ST[0m
+
+[0;32mI (2011) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2011) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2032) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x407891c8: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x407891cc  PS      : 0x00060933  A0      : 0x00000000  A1      : 0x3fcad9c0  
+A2      : 0x00000000  A3      : 0x00000001  A4      : 0x0010864e  A5      : 0x00000000  
+A6      : 0x00000001  A7      : 0x3fcec914  A8      : 0x8204c35c  A9      : 0xf0de1e1e  
+A10     : 0x3fcec914  A11     : 0x3fca77b8  A12     : 0xffffffff  A13     : 0x00060923  
+A14     : 0x001085ef  A15     : 0x4037ecdc  SAR     : 0x00000004  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x407891c9:0x3fcad9c0 |<-CORRUPTED
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1912) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1912) wifi:enable tsf[0m
+Guru Meditation Error: Core  0 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x420e05a5  PS      : 0x00060830  A0      : 0x820e06bf  A1      : 0x3fccf860  
+A2      : 0x00000000  A3      : 0x3fcc6aec  A4      : 0x00000000  A5      : 0x00000000  
+A6      : 0x3fccf86c  A7      : 0x00000000  A8      : 0x00000000  A9      : 0x00000001  
+A10     : 0x3fcec128  A11     : 0x00000001  A12     : 0x0000002b  A13     : 0x3fcec128  
+A14     : 0xffffffff  A15     : 0x3fcceed0  SAR     : 0x00000000  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00000000  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0x00000000  
+
+
+Backtrace: 0x420e05a2:0x3fccf860 0x420e06bc:0x3fccf8c0
+
+
+
+
+ELF file SHA256: 08d4d1e4b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760b8
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 10:29:38[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=e8ab0h (953008) map[0m
+[0;32mI (255) esp_image: segment 1: paddr=000f8ad8 vaddr=3fc9e800 size=058b4h ( 22708) load[0m
+[0;32mI (260) esp_image: segment 2: paddr=000fe394 vaddr=40374000 size=01c84h (  7300) load[0m
+[0;32mI (263) esp_image: segment 3: paddr=00100020 vaddr=42000020 size=e3f04h (933636) map[0m
+[0;32mI (408) esp_image: segment 4: paddr=001e3f2c vaddr=40375c84 size=18a78h (100984) load[0m
+[0;32mI (438) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (438) boot: Disabling RNG early entropy source...[0m
+[0;33mW (450) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (451) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (459) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (468) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (473) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (478) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (484) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (490) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (495) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (500) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (505) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (511) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (517) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (522) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (528) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (540) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (540) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (544) esp_psram: Speed: 120MHz[0m
+[0;32mI (600) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (658) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (658) cpu_start: Multicore app[0m
+[0;32mI (892) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (900) cpu_start: Pro cpu start user code[0m
+[0;32mI (900) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (900) app_init: Application information:[0m
+[0;32mI (903) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (914) app_init: Compile time:     Mar 21 2026 10:29:52[0m
+[0;32mI (920) app_init: ELF file SHA256:  08d4d1e4b...[0m
+[0;32mI (925) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (930) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (935) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (940) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (944) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (952) heap_init: At 3FCAB338 len 0003E3D8 (248 KiB): RAM[0m
+[0;32mI (958) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (964) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (970) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (976) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (984) spi_flash: detected chip: winbond[0m
+[0;32mI (988) spi_flash: flash io: qio[0m
+[0;33mW (992) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1003) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1012) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1018) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1026) main_task: Started on CPU0[0m
+[0;32mI (1031) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1039) main_task: Calling app_main()[0m
+[0;32mI (1043) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 10:37:58
+--------------------------------------------------------
+[0m
+[0;32mI (1083) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1087) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1093) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1105) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1129) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1144) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1557) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1665) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1750) sensor-model: sensor history data read successful[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1752) pp: pp rom version: e7ae62f[0m
+[0;32mI (1774) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1776) wifi:wifi driver task: 3fcc58f8, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1787) wifi:config nano formating: disabled[0m
+[0;32mI (1791) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1796) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1805) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1809) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1829) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1910) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1910) wifi:enable tsf[0m
+[0;32mI (1911) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1912) time: cfg read successful[0m
+[0;32mI (1916) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1917) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1928) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1934) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1940) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1950) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1950) wifi:security: WPA2-PSK, phy: bgn, rssi: -51[0m
+[0;32mI (1952) wifi:pm start, type: 1[0m
+
+[0;32mI (1955) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1963) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1972) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1977) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1977) display: cfg read successful[0m
+[0;32mI (1982) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1991) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1995) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (1996) wifi:[0;32mI (2001) view: event: VIEW_EVENT_DISPLAY_CFG[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64
+[0;32mI (2022) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2971) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (2971) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (2973) wifi-model: Last network exception, check network...[0m
+[0;32mI (3472) ntp: Notification of a time synchronization event[0m
+[0;32mI (3473) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (7850) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7850) view: update tvoc:0[0m
+[0;32mI (7852) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7852) view: update co2:510[0m
+
+--- 1.1.1.1 ping statistics ---
+5 packets transmitted, 4 received, 19% packet loss, time 1106ms
+[0;32mI (7980) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7982) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7986) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7991) city: start Get city and time zone[0m
+[0;32mI (8024) city: DNS lookup succeeded. IP=208.95.112.1[0m
+[0;32mI (8024) city: ... allocated socket[0m
+[0;32mI (8139) city: ... connected[0m
+[0;32mI (8140) city: ... socket send success[0m
+[0;32mI (8140) city: ... set socket receiving timeout success[0m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               [0;32mI (8279) city: ... done reading from socket. Last read return=0 errno=128.[0m
+[0;32mI (8294) city: Get succesfully[0m
+[0;32mI (8297) city: ip       : 151.41.119.231[0m
+[0;32mI (8301) city: city     : Florence[0m
+[0;32mI (8305) city: timezone : Europe/Rome[0m
+[0;32mI (8310) city: Get time zone...[0m
+[0;32mI (8314) view: event: VIEW_EVENT_CITY[0m
+[0;32mI (8876) city: Connection established...[0m
+[0;32mI (8877) city: 124 bytes written[0m
+[0;32mI (8877) city: Reading HTTP response...[0m
+[0;32mI (10326) ntp: Notification of a time synchronization event[0m
+[0;32mI (10326) view: event: VIEW_EVENT_TIME[0m
+HTTP/1.1 200 OK
+Server: nginx/1.29.4
+Date: Sat, 21 Mar 2026 09:49:54 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+3fd
+{"timeZone":"Europe/Rome","currentLocalTime":"2026-03-21T10:49:54.3693595","currentUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"standardUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"hasDayLightSaving":true,"isDayLightSavingActive":false,"dstInterval":{"dstName":"CEST","dstOffsetToUtc":{"seconds":7200,"milliseconds":7200000,"ticks":72000000000,"nanoseconds":7200000000000},"dstOffsetToStandardTime":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"dstStart":"2026-03-29T01:00:00Z","dstEnd":"2026-10-25T01:00:00Z","dstDuration":{"days":210,"nanosecondOfDay":0,"hours":0,"minutes":0,"seconds":0,"milliseconds":0,"subsecondTicks":0,"subsecondNanoseconds":0,"bclCompatibleTicks":181440000000000,"totalDays":210,"totalHours":5040,"totalMinutes":302400,"totalSeconds":18144000,"totalMilliseconds":18144000000,"totalTicks":181440000000000,"totalNanoseconds":18144000000000000}}}
+0
+
+[0;32mI (10451) city: local_utc_offset:3600s[0m
+[0;32mI (10453) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (13098) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13098) view: update tvoc:0[0m
+[0;32mI (13101) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13101) view: update co2:480[0m
+[0;32mI (18346) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18346) view: update tvoc:0[0m
+[0;32mI (18349) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18349) view: update co2:458[0m
+[0;32mI (23595) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23595) view: update tvoc:0[0m
+[0;32mI (23597) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23597) view: update co2:451[0m
+[0;32mI (28843) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28843) view: update tvoc:0[0m
+[0;32mI (28845) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28845) view: update co2:443[0m
+[0;32mI (34091) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34091) view: update tvoc:0[0m
+[0;32mI (34094) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34094) view: update co2:445[0m
+[0;32mI (39339) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39339) view: update tvoc:0[0m
+[0;32mI (39342) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39342) view: update co2:446[0m
+[0;32mI (44587) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44587) view: update tvoc:0[0m
+[0;32mI (44590) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44590) view: update co2:440[0m
+[0;32mI (49836) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49836) view: update tvoc:0[0m
+[0;32mI (49838) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49838) view: update co2:440[0m
+[0;32mI (55084) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55084) view: update tvoc:0[0m
+[0;32mI (55087) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55087) view: update co2:440[0m
+[0;32mI (60332) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60332) view: update tvoc:0[0m
+[0;32mI (60335) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60335) view: update co2:440[0m
+[0;32mI (65580) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65580) view: update tvoc:0[0m
+[0;32mI (65583) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65583) view: update co2:440[0m
+[0;32mI (70829) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70829) view: update tvoc:0[0m
+[0;32mI (70831) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70831) view: update co2:439[0m
+[0;32mI (76077) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76077) view: update tvoc:0[0m
+[0;32mI (76079) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76079) view: update co2:439[0m
+[0;32mI (81325) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81325) view: update tvoc:0[0m
+[0;32mI (81328) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81328) view: update co2:439[0m
+[0;32mI (86573) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86573) view: update tvoc:0[0m
+[0;32mI (86576) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86576) view: update co2:439[0m
+[0;32mI (91821) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91821) view: update tvoc:0[0m
+[0;32mI (91824) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91824) view: update co2:438[0m
+[0;32mI (97070) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97070) view: update tvoc:0[0m
+[0;32mI (97072) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97072) view: update co2:439[0m

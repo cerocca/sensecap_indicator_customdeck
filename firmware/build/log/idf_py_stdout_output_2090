@@ -1,0 +1,806 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (27) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Mar 21 2026 16:54:18[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (44) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (49) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (53) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (58) boot: Enabling RNG early entropy source...[0m
+[0;32mI (64) boot: Partition Table:[0m
+[0;32mI (67) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (74) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (82) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (89) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (97) boot: End of partition table[0m
+[0;32mI (101) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eba1ch (965148) map[0m
+[0;32mI (253) esp_image: segment 1: paddr=000fba44 vaddr=3fc9f300 size=045d4h ( 17876) load[0m
+[0;32mI (256) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e40b4h (934068) map[0m
+[0;32mI (397) esp_image: segment 3: paddr=001e40dc vaddr=3fca38d4 size=012e0h (  4832) load[0m
+[0;32mI (398) esp_image: segment 4: paddr=001e53c4 vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (435) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (435) boot: Disabling RNG early entropy source...[0m
+[0;33mW (447) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (447) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (456) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (465) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (470) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (475) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (481) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (486) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (491) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (497) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (502) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (508) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (513) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (519) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (525) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (536) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (536) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (540) esp_psram: Speed: 120MHz[0m
+[0;32mI (596) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (654) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (655) cpu_start: Multicore app[0m
+[0;32mI (888) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (896) cpu_start: Pro cpu start user code[0m
+[0;32mI (897) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (897) app_init: Application information:[0m
+[0;32mI (899) app_init: Project name:     indicator_basis[0m
+[0;32mI (905) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (910) app_init: Compile time:     Mar 21 2026 17:09:53[0m
+[0;32mI (916) app_init: ELF file SHA256:  f2c7c9057...[0m
+[0;32mI (922) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (926) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (931) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (936) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (941) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (948) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (954) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (960) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (967) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (973) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (981) spi_flash: detected chip: winbond[0m
+[0;32mI (985) spi_flash: flash io: qio[0m
+[0;33mW (989) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1000) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1008) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1015) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1022) main_task: Started on CPU0[0m
+[0;32mI (1026) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1035) main_task: Calling app_main()[0m
+[0;32mI (1039) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 17:10:04
+--------------------------------------------------------
+[0m
+[0;32mI (1079) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1083) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1089) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1101) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1125) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1553) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1661) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1747) sensor-model: sensor history data read successful[0m
+[0;32mI (1747) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1752) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1771) pp: pp rom version: e7ae62f[0m
+[0;32mI (1771) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1773) wifi:wifi driver task: 3fcd6420, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1788) wifi:config nano formating: disabled[0m
+[0;32mI (1792) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1797) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1806) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1810) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1830) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1858) wifi_init: tcp mss: 1440[0m
+[0;32mI (1862) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1877) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1911) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+[0;32mI (1912) wifi:Set ps type: 0, coexist: 0[0m
+
+[0;32mI (1912) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1917) time: cfg read successful[0m
+[0;32mI (1920) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1922) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1933) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1939) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1945) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1954) wifi:connected with Stucsnet2, aid = 3, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1955) wifi:security: WPA2-PSK, phy: bgn, rssi: -57[0m
+[0;32mI (1957) wifi:pm start, type: 0[0m
+
+[0;32mI (1959) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1967) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1976) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1982) display: cfg read successful[0m
+[0;32mI (1982) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1991) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1994) wifi:[0;32mI (1995) city: event: VIEW_EVENT_WIFI_ST[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (2001) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+
+[0;32mI (2012) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2012) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2920) time: need update time view[0m
+[0;32mI (2920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (2921) time: Thu Jan  1 01:00:02 1970[0m
+[0;32mI (2976) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (2976) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (2978) wifi-model: Last network exception, check network...[0m
+[0;32mI (5456) ntp: Notification of a time synchronization event[0m
+[0;32mI (5456) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (5920) time: need update time view[0m
+[0;32mI (5920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (5921) time: Sat Mar 21 17:14:23 2026[0m
+[0;32mI (7846) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7846) view: update tvoc:0[0m
+[0;32mI (7848) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7848) view: update co2:885[0m
+
+--- 1.1.1.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 63ms
+[0;32mI (7985) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7987) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7991) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7996) city: start Get city and time zone[0m
+[0;32mI (8022) city: DNS lookup succeeded. IP=208.95.112.1[0m
+[0;32mI (8023) city: ... allocated socket[0m
+[0;32mI (8130) city: ... connected[0m
+[0;32mI (8130) city: ... socket send success[0m
+[0;32mI (8130) city: ... set socket receiving timeout success[0m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               [0;32mI (8265) city: ... done reading from socket. Last read return=0 errno=128.[0m
+[0;32mI (8279) city: Get succesfully[0m
+[0;32mI (8282) city: ip       : 151.41.119.231[0m
+[0;32mI (8287) city: city     : Florence[0m
+[0;32mI (8291) city: timezone : Europe/Rome[0m
+[0;32mI (8295) city: Get time zone...[0m
+[0;32mI (8299) view: event: VIEW_EVENT_CITY[0m
+[0;32mI (8894) city: Connection established...[0m
+[0;32mI (8895) city: 124 bytes written[0m
+[0;32mI (8895) city: Reading HTTP response...[0m
+HTTP/1.1 200 OK
+Server: nginx/1.29.4
+Date: Sat, 21 Mar 2026 16:14:26 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+3fd
+{"timeZone":"Europe/Rome","currentLocalTime":"2026-03-21T17:14:26.2370959","currentUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"standardUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"hasDayLightSaving":true,"isDayLightSavingActive":false,"dstInterval":{"dstName":"CEST","dstOffsetToUtc":{"seconds":7200,"milliseconds":7200000,"ticks":72000000000,"nanoseconds":7200000000000},"dstOffsetToStandardTime":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"dstStart":"2026-03-29T01:00:00Z","dstEnd":"2026-10-25T01:00:00Z","dstDuration":{"days":210,"nanosecondOfDay":0,"hours":0,"minutes":0,"seconds":0,"milliseconds":0,"subsecondTicks":0,"subsecondNanoseconds":0,"bclCompatibleTicks":181440000000000,"totalDays":210,"totalHours":5040,"totalMinutes":302400,"totalSeconds":18144000,"totalMilliseconds":18144000000,"totalTicks":181440000000000,"totalNanoseconds":18144000000000000}}}
+0
+
+[0;32mI (9033) city: local_utc_offset:3600s[0m
+[0;32mI (9036) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (11747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:14:29 2026[0m
+[0;32mI (11747) sensor-model: Temp History day data valid[0m
+[0;32mI (11750) sensor-model: Temp History week data valid[0m
+[0;32mI (11756) sensor-model: Humidity History day data valid[0m
+[0;32mI (11762) sensor-model: Humidity History week data valid[0m
+[0;32mI (11768) sensor-model: CO2 index:0, data:502, time:1774022400[0m
+[0;32mI (11774) sensor-model: CO2 index:1, data:621, time:1774026000[0m
+[0;32mI (11781) sensor-model: CO2 index:18, data:430, time:1774087200[0m
+[0;32mI (11787) sensor-model: CO2 index:20, data:591, time:1774094400[0m
+[0;32mI (11794) sensor-model: CO2 index:21, data:609, time:1774098000[0m
+[0;32mI (11801) sensor-model: CO2 index:22, data:704, time:1774101600[0m
+[0;32mI (11807) sensor-model: CO2 index:23, data:720, time:1774105200[0m
+[0;32mI (11814) sensor-model: CO2 History day data valid[0m
+[0;32mI (11819) sensor-model: CO2, index:1, min:638, max:887, time:1773532800[0m
+[0;32mI (11827) sensor-model: CO2, index:5, min:751, max:821, time:1773878400[0m
+[0;32mI (11834) sensor-model: CO2 History week data valid[0m
+[0;32mI (11839) sensor-model: TVOC index:0, data:97, time:1774022400[0m
+[0;32mI (11844) ntp: Notification of a time synchronization event[0m
+[0;32mI (11846) sensor-model: TVOC index:1, data:63, time:1774026000[0m
+[0;32mI (11852) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (11859) sensor-model: TVOC index:18, data:26, time:1774087200[0m
+[0;32mI (11870) sensor-model: TVOC index:20, data:0, time:1774094400[0m
+[0;32mI (11876) sensor-model: TVOC index:21, data:94, time:1774098000[0m
+[0;32mI (11883) sensor-model: TVOC index:22, data:0, time:1774101600[0m
+[0;32mI (11889) sensor-model: TVOC index:23, data:0, time:1774105200[0m
+[0;32mI (11896) sensor-model: TVOC History day data valid[0m
+[0;32mI (11901) sensor-model: TVOC, index:1, min:0, max:115, time:1773532800[0m
+[0;32mI (11909) sensor-model: TVOC, index:5, min:0, max:107, time:1773878400[0m
+[0;32mI (11916) sensor-model: TVOC History week data valid[0m
+[0;32mI (11921) sensor-model: update day history data[0m
+[0;32mI (11929) sensor-model: sensor history data save successful[0m
+[0;32mI (11933) sensor-model: update week history data[0m
+[0;32mI (11940) sensor-model: sensor history data save successful[0m
+[0;32mI (13094) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13094) view: update tvoc:0[0m
+[0;32mI (13097) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13097) view: update co2:843[0m
+[0;32mI (18342) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18342) view: update tvoc:0[0m
+[0;32mI (18345) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18345) view: update co2:816[0m
+[0;32mI (21747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:14:39 2026[0m
+[0;32mI (23591) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23591) view: update tvoc:0[0m
+[0;32mI (23593) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23593) view: update co2:815[0m
+[0;32mI (28839) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28839) view: update tvoc:0[0m
+[0;32mI (28841) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28841) view: update co2:811[0m
+[0;32mI (31747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:14:49 2026[0m
+[0;32mI (34087) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34087) view: update tvoc:0[0m
+[0;32mI (34090) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34090) view: update co2:808[0m
+[0;32mI (39335) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39335) view: update tvoc:0[0m
+[0;32mI (39338) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39338) view: update co2:805[0m
+[0;32mI (41747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:14:59 2026[0m
+[0;32mI (42920) time: need update time view[0m
+[0;32mI (42920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (42921) time: Sat Mar 21 17:15:00 2026[0m
+[0;32mI (44583) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44583) view: update tvoc:0[0m
+[0;32mI (44586) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44586) view: update co2:805[0m
+[0;32mI (49832) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49832) view: update tvoc:0[0m
+[0;32mI (49834) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49834) view: update co2:804[0m
+[0;32mI (51747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:09 2026[0m
+[0;32mI (55080) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55080) view: update tvoc:0[0m
+[0;32mI (55082) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55082) view: update co2:803[0m
+[0;32mI (60328) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60328) view: update tvoc:0[0m
+[0;32mI (60331) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60331) view: update co2:803[0m
+[0;32mI (61747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:19 2026[0m
+[0;32mI (65576) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65576) view: update tvoc:0[0m
+[0;32mI (65579) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65579) view: update co2:803[0m
+[0;32mI (70824) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70824) view: update tvoc:0[0m
+[0;32mI (70827) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70827) view: update co2:804[0m
+[0;32mI (71747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:29 2026[0m
+[0;32mI (76073) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76073) view: update tvoc:0[0m
+[0;32mI (76075) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76075) view: update co2:804[0m
+[0;32mI (81321) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81321) view: update tvoc:0[0m
+[0;32mI (81323) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81323) view: update co2:805[0m
+[0;32mI (81747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:39 2026[0m
+[0;32mI (86569) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86569) view: update tvoc:0[0m
+[0;32mI (86572) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86572) view: update co2:805[0m
+[0;32mI (91747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:49 2026[0m
+[0;32mI (91817) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91817) view: update tvoc:0[0m
+[0;32mI (91820) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91820) view: update co2:803[0m
+[0;32mI (97065) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97065) view: update tvoc:0[0m
+[0;32mI (97068) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97068) view: update co2:804[0m
+[0;32mI (101747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:15:59 2026[0m
+[0;32mI (102314) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102314) view: update tvoc:0[0m
+[0;32mI (102316) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102317) view: update co2:804[0m
+[0;32mI (102920) time: need update time view[0m
+[0;32mI (102920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (102921) time: Sat Mar 21 17:16:00 2026[0m
+[0;32mI (107562) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107562) view: update tvoc:0[0m
+[0;32mI (107564) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107565) view: update co2:804[0m
+[0;32mI (111747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:09 2026[0m
+[0;32mI (112810) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112810) view: update tvoc:0[0m
+[0;32mI (112813) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112813) view: update co2:803[0m
+[0;32mI (118058) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (118058) view: update tvoc:0[0m
+[0;32mI (118061) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (118061) view: update co2:802[0m
+[0;32mI (121747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:19 2026[0m
+[0;32mI (123306) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (123306) view: update tvoc:0[0m
+[0;32mI (123309) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (123309) view: update co2:802[0m
+[0;32mI (128555) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (128555) view: update tvoc:0[0m
+[0;32mI (128557) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (128558) view: update co2:802[0m
+[0;32mI (131747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:29 2026[0m
+[0;32mI (133803) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (133803) view: update tvoc:0[0m
+[0;32mI (133805) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (133806) view: update co2:802[0m
+[0;32mI (139051) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (139051) view: update tvoc:0[0m
+[0;32mI (139054) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (139054) view: update co2:802[0m
+[0;32mI (141747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:39 2026[0m
+[0;32mI (144299) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (144299) view: update tvoc:0[0m
+[0;32mI (144302) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (144302) view: update co2:803[0m
+[0;32mI (149547) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (149547) view: update tvoc:0[0m
+[0;32mI (149550) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (149550) view: update co2:803[0m
+[0;32mI (151747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:49 2026[0m
+[0;32mI (154796) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (154796) view: update tvoc:0[0m
+[0;32mI (154798) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (154799) view: update co2:802[0m
+[0;32mI (160044) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (160044) view: update tvoc:0[0m
+[0;32mI (160046) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (160047) view: update co2:801[0m
+[0;32mI (161747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:16:59 2026[0m
+[0;32mI (162920) time: need update time view[0m
+[0;32mI (162920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (162921) time: Sat Mar 21 17:17:00 2026[0m
+[0;32mI (165292) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (165292) view: update tvoc:0[0m
+[0;32mI (165295) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (165295) view: update co2:799[0m
+[0;32mI (170540) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (170540) view: update tvoc:0[0m
+[0;32mI (170543) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (170543) view: update co2:799[0m
+[0;32mI (171747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:09 2026[0m
+[0;32mI (175788) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (175788) view: update tvoc:0[0m
+[0;32mI (175791) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (175791) view: update co2:799[0m
+[0;32mI (181037) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (181037) view: update tvoc:0[0m
+[0;32mI (181039) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (181040) view: update co2:797[0m
+[0;32mI (181747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:19 2026[0m
+[0;32mI (186285) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (186285) view: update tvoc:0[0m
+[0;32mI (186287) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (186288) view: update co2:797[0m
+[0;32mI (191533) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (191533) view: update tvoc:0[0m
+[0;32mI (191536) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (191536) view: update co2:796[0m
+[0;32mI (191747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:29 2026[0m
+[0;32mI (196781) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (196781) view: update tvoc:0[0m
+[0;32mI (196784) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (196784) view: update co2:796[0m
+[0;32mI (201747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:39 2026[0m
+[0;32mI (202029) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (202029) view: update tvoc:0[0m
+[0;32mI (202032) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (202032) view: update co2:795[0m
+[0;32mI (207278) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (207278) view: update tvoc:0[0m
+[0;32mI (207280) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (207281) view: update co2:793[0m
+[0;32mI (211747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:49 2026[0m
+[0;32mI (212526) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (212526) view: update tvoc:0[0m
+[0;32mI (212528) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (212529) view: update co2:793[0m
+[0;32mI (217774) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (217774) view: update tvoc:0[0m
+[0;32mI (217777) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (217777) view: update co2:791[0m
+[0;32mI (221747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:17:59 2026[0m
+[0;32mI (222920) time: need update time view[0m
+[0;32mI (222920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (222921) time: Sat Mar 21 17:18:00 2026[0m
+[0;32mI (223022) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (223022) view: update tvoc:0[0m
+[0;32mI (223025) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (223025) view: update co2:790[0m
+[0;32mI (228270) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (228270) view: update tvoc:0[0m
+[0;32mI (228273) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (228273) view: update co2:789[0m
+[0;32mI (231747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:09 2026[0m
+[0;32mI (233519) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (233519) view: update tvoc:0[0m
+[0;32mI (233521) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (233522) view: update co2:787[0m
+[0;32mI (238767) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (238767) view: update tvoc:0[0m
+[0;32mI (238769) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (238770) view: update co2:787[0m
+[0;32mI (241747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:19 2026[0m
+[0;32mI (244015) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (244015) view: update tvoc:0[0m
+[0;32mI (244018) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (244018) view: update co2:787[0m
+[0;32mI (249263) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (249263) view: update tvoc:1[0m
+[0;32mI (249266) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (249266) view: update co2:787[0m
+[0;32mI (251747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:29 2026[0m
+[0;32mI (254512) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (254512) view: update tvoc:1[0m
+[0;32mI (254514) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (254515) view: update co2:787[0m
+[0;32mI (259760) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (259760) view: update tvoc:1[0m
+[0;32mI (259763) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (259763) view: update co2:786[0m
+[0;32mI (261747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:39 2026[0m
+[0;32mI (265009) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (265009) view: update tvoc:3[0m
+[0;32mI (265011) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (265012) view: update co2:784[0m
+[0;32mI (270257) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (270257) view: update tvoc:6[0m
+[0;32mI (270260) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (270260) view: update co2:784[0m
+[0;32mI (271747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:49 2026[0m
+[0;32mI (275505) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (275505) view: update tvoc:10[0m
+[0;32mI (275508) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (275508) view: update co2:783[0m
+[0;32mI (280754) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (280754) view: update tvoc:13[0m
+[0;32mI (280756) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (280757) view: update co2:783[0m
+[0;32mI (281747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:18:59 2026[0m
+[0;32mI (282920) time: need update time view[0m
+[0;32mI (282920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (282921) time: Sat Mar 21 17:19:00 2026[0m
+[0;32mI (286002) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (286002) view: update tvoc:17[0m
+[0;32mI (286005) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (286005) view: update co2:783[0m
+[0;32mI (291250) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (291250) view: update tvoc:21[0m
+[0;32mI (291253) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (291253) view: update co2:783[0m
+[0;32mI (291747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:09 2026[0m
+[0;32mI (296499) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (296499) view: update tvoc:25[0m
+[0;32mI (296501) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (296502) view: update co2:782[0m
+[0;32mI (301747) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (301747) view: update tvoc:29[0m
+[0;32mI (301747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:19 2026[0m
+[0;32mI (301754) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (301758) view: update co2:783[0m
+[0;32mI (306995) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (306995) view: update tvoc:33[0m
+[0;32mI (306998) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (306998) view: update co2:783[0m
+[0;32mI (311747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:29 2026[0m
+[0;32mI (312244) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (312244) view: update tvoc:36[0m
+[0;32mI (312246) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (312247) view: update co2:782[0m
+[0;32mI (312985) wifi-model: Network normal last time, retry check network...[0m
+[0;32mI (317492) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (317492) view: update tvoc:40[0m
+[0;32mI (317495) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (317495) view: update co2:782[0m
+
+--- 1.1.1.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 55ms
+[0;32mI (317985) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (317987) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (317991) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (321747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:39 2026[0m
+[0;32mI (322741) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (322741) view: update tvoc:43[0m
+[0;32mI (322743) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (322744) view: update co2:781[0m
+[0;32mI (327989) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (327989) view: update tvoc:46[0m
+[0;32mI (327992) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (327992) view: update co2:781[0m
+[0;32mI (331747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:49 2026[0m
+[0;32mI (333237) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (333237) view: update tvoc:49[0m
+[0;32mI (333240) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (333240) view: update co2:781[0m
+[0;32mI (338486) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (338486) view: update tvoc:51[0m
+[0;32mI (338488) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (338489) view: update co2:780[0m
+[0;32mI (341747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:19:59 2026[0m
+[0;32mI (342920) time: need update time view[0m
+[0;32mI (342920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (342921) time: Sat Mar 21 17:20:00 2026[0m
+[0;32mI (343734) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (343734) view: update tvoc:54[0m
+[0;32mI (343737) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (343737) view: update co2:780[0m
+[0;32mI (348982) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (348982) view: update tvoc:56[0m
+[0;32mI (348985) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (348985) view: update co2:781[0m
+[0;32mI (351747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:09 2026[0m
+[0;32mI (354231) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (354231) view: update tvoc:59[0m
+[0;32mI (354233) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (354234) view: update co2:781[0m
+[0;32mI (359479) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (359479) view: update tvoc:61[0m
+[0;32mI (359482) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (359482) view: update co2:780[0m
+[0;32mI (361747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:19 2026[0m
+[0;32mI (364728) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (364728) view: update tvoc:63[0m
+[0;32mI (364730) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (364731) view: update co2:780[0m
+[0;32mI (369976) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (369976) view: update tvoc:65[0m
+[0;32mI (369979) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (369979) view: update co2:779[0m
+[0;32mI (371747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:29 2026[0m
+[0;32mI (375224) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (375224) view: update tvoc:67[0m
+[0;32mI (375227) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (375227) view: update co2:778[0m
+[0;32mI (380473) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (380473) view: update tvoc:69[0m
+[0;32mI (380475) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (380476) view: update co2:778[0m
+[0;32mI (381747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:39 2026[0m
+[0;32mI (385721) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (385721) view: update tvoc:71[0m
+[0;32mI (385724) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (385724) view: update co2:778[0m
+[0;32mI (390969) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (390969) view: update tvoc:73[0m
+[0;32mI (390972) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (390972) view: update co2:777[0m
+[0;32mI (391747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:49 2026[0m
+[0;32mI (396218) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (396218) view: update tvoc:75[0m
+[0;32mI (396221) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (396221) view: update co2:776[0m
+[0;32mI (401466) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (401466) view: update tvoc:76[0m
+[0;32mI (401469) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (401469) view: update co2:777[0m
+[0;32mI (401747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:20:59 2026[0m
+[0;32mI (402920) time: need update time view[0m
+[0;32mI (402920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (402921) time: Sat Mar 21 17:21:00 2026[0m
+[0;32mI (406715) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (406715) view: update tvoc:78[0m
+[0;32mI (406717) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (406718) view: update co2:776[0m
+[0;32mI (411747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:09 2026[0m
+[0;32mI (411963) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (411963) view: update tvoc:80[0m
+[0;32mI (411966) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (411966) view: update co2:776[0m
+[0;32mI (417211) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (417211) view: update tvoc:81[0m
+[0;32mI (417214) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (417214) view: update co2:776[0m
+[0;32mI (421747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:19 2026[0m
+[0;32mI (422460) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (422460) view: update tvoc:82[0m
+[0;32mI (422462) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (422463) view: update co2:776[0m
+[0;32mI (427708) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (427708) view: update tvoc:84[0m
+[0;32mI (427711) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (427711) view: update co2:776[0m
+[0;32mI (431747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:29 2026[0m
+[0;32mI (432956) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (432956) view: update tvoc:85[0m
+[0;32mI (432959) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (432959) view: update co2:776[0m
+[0;32mI (438205) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (438205) view: update tvoc:86[0m
+[0;32mI (438207) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (438208) view: update co2:775[0m
+[0;32mI (441747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:39 2026[0m
+[0;32mI (443453) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (443453) view: update tvoc:87[0m
+[0;32mI (443456) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (443456) view: update co2:776[0m
+[0;32mI (448702) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (448702) view: update tvoc:88[0m
+[0;32mI (448704) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (448705) view: update co2:776[0m
+[0;32mI (451747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:49 2026[0m
+[0;32mI (453950) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (453950) view: update tvoc:89[0m
+[0;32mI (453953) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (453953) view: update co2:776[0m
+[0;32mI (459198) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (459198) view: update tvoc:90[0m
+[0;32mI (459201) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (459201) view: update co2:777[0m
+[0;32mI (461747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:21:59 2026[0m
+[0;32mI (462920) time: need update time view[0m
+[0;32mI (462920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (462921) time: Sat Mar 21 17:22:00 2026[0m
+[0;32mI (464447) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (464447) view: update tvoc:91[0m
+[0;32mI (464449) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (464450) view: update co2:778[0m
+[0;32mI (469695) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (469695) view: update tvoc:91[0m
+[0;32mI (469698) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (469698) view: update co2:778[0m
+[0;32mI (471747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:09 2026[0m
+[0;32mI (474943) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (474943) view: update tvoc:92[0m
+[0;32mI (474946) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (474946) view: update co2:778[0m
+[0;32mI (480192) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (480192) view: update tvoc:93[0m
+[0;32mI (480194) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (480195) view: update co2:779[0m
+[0;32mI (481747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:19 2026[0m
+[0;32mI (485440) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (485440) view: update tvoc:94[0m
+[0;32mI (485443) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (485443) view: update co2:778[0m
+[0;32mI (490689) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (490689) view: update tvoc:94[0m
+[0;32mI (490691) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (490692) view: update co2:779[0m
+[0;32mI (491747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:29 2026[0m
+[0;32mI (495937) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (495937) view: update tvoc:95[0m
+[0;32mI (495940) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (495940) view: update co2:779[0m
+[0;32mI (501185) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (501185) view: update tvoc:95[0m
+[0;32mI (501188) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (501188) view: update co2:779[0m
+[0;32mI (501747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:39 2026[0m
+[0;32mI (506434) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (506434) view: update tvoc:96[0m
+[0;32mI (506436) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (506437) view: update co2:779[0m
+[0;32mI (511682) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (511682) view: update tvoc:96[0m
+[0;32mI (511685) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (511685) view: update co2:779[0m
+[0;32mI (511747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:49 2026[0m
+[0;32mI (516931) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (516931) view: update tvoc:97[0m
+[0;32mI (516933) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (516934) view: update co2:779[0m
+[0;32mI (521747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:22:59 2026[0m
+[0;32mI (522179) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (522179) view: update tvoc:97[0m
+[0;32mI (522182) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (522182) view: update co2:779[0m
+[0;32mI (522920) time: need update time view[0m
+[0;32mI (522920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (522921) time: Sat Mar 21 17:23:00 2026[0m
+[0;32mI (527427) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (527427) view: update tvoc:98[0m
+[0;32mI (527430) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (527430) view: update co2:778[0m
+[0;32mI (531747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:09 2026[0m
+[0;32mI (532676) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (532676) view: update tvoc:98[0m
+[0;32mI (532678) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (532679) view: update co2:779[0m
+[0;32mI (537924) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (537924) view: update tvoc:99[0m
+[0;32mI (537927) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (537927) view: update co2:779[0m
+[0;32mI (541747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:19 2026[0m
+[0;32mI (543172) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (543172) view: update tvoc:99[0m
+[0;32mI (543175) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (543175) view: update co2:780[0m
+[0;32mI (548421) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (548421) view: update tvoc:100[0m
+[0;32mI (548423) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (548424) view: update co2:780[0m
+[0;32mI (551747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:29 2026[0m
+[0;32mI (553669) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (553669) view: update tvoc:100[0m
+[0;32mI (553672) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (553672) view: update co2:780[0m
+[0;32mI (558917) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (558917) view: update tvoc:101[0m
+[0;32mI (558920) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (558920) view: update co2:780[0m
+[0;32mI (561747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:39 2026[0m
+[0;32mI (564166) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (564166) view: update tvoc:101[0m
+[0;32mI (564168) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (564169) view: update co2:779[0m
+[0;32mI (569414) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (569414) view: update tvoc:101[0m
+[0;32mI (569417) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (569417) view: update co2:779[0m
+[0;32mI (571747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:49 2026[0m
+[0;32mI (574663) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (574663) view: update tvoc:102[0m
+[0;32mI (574665) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (574666) view: update co2:779[0m
+[0;32mI (579911) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (579911) view: update tvoc:102[0m
+[0;32mI (579914) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (579914) view: update co2:779[0m
+[0;32mI (581747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:23:59 2026[0m
+[0;32mI (582450) btn: click, off[0m
+[0;32mI (582920) time: need update time view[0m
+[0;32mI (582920) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (582921) time: Sat Mar 21 17:24:00 2026[0m
+[0;32mI (583575) btn: click, on[0m
+[0;32mI (585159) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (585159) view: update tvoc:102[0m
+[0;32mI (585162) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (585162) view: update co2:779[0m
+[0;32mI (590416) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (590416) view: update tvoc:103[0m
+[0;32mI (590416) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (590419) view: update co2:778[0m
+[0;32mI (591747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:24:09 2026[0m
+[0;32mI (595656) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (595656) view: update tvoc:104[0m
+[0;32mI (595717) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (595717) view: update co2:778[0m
+[0;32mI (600935) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (600936) view: update tvoc:104[0m
+[0;32mI (600936) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (600939) view: update co2:778[0m
+[0;32mI (601725) btn: click, off[0m
+[0;32mI (601747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:24:19 2026[0m
+[0;32mI (602755) btn: click, on[0m
+[0;32mI (606153) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (606153) view: update tvoc:105[0m
+[0;32mI (606156) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (606156) view: update co2:779[0m
+[0;32mI (611401) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (611401) view: update tvoc:106[0m
+[0;32mI (611404) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (611404) view: update co2:780[0m
+[0;32mI (611747) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 17:24:29 2026[0m
+[0;32mI (616650) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (616650) view: update tvoc:106[0m
+[0;32mI (616652) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (616653) view: update co2:782[0m

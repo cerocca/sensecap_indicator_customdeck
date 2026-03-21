@@ -1,0 +1,2228 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (27) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (44) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (49) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (53) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (58) boot: Enabling RNG early entropy source...[0m
+[0;32mI (64) boot: Partition Table:[0m
+[0;32mI (67) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (74) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (82) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (89) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (97) boot: End of partition table[0m
+[0;32mI (101) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (253) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (256) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (397) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (398) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (435) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (435) boot: Disabling RNG early entropy source...[0m
+[0;33mW (447) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (447) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (456) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (465) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (470) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (475) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (481) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (486) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (491) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (497) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (502) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (507) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (513) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (519) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (525) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (536) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (536) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (540) esp_psram: Speed: 120MHz[0m
+[0;32mI (596) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (654) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (654) cpu_start: Multicore app[0m
+[0;32mI (888) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (896) cpu_start: Pro cpu start user code[0m
+[0;32mI (896) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (897) app_init: Application information:[0m
+[0;32mI (899) app_init: Project name:     indicator_basis[0m
+[0;32mI (905) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (910) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (916) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (922) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (926) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (931) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (936) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (941) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (948) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (954) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (960) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (967) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (973) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (981) spi_flash: detected chip: winbond[0m
+[0;32mI (985) spi_flash: flash io: qio[0m
+[0;33mW (989) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1000) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1008) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1015) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1022) main_task: Started on CPU0[0m
+[0;32mI (1027) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1035) main_task: Calling app_main()[0m
+[0;32mI (1039) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1079) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1083) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1089) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1101) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1125) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1553) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1662) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1810) sensor-model: sensor history data read successful[0m
+[0;32mI (1810) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1815) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1831) pp: pp rom version: e7ae62f[0m
+[0;32mI (1831) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1833) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1840) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1841) wifi:wifi certification version: v7.0[0m
+[0;32mI (1845) wifi:config NVS flash: enabled[0m
+[0;32mI (1849) wifi:config nano formating: disabled[0m
+[0;32mI (1853) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1858) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1862) wifi:Init management short buffer num: 32[0m
+[0;32mI (1867) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1871) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1874) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1878) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1882) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1886) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1891) wifi_init: rx ba win: 6[0m
+[0;32mI (1894) wifi_init: accept mbox: 6[0m
+[0;32mI (1898) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1902) wifi_init: udp mbox: 6[0m
+[0;32mI (1906) wifi_init: tcp mbox: 6[0m
+[0;32mI (1910) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1914) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1918) wifi_init: tcp mss: 1440[0m
+[0;32mI (1922) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1927) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1932) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1937) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1972) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1972) wifi:enable tsf[0m
+[0;32mI (1973) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1974) time: cfg read successful[0m
+[0;32mI (1977) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1979) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1990) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1996) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2002) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2010) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (2011) wifi:security: WPA2-PSK, phy: bgn, rssi: -59[0m
+[0;32mI (2014) wifi:pm start, type: 1[0m
+
+[0;32mI (2016) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (2024) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2033) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2039) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2043) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2048) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2052) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2039) display: cfg read successful[0m
+[0;32mI (2062) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2067) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x8 (TG1WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403761ef
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1569) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1678) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1826) sensor-model: sensor history data read successful[0m
+[0;32mI (1826) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1831) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1847) pp: pp rom version: e7ae62f[0m
+[0;32mI (1847) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1849) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1856) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1857) wifi:wifi certification version: v7.0[0m
+[0;32mI (1861) wifi:config NVS flash: enabled[0m
+[0;32mI (1864) wifi:config nano formating: disabled[0m
+[0;32mI (1869) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1874) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1878) wifi:Init management short buffer num: 32[0m
+[0;32mI (1882) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1886) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1890) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1894) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1898) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1902) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1906) wifi_init: rx ba win: 6[0m
+[0;32mI (1910) wifi_init: accept mbox: 6[0m
+[0;32mI (1914) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1918) wifi_init: udp mbox: 6[0m
+[0;32mI (1922) wifi_init: tcp mbox: 6[0m
+[0;32mI (1926) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1930) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1934) wifi_init: tcp mss: 1440[0m
+[0;32mI (1938) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1943) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1948) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1953) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1987) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1987) wifi:enable tsf[0m
+[0;32mI (1988) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1989) time: cfg read successful[0m
+[0;32mI (1992) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1994) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (2005) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (2011) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2016) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2033) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (2033) wifi:security: WPA2-PSK, phy: bgn, rssi: -54[0m
+[0;32mI (2036) wifi:pm start, type: 1[0m
+
+[0;32mI (2038) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (2046) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2055) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2060) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2061) display: cfg read successful[0m
+[0;32mI (2065) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2074) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2078) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2083) wifi:[0;32mI (2084) view: event: VIEW_EVENT_DISPLAY_CFG[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64
+[0;32mI (2182) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40789cfc: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x40789d00  PS      : 0x00060330  A0      : 0x82045e14  A1      : 0x3fcc01d0  
+A2      : 0x3fcc7cb4  A3      : 0x000005bf  A4      : 0x00000000  A5      : 0x000004f7  
+A6      : 0x000000c8  A7      : 0x3c1e0900  A8      : 0x82051856  A9      : 0x3fcc0160  
+A10     : 0x3fcc65e0  A11     : 0x00000000  A12     : 0x00000001  A13     : 0xffffffff  
+A14     : 0x3fcb9e6c  A15     : 0x00000000  SAR     : 0x00000016  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x40789cfd:0x3fcc01d0 |<-CORRUPTED
+
+
+
+
+ELF file SHA256: 3409be347
+
+Rebooting...
+ �ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760ec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (257) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (261) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (401) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (403) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (439) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (439) boot: Disabling RNG early entropy source...[0m
+[0;33mW (451) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (452) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (460) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (469) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (474) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (479) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (485) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (491) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (496) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (501) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (506) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (512) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (518) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (523) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (529) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (541) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (541) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (545) esp_psram: Speed: 120MHz[0m
+[0;32mI (601) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (659) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (659) cpu_start: Multicore app[0m
+[0;32mI (893) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (901) cpu_start: Pro cpu start user code[0m
+[0;32mI (901) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (901) app_init: Application information:[0m
+[0;32mI (904) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (915) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (921) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (926) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (931) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (936) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (941) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (945) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (953) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (959) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (965) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (971) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (977) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (985) spi_flash: detected chip: winbond[0m
+[0;32mI (989) spi_flash: flash io: qio[0m
+[0;33mW (993) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1004) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1013) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1019) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1027) main_task: Started on CPU0[0m
+[0;32mI (1032) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1040) main_task: Calling app_main()[0m
+[0;32mI (1044) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1084) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1088) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1094) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1106) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1130) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1145) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1145) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1558) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1667) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1815) sensor-model: sensor history data read successful[0m
+[0;32mI (1815) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1820) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1836) pp: pp rom version: e7ae62f[0m
+[0;32mI (1836) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1838) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1845) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1846) wifi:wifi certification version: v7.0[0m
+[0;32mI (1850) wifi:config NVS flash: enabled[0m
+[0;32mI (1853) wifi:config nano formating: disabled[0m
+[0;32mI (1858) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1863) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1867) wifi:Init management short buffer num: 32[0m
+[0;32mI (1872) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1876) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1879) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1883) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1887) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1891) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1895) wifi_init: rx ba win: 6[0m
+[0;32mI (1899) wifi_init: accept mbox: 6[0m
+[0;32mI (1903) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1907) wifi_init: udp mbox: 6[0m
+[0;32mI (1911) wifi_init: tcp mbox: 6[0m
+[0;32mI (1915) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1919) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1923) wifi_init: tcp mss: 1440[0m
+[0;32mI (1927) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1932) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1937) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1942) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;33mW (1977) phy_init: saving new calibration data because of checksum failure, mode(0)[0m
+[0;32mI (2048) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (2048) wifi:enable tsf[0m
+[0;32mI (2049) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (2050) time: cfg read successful[0m
+[0;32mI (2053) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (2055) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (2066) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (2072) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2077) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2098) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (2098) wifi:security: WPA2-PSK, phy: bgn, rssi: -57[0m
+[0;32mI (2100) wifi:pm start, type: 1[0m
+
+[0;32mI (2103) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (2111) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2119) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2125) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2131) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2131) display: cfg read successful[0m
+[0;32mI (2135) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2144) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2149) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2150) wifi:[0;32mI (2154) view: event: VIEW_EVENT_DISPLAY_CFG[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x42049188: 0008e0cf 0000b01d 65604136
+Core  0 register dump:
+PC      : 0x4204918c  PS      : 0x00060130  A0      : 0x82049196  A1      : 0x3fcae1e0  
+A2      : 0x00000000  A3      : 0x00000001  A4      : 0x80382199  A5      : 0x3fcb13bc  
+A6      : 0x3fca829c  A7      : 0x00000001  A8      : 0x8204918c  A9      : 0x3fcae1c0  
+A10     : 0x3fc9fc64  A11     : 0x3fcb9da0  A12     : 0x3fcb9d7c  A13     : 0x00060123  
+A14     : 0x00060023  A15     : 0x0000cdcd  SAR     : 0x00000000  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x00000000  LEND    : 0x00000000  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcae030  
+A2      : 0x3fcae120  A3      : 0x00000000  A4      : 0x3fcae030  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcae1e0  
+A10     : 0x00000064  A11     : 0x3fcae030  A12     : 0x00000001  A13     : 0x4204918c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcade80  
+A2      : 0x3fcadf70  A3      : 0x00000000  A4      : 0x3fcade80  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcae030  
+A10     : 0x00000064  A11     : 0x3fcade80  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcadcd0  
+A2      : 0x3fcaddc0  A3      : 0x00000000  A4      : 0x3fcadcd0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcade80  
+A10     : 0x00000064  A11     : 0x3fcadcd0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcadb20  
+A2      : 0x3fcadc10  A3      : 0x00000000  A4      : 0x3fcadb20  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcadcd0  
+A10     : 0x00000064  A11     : 0x3fcadb20  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad970  
+A2      : 0x3fcada60  A3      : 0x00000000  A4      : 0x3fcad970  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcadb20  
+A10     : 0x00000064  A11     : 0x3fcad970  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad7c0  
+A2      : 0x3fcad8b0  A3      : 0x00000000  A4      : 0x3fcad7c0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad970  
+A10     : 0x00000064  A11     : 0x3fcad7c0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad610  
+A2      : 0x3fcad700  A3      : 0x00000000  A4      : 0x3fcad610  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad7c0  
+A10     : 0x00000064  A11     : 0x3fcad610  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad460  
+A2      : 0x3fcad550  A3      : 0x00000000  A4      : 0x3fcad460  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad610  
+A10     : 0x00000064  A11     : 0x3fcad460  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad2b0  
+A2      : 0x3fcad3a0  A3      : 0x00000000  A4      : 0x3fcad2b0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad460  
+A10     : 0x00000064  A11     : 0x3fcad2b0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcad100  
+A2      : 0x3fcad1f0  A3      : 0x00000000  A4      : 0x3fcad100  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad2b0  
+A10     : 0x00000064  A11     : 0x3fcad100  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcacf50  
+A2      : 0x3fcad040  A3      : 0x00000000  A4      : 0x3fcacf50  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcad100  
+A10     : 0x00000064  A11     : 0x3fcacf50  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcacda0  
+A2      : 0x3fcace90  A3      : 0x00000000  A4      : 0x3fcacda0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcacf50  
+A10     : 0x00000064  A11     : 0x3fcacda0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcacbf0  
+A2      : 0x3fcacce0  A3      : 0x00000000  A4      : 0x3fcacbf0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcacda0  
+A10     : 0x00000064  A11     : 0x3fcacbf0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaca40  
+A2      : 0x3fcacb30  A3      : 0x00000000  A4      : 0x3fcaca40  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcacbf0  
+A10     : 0x00000064  A11     : 0x3fcaca40  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac890  
+A2      : 0x3fcac980  A3      : 0x00000000  A4      : 0x3fcac890  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaca40  
+A10     : 0x00000064  A11     : 0x3fcac890  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac6e0  
+A2      : 0x3fcac7d0  A3      : 0x00000000  A4      : 0x3fcac6e0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac890  
+A10     : 0x00000064  A11     : 0x3fcac6e0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac530  
+A2      : 0x3fcac620  A3      : 0x00000000  A4      : 0x3fcac530  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac6e0  
+A10     : 0x00000064  A11     : 0x3fcac530  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac380  
+A2      : 0x3fcac470  A3      : 0x00000000  A4      : 0x3fcac380  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac530  
+A10     : 0x00000064  A11     : 0x3fcac380  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac1d0  
+A2      : 0x3fcac2c0  A3      : 0x00000000  A4      : 0x3fcac1d0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac380  
+A10     : 0x00000064  A11     : 0x3fcac1d0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcac020  
+A2      : 0x3fcac110  A3      : 0x00000000  A4      : 0x3fcac020  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac1d0  
+A10     : 0x00000064  A11     : 0x3fcac020  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcabe70  
+A2      : 0x3fcabf60  A3      : 0x00000000  A4      : 0x3fcabe70  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcac020  
+A10     : 0x00000064  A11     : 0x3fcabe70  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcabcc0  
+A2      : 0x3fcabdb0  A3      : 0x00000000  A4      : 0x3fcabcc0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcabe70  
+A10     : 0x00000064  A11     : 0x3fcabcc0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcabb10  
+A2      : 0x3fcabc00  A3      : 0x00000000  A4      : 0x3fcabb10  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcabcc0  
+A10     : 0x00000064  A11     : 0x3fcabb10  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab960  
+A2      : 0x3fcaba50  A3      : 0x00000000  A4      : 0x3fcab960  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcabb10  
+A10     : 0x00000064  A11     : 0x3fcab960  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab7b0  
+A2      : 0x3fcab8a0  A3      : 0x00000000  A4      : 0x3fcab7b0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab960  
+A10     : 0x00000064  A11     : 0x3fcab7b0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab600  
+A2      : 0x3fcab6f0  A3      : 0x00000000  A4      : 0x3fcab600  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab7b0  
+A10     : 0x00000064  A11     : 0x3fcab600  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab450  
+A2      : 0x3fcab540  A3      : 0x00000000  A4      : 0x3fcab450  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab600  
+A10     : 0x00000064  A11     : 0x3fcab450  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab2a0  
+A2      : 0x3fcab390  A3      : 0x00000000  A4      : 0x3fcab2a0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab450  
+A10     : 0x00000064  A11     : 0x3fcab2a0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcab0f0  
+A2      : 0x3fcab1e0  A3      : 0x00000000  A4      : 0x3fcab0f0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab2a0  
+A10     : 0x00000064  A11     : 0x3fcab0f0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaaf40  
+A2      : 0x3fcab030  A3      : 0x00000000  A4      : 0x3fcaaf40  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcab0f0  
+A10     : 0x00000064  A11     : 0x3fcaaf40  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaad90  
+A2      : 0x3fcaae80  A3      : 0x00000000  A4      : 0x3fcaad90  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaaf40  
+A10     : 0x00000064  A11     : 0x3fcaad90  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaabe0  
+A2      : 0x3fcaacd0  A3      : 0x00000000  A4      : 0x3fcaabe0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaad90  
+A10     : 0x00000064  A11     : 0x3fcaabe0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaaa30  
+A2      : 0x3fcaab20  A3      : 0x00000000  A4      : 0x3fcaaa30  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaabe0  
+A10     : 0x00000064  A11     : 0x3fcaaa30  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa880  
+A2      : 0x3fcaa970  A3      : 0x00000000  A4      : 0x3fcaa880  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaaa30  
+A10     : 0x00000064  A11     : 0x3fcaa880  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa6d0  
+A2      : 0x3fcaa7c0  A3      : 0x00000000  A4      : 0x3fcaa6d0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa880  
+A10     : 0x00000064  A11     : 0x3fcaa6d0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa520  
+A2      : 0x3fcaa610  A3      : 0x00000000  A4      : 0x3fcaa520  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa6d0  
+A10     : 0x00000064  A11     : 0x3fcaa520  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa370  
+A2      : 0x3fcaa460  A3      : 0x00000000  A4      : 0x3fcaa370  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa520  
+A10     : 0x00000064  A11     : 0x3fcaa370  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa1c0  
+A2      : 0x3fcaa2b0  A3      : 0x00000000  A4      : 0x3fcaa1c0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa370  
+A10     : 0x00000064  A11     : 0x3fcaa1c0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fcaa010  
+A2      : 0x3fcaa100  A3      : 0x00000000  A4      : 0x3fcaa010  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa1c0  
+A10     : 0x00000064  A11     : 0x3fcaa010  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9e60  
+A2      : 0x3fca9f50  A3      : 0x00000000  A4      : 0x3fca9e60  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fcaa010  
+A10     : 0x00000064  A11     : 0x3fca9e60  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9cb0  
+A2      : 0x3fca9da0  A3      : 0x00000000  A4      : 0x3fca9cb0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9e60  
+A10     : 0x00000064  A11     : 0x3fca9cb0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9b00  
+A2      : 0x3fca9bf0  A3      : 0x00000000  A4      : 0x3fca9b00  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9cb0  
+A10     : 0x00000064  A11     : 0x3fca9b00  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9950  
+A2      : 0x3fca9a40  A3      : 0x00000000  A4      : 0x3fca9950  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9b00  
+A10     : 0x00000064  A11     : 0x3fca9950  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca97a0  
+A2      : 0x3fca9890  A3      : 0x00000000  A4      : 0x3fca97a0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9950  
+A10     : 0x00000064  A11     : 0x3fca97a0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca95f0  
+A2      : 0x3fca96e0  A3      : 0x00000000  A4      : 0x3fca95f0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca97a0  
+A10     : 0x00000064  A11     : 0x3fca95f0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9440  
+A2      : 0x3fca9530  A3      : 0x00000000  A4      : 0x3fca9440  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca95f0  
+A10     : 0x00000064  A11     : 0x3fca9440  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca9290  
+A2      : 0x3fca9380  A3      : 0x00000000  A4      : 0x3fca9290  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9440  
+A10     : 0x00000064  A11     : 0x3fca9290  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca90e0  
+A2      : 0x3fca91d0  A3      : 0x00000000  A4      : 0x3fca90e0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca9290  
+A10     : 0x00000064  A11     : 0x3fca90e0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8f30  
+A2      : 0x3fca9020  A3      : 0x00000000  A4      : 0x3fca8f30  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca90e0  
+A10     : 0x00000064  A11     : 0x3fca8f30  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8d80  
+A2      : 0x3fca8e70  A3      : 0x00000000  A4      : 0x3fca8d80  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8f30  
+A10     : 0x00000064  A11     : 0x3fca8d80  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8bd0  
+A2      : 0x3fca8cc0  A3      : 0x00000000  A4      : 0x3fca8bd0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8d80  
+A10     : 0x00000064  A11     : 0x3fca8bd0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8a20  
+A2      : 0x3fca8b10  A3      : 0x00000000  A4      : 0x3fca8a20  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8bd0  
+A10     : 0x00000064  A11     : 0x3fca8a20  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8870  
+A2      : 0x3fca8960  A3      : 0x00000000  A4      : 0x3fca8870  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8a20  
+A10     : 0x00000064  A11     : 0x3fca8870  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca86c0  
+A2      : 0x3fca87b0  A3      : 0x00000000  A4      : 0x3fca86c0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8870  
+A10     : 0x00000064  A11     : 0x3fca86c0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8510  
+A2      : 0x3fca8600  A3      : 0x00000000  A4      : 0x3fca8510  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca86c0  
+A10     : 0x00000064  A11     : 0x3fca8510  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8360  
+A2      : 0x3fca8450  A3      : 0x00000000  A4      : 0x3fca8360  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8510  
+A10     : 0x00000064  A11     : 0x3fca8360  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca81b0  
+A2      : 0x3fca82a0  A3      : 0x00000000  A4      : 0x3fca81b0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8360  
+A10     : 0x00000064  A11     : 0x3fca81b0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca8000  
+A2      : 0x3fca80f0  A3      : 0x00000000  A4      : 0x3fca8000  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca81b0  
+A10     : 0x00000064  A11     : 0x3fca8000  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7e50  
+A2      : 0x3fca7f40  A3      : 0x00000000  A4      : 0x3fca7e50  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca8000  
+A10     : 0x00000064  A11     : 0x3fca7e50  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7ca0  
+A2      : 0x3fca7d90  A3      : 0x00000000  A4      : 0x3fca7ca0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7e50  
+A10     : 0x00000064  A11     : 0x3fca7ca0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7af0  
+A2      : 0x3fca7be0  A3      : 0x00000000  A4      : 0x3fca7af0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7ca0  
+A10     : 0x00000064  A11     : 0x3fca7af0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7940  
+A2      : 0x3fca7a30  A3      : 0x00000000  A4      : 0x3fca7940  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7af0  
+A10     : 0x00000064  A11     : 0x3fca7940  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7790  
+A2      : 0x3fca7880  A3      : 0x00000000  A4      : 0x3fca7790  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7940  
+A10     : 0x00000064  A11     : 0x3fca7790  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca75e0  
+A2      : 0x3fca76d0  A3      : 0x00000000  A4      : 0x3fca75e0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7790  
+A10     : 0x00000064  A11     : 0x3fca75e0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7430  
+A2      : 0x3fca7520  A3      : 0x00000000  A4      : 0x3fca7430  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca75e0  
+A10     : 0x00000064  A11     : 0x3fca7430  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca7280  
+A2      : 0x3fca7370  A3      : 0x00000000  A4      : 0x3fca7280  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7430  
+A10     : 0x00000064  A11     : 0x3fca7280  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca70d0  
+A2      : 0x3fca71c0  A3      : 0x00000000  A4      : 0x3fca70d0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca7280  
+A10     : 0x00000064  A11     : 0x3fca70d0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6f20  
+A2      : 0x3fca7010  A3      : 0x00000000  A4      : 0x3fca6f20  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca70d0  
+A10     : 0x00000064  A11     : 0x3fca6f20  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6d70  
+A2      : 0x3fca6e60  A3      : 0x00000000  A4      : 0x3fca6d70  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6f20  
+A10     : 0x00000064  A11     : 0x3fca6d70  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6bc0  
+A2      : 0x3fca6cb0  A3      : 0x00000000  A4      : 0x3fca6bc0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6d70  
+A10     : 0x00000064  A11     : 0x3fca6bc0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6a10  
+A2      : 0x3fca6b00  A3      : 0x00000000  A4      : 0x3fca6a10  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6bc0  
+A10     : 0x00000064  A11     : 0x3fca6a10  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6860  
+A2      : 0x3fca6950  A3      : 0x00000000  A4      : 0x3fca6860  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6a10  
+A10     : 0x00000064  A11     : 0x3fca6860  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca66b0  
+A2      : 0x3fca67a0  A3      : 0x00000000  A4      : 0x3fca66b0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6860  
+A10     : 0x00000064  A11     : 0x3fca66b0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6500  
+A2      : 0x3fca65f0  A3      : 0x00000000  A4      : 0x3fca6500  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca66b0  
+A10     : 0x00000064  A11     : 0x3fca6500  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca6350  
+A2      : 0x3fca6440  A3      : 0x00000000  A4      : 0x3fca6350  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6500  
+A10     : 0x00000064  A11     : 0x3fca6350  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca61a0  
+A2      : 0x3fca6290  A3      : 0x00000000  A4      : 0x3fca61a0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca6350  
+A10     : 0x00000064  A11     : 0x3fca61a0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5ff0  
+A2      : 0x3fca60e0  A3      : 0x00000000  A4      : 0x3fca5ff0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca61a0  
+A10     : 0x00000064  A11     : 0x3fca5ff0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5e40  
+A2      : 0x3fca5f30  A3      : 0x00000000  A4      : 0x3fca5e40  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5ff0  
+A10     : 0x00000064  A11     : 0x3fca5e40  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5c90  
+A2      : 0x3fca5d80  A3      : 0x00000000  A4      : 0x3fca5c90  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5e40  
+A10     : 0x00000064  A11     : 0x3fca5c90  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5ae0  
+A2      : 0x3fca5bd0  A3      : 0x00000000  A4      : 0x3fca5ae0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5c90  
+A10     : 0x00000064  A11     : 0x3fca5ae0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5930  
+A2      : 0x3fca5a20  A3      : 0x00000000  A4      : 0x3fca5930  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5ae0  
+A10     : 0x00000064  A11     : 0x3fca5930  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5780  
+A2      : 0x3fca5870  A3      : 0x00000000  A4      : 0x3fca5780  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5930  
+A10     : 0x00000064  A11     : 0x3fca5780  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca55d0  
+A2      : 0x3fca56c0  A3      : 0x00000000  A4      : 0x3fca55d0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5780  
+A10     : 0x00000064  A11     : 0x3fca55d0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5420  
+A2      : 0x3fca5510  A3      : 0x00000000  A4      : 0x3fca5420  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca55d0  
+A10     : 0x00000064  A11     : 0x3fca5420  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca5270  
+A2      : 0x3fca5360  A3      : 0x00000000  A4      : 0x3fca5270  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5420  
+A10     : 0x00000064  A11     : 0x3fca5270  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca50c0  
+A2      : 0x3fca51b0  A3      : 0x00000000  A4      : 0x3fca50c0  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca5270  
+A10     : 0x00000064  A11     : 0x3fca50c0  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+Guru Meditation Error: Core  0 panic'ed (IllegalInstruction). Exception was unhandled.
+Memory dump at 0x40776338: 00000000 00000000 00000000
+Core  0 register dump:
+PC      : 0x4077633c  PS      : 0x00060034  A0      : 0x82003671  A1      : 0x3fca4f10  
+A2      : 0x3fca5000  A3      : 0x00000000  A4      : 0x3fca4f10  A5      : 0x00000000  
+A6      : 0x3fc9f3b4  A7      : 0x00000000  A8      : 0x82003a2a  A9      : 0x3fca50c0  
+A10     : 0x00000064  A11     : 0x3fca4f10  A12     : 0x00000001  A13     : 0x4077633c  
+A14     : 0x3fca4bf8  A15     : 0x60038000  SAR     : 0x0000000a  EXCCAUSE: 0x00000000  
+EXCVADDR: 0x00000000  LBEG    : 0x4038789a  LEND    : 0x403878a6  LCOUNT  : 0x00000000  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x7 (TG0WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403743c0
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1016) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1569) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1678) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1826) sensor-model: sensor history data read successful[0m
+[0;32mI (1826) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1831) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1847) pp: pp rom version: e7ae62f[0m
+[0;32mI (1847) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1849) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1856) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1857) wifi:wifi certification version: v7.0[0m
+[0;32mI (1861) wifi:config NVS flash: enabled[0m
+[0;32mI (1865) wifi:config nano formating: disabled[0m
+[0;32mI (1869) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1874) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1878) wifi:Init management short buffer num: 32[0m
+[0;32mI (1883) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1887) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1890) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1894) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1898) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1902) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1907) wifi_init: rx ba win: 6[0m
+[0;32mI (1910) wifi_init: accept mbox: 6[0m
+[0;32mI (1914) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1918) wifi_init: udp mbox: 6[0m
+[0;32mI (1922) wifi_init: tcp mbox: 6[0m
+[0;32mI (1926) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1930) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1934) wifi_init: tcp mss: 1440[0m
+[0;32mI (1938) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1943) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1948) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1953) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1987) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1987) wifi:enable tsf[0m
+Guru Meditation Error: Core  0 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  0 register dump:
+PC      : 0x42095965  PS      : 0x00060630  A0      : 0x82097404  A1      : 0x3fcd52d0  
+A2      : 0x00000000  A3      : 0x3fcc7988  A4      : 0x00018652  A5      : 0x00060a23  
+A6      : 0x3fcabeb0  A7      : 0x0000cdcd  A8      : 0x82095957  A9      : 0x3fcd52b0  
+A10     : 0x00000000  A11     : 0x3fcc7988  A12     : 0x00000006  A13     : 0x3fcd604c  
+A14     : 0x00000331  A15     : 0x3fca92b8  SAR     : 0x00000017  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00018652  LBEG    : 0x40056f5c  LEND    : 0x40056f72  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x42095962:0x3fcd52d0 0x42097401:0x3fcd52f0 0x42097577:0x3fcd5310 0x42069a46:0x3fcd5350 0x42069aaf:0x3fcd5390 0x420df51d:0x3fcd53b0 0x420df5ec:0x3fcd5410
+
+
+
+
+ELF file SHA256: 3409be347
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403760ec
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (63) boot: Enabling RNG early entropy source...[0m
+[0;32mI (68) boot: Partition Table:[0m
+[0;32mI (71) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (79) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (86) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (94) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (101) boot: End of partition table[0m
+[0;32mI (105) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (257) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (261) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (401) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (403) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (439) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (439) boot: Disabling RNG early entropy source...[0m
+[0;33mW (451) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (452) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (460) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (469) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (474) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (479) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (485) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (491) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (496) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (501) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (506) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (512) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (518) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (523) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (529) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (541) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (541) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (545) esp_psram: Speed: 120MHz[0m
+[0;32mI (601) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (659) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (659) cpu_start: Multicore app[0m
+[0;32mI (893) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (901) cpu_start: Pro cpu start user code[0m
+[0;32mI (901) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (901) app_init: Application information:[0m
+[0;32mI (904) app_init: Project name:     indicator_basis[0m
+[0;32mI (909) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (915) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (921) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (926) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (931) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (936) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (941) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (945) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (953) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (959) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (965) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (971) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (977) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (985) spi_flash: detected chip: winbond[0m
+[0;32mI (989) spi_flash: flash io: qio[0m
+[0;33mW (993) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1004) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1013) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1019) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1027) main_task: Started on CPU0[0m
+[0;32mI (1032) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1040) main_task: Calling app_main()[0m
+[0;32mI (1044) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1084) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1088) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1094) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1106) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1130) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1145) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1145) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1558) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1667) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1815) sensor-model: sensor history data read successful[0m
+[0;32mI (1815) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1820) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1836) pp: pp rom version: e7ae62f[0m
+[0;32mI (1836) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1838) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1845) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1846) wifi:wifi certification version: v7.0[0m
+[0;32mI (1850) wifi:config NVS flash: enabled[0m
+[0;32mI (1854) wifi:config nano formating: disabled[0m
+[0;32mI (1858) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1863) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1867) wifi:Init management short buffer num: 32[0m
+[0;32mI (1872) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1876) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1879) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1883) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1887) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1891) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1896) wifi_init: rx ba win: 6[0m
+[0;32mI (1899) wifi_init: accept mbox: 6[0m
+[0;32mI (1903) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1907) wifi_init: udp mbox: 6[0m
+[0;32mI (1911) wifi_init: tcp mbox: 6[0m
+[0;32mI (1915) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1919) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1924) wifi_init: tcp mss: 1440[0m
+[0;32mI (1928) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1932) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1937) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1943) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1977) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1977) wifi:enable tsf[0m
+[0;32mI (1978) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1979) time: cfg read successful[0m
+[0;32mI (1983) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1986) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1995) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (2002) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2007) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2017) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (2017) wifi:security: WPA2-PSK, phy: bgn, rssi: -56[0m
+[0;32mI (2020) wifi:pm start, type: 1[0m
+
+[0;32mI (2022) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (2030) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2039) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2044) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2049) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2053) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2058) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2045) display: cfg read successful[0m
+[0;32mI (2077) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2080) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x8 (TG1WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403761ef
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1569) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1678) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1826) sensor-model: sensor history data read successful[0m
+[0;32mI (1826) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1831) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1847) pp: pp rom version: e7ae62f[0m
+[0;32mI (1847) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1849) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1856) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1857) wifi:wifi certification version: v7.0[0m
+[0;32mI (1861) wifi:config NVS flash: enabled[0m
+[0;32mI (1865) wifi:config nano formating: disabled[0m
+[0;32mI (1869) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1874) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1878) wifi:Init management short buffer num: 32[0m
+[0;32mI (1883) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1887) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1890) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1894) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1898) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1902) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1907) wifi_init: rx ba win: 6[0m
+[0;32mI (1910) wifi_init: accept mbox: 6[0m
+[0;32mI (1914) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1918) wifi_init: udp mbox: 6[0m
+[0;32mI (1922) wifi_init: tcp mbox: 6[0m
+[0;32mI (1926) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1930) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1934) wifi_init: tcp mss: 1440[0m
+[0;32mI (1938) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1943) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1948) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1953) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1990) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1990) wifi:enable tsf[0m
+GuruESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x7 (TG0WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x42003000
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1016) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1569) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1678) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1826) sensor-model: sensor history data read successful[0m
+[0;32mI (1826) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1831) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1847) pp: pp rom version: e7ae62f[0m
+[0;32mI (1847) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1849) wifi:wifi driver task: 3fcd8148, prio:23, stack:6656, core=0[0m
+[0;32mI (1856) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1857) wifi:wifi certification version: v7.0[0m
+[0;32mI (1861) wifi:config NVS flash: enabled[0m
+[0;32mI (1864) wifi:config nano formating: disabled[0m
+[0;32mI (1869) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1874) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1878) wifi:Init management short buffer num: 32[0m
+[0;32mI (1882) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1886) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1890) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1894) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1898) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1902) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1906) wifi_init: rx ba win: 6[0m
+[0;32mI (1910) wifi_init: accept mbox: 6[0m
+[0;32mI (1914) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1918) wifi_init: udp mbox: 6[0m
+[0;32mI (1922) wifi_init: tcp mbox: 6[0m
+[0;32mI (1926) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1930) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1934) wifi_init: tcp mss: 1440[0m
+[0;32mI (1938) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1943) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1948) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1953) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1988) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1988) wifi:enable tsf[0m
+[0;32mI (1989) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1990) time: cfg read successful[0m
+[0;32mI (1994) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1995) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (2006) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (2012) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (2018) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (2027) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (2027) wifi:security: WPA2-PSK, phy: bgn, rssi: -57[0m
+[0;32mI (2030) wifi:pm start, type: 1[0m
+
+[0;32mI (2033) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (2041) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2049) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (2055) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2060) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2064) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (2069) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2055) display: cfg read successful[0m
+[0;32mI (2090) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2145) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x8 (TG1WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403761ef
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1569) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1678) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1826) sensor-model: sensor history data read successful[0m
+[0;32mI (1826) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1831) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1847) pp: pp rom version: e7ae62f[0m
+[0;32mI (1847) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1849) wifi:wifi driver task: 3fcd8140, prio:23, stack:6656, core=0[0m
+[0;32mI (1856) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1857) wifi:wifi certification version: v7.0[0m
+[0;32mI (1861) wifi:config NVS flash: enabled[0m
+[0;32mI (1865) wifi:config nano formating: disabled[0m
+[0;32mI (1869) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1874) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1878) wifi:Init management short buffer num: 32[0m
+[0;32mI (1883) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1887) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1890) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1894) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1898) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1902) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1907) wifi_init: rx ba win: 6[0m
+[0;32mI (1910) wifi_init: accept mbox: 6[0m
+[0;32mI (1914) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1918) wifi_init: udp mbox: 6[0m
+[0;32mI (1922) wifi_init: tcp mbox: 6[0m
+[0;32mI (1926) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1930) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1934) wifi_init: tcp mss: 1440[0m
+[0;32mI (1938) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1943) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1948) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1953) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1988) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1988) wifi:enable tsf[0m
+GuruESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x7 (TG0WDT_SYS_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x42003000
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (31) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (34) boot: chip revision: v0.2[0m
+[0;32mI (38) boot: efuse block revision: v1.3[0m
+[0;32mI (43) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (48) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (53) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (58) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;33mW (62) boot.esp32s3: PRO CPU has been reset by WDT.[0m
+[0;33mW (68) boot.esp32s3: APP CPU has been reset by WDT.[0m
+[0;32mI (74) boot: Enabling RNG early entropy source...[0m
+[0;32mI (79) boot: Partition Table:[0m
+[0;32mI (83) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (90) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (97) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (105) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (112) boot: End of partition table[0m
+[0;32mI (117) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (268) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (272) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f18h (933656) map[0m
+[0;32mI (413) esp_image: segment 3: paddr=001e3f40 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (414) esp_image: segment 4: paddr=001e51cc vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (450) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (451) boot: Disabling RNG early entropy source...[0m
+[0;33mW (462) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (463) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (472) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (480) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (485) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (490) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (496) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (502) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (507) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (512) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (517) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (523) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (529) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (534) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (541) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (552) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (552) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (556) esp_psram: Speed: 120MHz[0m
+[0;32mI (612) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (670) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (670) cpu_start: Multicore app[0m
+[0;32mI (904) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (912) cpu_start: Pro cpu start user code[0m
+[0;32mI (912) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (912) app_init: Application information:[0m
+[0;32mI (915) app_init: Project name:     indicator_basis[0m
+[0;32mI (921) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (926) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (932) app_init: ELF file SHA256:  3409be347...[0m
+[0;32mI (937) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (942) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (947) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (952) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (957) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (964) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (970) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (976) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (982) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (989) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (996) spi_flash: detected chip: winbond[0m
+[0;32mI (1001) spi_flash: flash io: qio[0m
+[0;33mW (1005) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (1015) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1024) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1031) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1038) main_task: Started on CPU0[0m
+[0;32mI (1043) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1051) main_task: Calling app_main()[0m
+[0;32mI (1055) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:11:29
+--------------------------------------------------------
+[0m
+[0;32mI (1096) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1099) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1105) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1117) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1141) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1156) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m

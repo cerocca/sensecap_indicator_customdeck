@@ -1,0 +1,2 @@
+/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ar qc liblora.a CMakeFiles/__idf_lora.dir/sx126x_sensecap_board.c.obj CMakeFiles/__idf_lora.dir/radio.c.obj CMakeFiles/__idf_lora.dir/sx126x.c.obj CMakeFiles/__idf_lora.dir/timer.c.obj
+/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ranlib liblora.a

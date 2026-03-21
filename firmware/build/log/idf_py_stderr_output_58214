@@ -1,0 +1,60 @@
+[0;33m--- esp-idf-monitor 1.9.0 on /dev/cu.usbserial-1110 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x4038e53e: [0;33m_xt_context_save[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/xtensa/xtensa_context.S[0m[0m:[1;31m114[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x42003084: [0;33mpanic_print_str[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m136[0m
+[0m--- 0x420dc83b: [0;33mspi_bus_lock_set_bg_control[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/spi_bus_lock.c[0m[0m:[1;31m697[0m
+[0m--- 0x420dc838: [0;33mspi_bus_lock_set_bg_control[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/spi_bus_lock.c[0m[0m:[1;31m696[0m
+[0m--- 0x4204cd90: [0;33mxPortEnterCriticalTimeoutSafe[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m578[0m
+[0m--- (inlined by) [0;33mvPortEnterCriticalSafe[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m588[0m
+[0m--- (inlined by) [0;33mtimer_list_lock[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_timer/src/esp_timer.c[0m[0m:[1;31m401[0m
+[0m--- (inlined by) [0;33mtimer_process_alarm[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_timer/src/esp_timer.c[0m[0m:[1;31m415[0m
+[0m--- (inlined by) [0;33mtimer_task[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_timer/src/esp_timer.c[0m[0m:[1;31m482[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x403761bb: [0;33mpanicHandler[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/panic_handler.c[0m[0m:[1;31m245[0m
+[0m--- 0x420e3d17: [0;33mxSemaphoreCreateGenericWithCaps[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/esp_additions/idf_additions.c[0m[0m:[1;31m277[0m
+[0m--- 0x4202ceb8: [0;33mlv_mem_buf_release[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/misc/lv_mem.c[0m[0m:[1;31m337[0m
+[0m--- 0x4202ced2: [0;33mlv_mem_buf_release[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/misc/lv_mem.c[0m[0m:[1;31m344[0m
+[0m--- 0x420e3d14: [0;33mxSemaphoreCreateGenericWithCaps[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/esp_additions/idf_additions.c[0m[0m:[1;31m272[0m
+[0m--- 0x4201f7ab: [0;33mlv_draw_label[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/draw/lv_draw_label.c[0m[0m:[1;31m242[0m
+[0m--- 0x420339d6: [0;33mdraw_main[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/widgets/lv_label.c[0m[0m:[1;31m859[0m
+[0m--- (inlined by) [0;33mlv_label_event[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/widgets/lv_label.c[0m[0m:[1;31m786[0m
+[0m--- (inlined by) [0;33mlv_label_event[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/widgets/lv_label.c[0m[0m:[1;31m734[0m
+[0m--- 0x420da601: [0;33mlv_obj_event_base[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_event.c[0m[0m:[1;31m98[0m
+[0m--- 0x420161c2: [0;33mevent_send_core[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_event.c[0m[0m:[1;31m458[0m
+[0m--- 0x420162bb: [0;33mlv_event_send[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_event.c[0m[0m:[1;31m75[0m
+[0m--- 0x4201e4f1: [0;33mlv_obj_redraw[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m147[0m
+[0m--- 0x4201e5c1: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m893[0m
+[0m--- 0x4201e57b: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m890[0m
+[0m--- (inlined by) [0;33mlv_obj_redraw[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m181[0m
+[0m--- 0x4201e5c1: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m893[0m
+[0m--- 0x4201e57b: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m890[0m
+[0m--- (inlined by) [0;33mlv_obj_redraw[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m181[0m
+[0m--- 0x4201e5c1: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m893[0m
+[0m--- 0x4201e8d5: [0;33mrefr_obj[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m890[0m
+[0m--- (inlined by) [0;33mrefr_obj_and_children[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m775[0m
+[0m--- 0x4201eaa8: [0;33mrefr_area_part[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m706[0m
+[0m--- 0x4201ee41: [0;33mrefr_area[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m572[0m
+[0m--- (inlined by) [0;33mrefr_invalid_areas[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m539[0m
+[0m--- (inlined by) [0;33m_lv_disp_refr_timer[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/core/lv_refr.c[0m[0m:[1;31m324[0m
+[0m--- 0x4202e407: [0;33mlv_timer_exec[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/misc/lv_timer.c[0m[0m:[1;31m313[0m
+[0m--- (inlined by) [0;33mlv_timer_handler[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/misc/lv_timer.c[0m[0m:[1;31m109[0m
+[0m--- 0x4200ab07: [0;33mlv_task_handler[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/lvgl/src/lv_api_map.h[0m[0m:[1;31m37[0m
+[0m--- (inlined by) [0;33mlvgl_task[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/firmware/main/lv_port.c[0m[0m:[1;31m362[0m
+[0m--- 0x4037cb06: [0;33mesp_cpu_wait_for_intr[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/cpu.c[0m[0m:[1;31m64[0m
+[0m--- 0x42003084: [0;33mpanic_print_str[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m136[0m
+[0m--- 0x40035880: [0;33mrom_i2c_writeReg[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x4037b3a7: [0;33mphy_wakeup_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420ad14f: [0;33mesp_phy_enable[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m266[0m
+[0m--- 0x420e3631: [0;33mesp_phy_enable_wrapper[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_wifi/esp32s3/esp_adapter.c[0m[0m:[1;31m616[0m
+[0m--- 0x4003ad27: [0;33mwifi_rf_phy_enable[0m[0m in [0;32mROM[0m
+[0m--- 0x420a2710: [0;33mpm_disconnected_wake[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420a27f2: [0;33mpm_wake_up[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4209565b: [0;33mieee80211_ioctl_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40389da1: [0;33mppTask[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m

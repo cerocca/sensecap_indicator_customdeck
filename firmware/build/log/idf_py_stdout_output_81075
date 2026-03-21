@@ -1,0 +1,335 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x19fc
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xe8c
+load:0x403cb700,len:0x3164
+entry 0x403c8940
+[0;32mI (27) boot: ESP-IDF v5.3.2 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Mar 21 2026 12:50:36[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) qio_mode: Enabling QIO for flash chip WinBond[0m
+[0;32mI (44) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (49) boot.esp32s3: SPI Mode       : QIO[0m
+[0;32mI (53) boot.esp32s3: SPI Flash Size : 8MB[0m
+[0;32mI (58) boot: Enabling RNG early entropy source...[0m
+[0;32mI (64) boot: Partition Table:[0m
+[0;32mI (67) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (74) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (82) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (89) boot:  2 factory          factory app      00 00 00010000 00400000[0m
+[0;32mI (97) boot: End of partition table[0m
+[0;32mI (101) esp_image: segment 0: paddr=00010020 vaddr=3c0f0020 size=eb9c0h (965056) map[0m
+[0;32mI (253) esp_image: segment 1: paddr=000fb9e8 vaddr=3fc9f300 size=04630h ( 17968) load[0m
+[0;32mI (256) esp_image: segment 2: paddr=00100020 vaddr=42000020 size=e3f8ch (933772) map[0m
+[0;32mI (397) esp_image: segment 3: paddr=001e3fb4 vaddr=3fca3930 size=01284h (  4740) load[0m
+[0;32mI (398) esp_image: segment 4: paddr=001e5240 vaddr=40374000 size=1b270h (111216) load[0m
+[0;32mI (435) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (435) boot: Disabling RNG early entropy source...[0m
+[0;33mW (447) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (447) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (456) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (464) MSPI Timing: Flash timing tuning index: 3[0m
+[0;32mI (470) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (475) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (480) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (486) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (491) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (496) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (501) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (507) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (513) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (519) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (525) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (536) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (536) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (540) esp_psram: Speed: 120MHz[0m
+[0;32mI (596) mmu_psram: Read only data copied and mapped to SPIRAM[0m
+[0;32mI (654) mmu_psram: Instructions copied and mapped to SPIRAM[0m
+[0;32mI (654) cpu_start: Multicore app[0m
+[0;32mI (888) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (896) cpu_start: Pro cpu start user code[0m
+[0;32mI (896) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (896) app_init: Application information:[0m
+[0;32mI (899) app_init: Project name:     indicator_basis[0m
+[0;32mI (905) app_init: App version:      d9e0483-dirty[0m
+[0;32mI (910) app_init: Compile time:     Mar 21 2026 13:11:19[0m
+[0;32mI (916) app_init: ELF file SHA256:  3e81a1196...[0m
+[0;32mI (921) app_init: ESP-IDF:          v5.3.2[0m
+[0;32mI (926) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (931) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (936) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (941) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (948) heap_init: At 3FCABE78 len 0003D898 (246 KiB): RAM[0m
+[0;32mI (954) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (960) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (966) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (973) esp_psram: Adding pool of 6272K of PSRAM memory to heap allocator[0m
+[0;32mI (980) spi_flash: detected chip: winbond[0m
+[0;32mI (985) spi_flash: flash io: qio[0m
+[0;33mW (989) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;33mW (999) ADC: legacy driver is deprecated, please migrate to `esp_adc/adc_oneshot.h`[0m
+[0;32mI (1008) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (1015) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (1022) main_task: Started on CPU0[0m
+[0;32mI (1027) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1035) main_task: Calling app_main()[0m
+[0;32mI (1039) : 
+   _____                      _________    ____         
+  / ___/___  ____  ________  / ____/   |  / __ \       
+  \__ \/ _ \/ __ \/ ___/ _ \/ /   / /| | / /_/ /   
+ ___/ /  __/ / / (__  )  __/ /___/ ___ |/ ____/         
+/____/\___/_/ /_/____/\___/\____/_/  |_/_/           
+--------------------------------------------------------
+ Version: v1.0.0 Mar 21 2026 13:53:02
+--------------------------------------------------------
+[0m
+[0;32mI (1079) i2c_bus: i2c0 bus inited[0m
+[0;32mI (1083) bsp boards: detecting board SenseCAP_Indicator[0m
+[0;32mI (1089) bsp boards: Detected board: [SenseCAP_Indicator][0m
+[0;32mI (1101) gpio: GPIO[38]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (1125) gpio: GPIO[45]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[41]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1140) gpio: GPIO[48]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1553) lvgl_port: Add TP input device to LVGL[0m
+[0;32mI (1661) view: data max:90.0, min:13.0, char max:128.5, min:-25.5 [0m
+[0;32mI (1745) sensor-model: sensor history data read successful[0m
+[0;32mI (1746) uart: ESP_INTR_FLAG_IRAM flag not set while CONFIG_UART_ISR_IN_IRAM is enabled, flag updated[0m
+[0;32mI (1751) sensor-model: encode status:0, len:2[0m
+0x2 0xa4 
+[0;32mI (1771) pp: pp rom version: e7ae62f[0m
+[0;32mI (1771) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1772) wifi:wifi driver task: 3fcd4428, prio:23, stack:6656, core=0[0m
+[0;32mI (1779) wifi:wifi firmware version: b0fd6006b[0m
+[0;32mI (1780) wifi:wifi certification version: v7.0[0m
+[0;32mI (1784) wifi:config NVS flash: enabled[0m
+[0;32mI (1788) wifi:config nano formating: disabled[0m
+[0;32mI (1792) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1797) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1801) wifi:Init management short buffer num: 32[0m
+[0;32mI (1806) wifi:Init static tx buffer num: 16[0m
+[0;32mI (1810) wifi:Init tx cache buffer num: 32[0m
+[0;32mI (1813) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1817) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1821) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1825) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1830) wifi_init: rx ba win: 6[0m
+[0;32mI (1833) wifi_init: accept mbox: 6[0m
+[0;32mI (1837) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1841) wifi_init: udp mbox: 6[0m
+[0;32mI (1845) wifi_init: tcp mbox: 6[0m
+[0;32mI (1849) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1853) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1857) wifi_init: tcp mss: 1440[0m
+[0;32mI (1861) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1866) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1871) wifi-model: last config ssid: Stucsnet2[0m
+[0;32mI (1876) phy_init: phy_version 680,a6008b2,Jun  4 2024,16:41:10[0m
+[0;32mI (1911) wifi:mode : sta (d8:3b:da:a3:d8:28)[0m
+[0;32mI (1911) wifi:enable tsf[0m
+[0;32mI (1912) wifi-model: wifi event: WIFI_EVENT_STA_START[0m
+[0;32mI (1913) time: cfg read successful[0m
+[0;32mI (1917) view: event: VIEW_EVENT_TIME_CFG_UPDATE[0m
+[0;32mI (1918) wifi:new:<9,1>, old:<1,0>, ap:<255,255>, sta:<9,1>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1929) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1935) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1943) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1952) wifi:connected with Stucsnet2, aid = 5, channel 9, 40U, bssid = cc:2d:e0:b3:b2:51[0m
+[0;32mI (1952) wifi:security: WPA2-PSK, phy: bgn, rssi: -59[0m
+[0;32mI (1954) wifi:pm start, type: 1[0m
+
+[0;32mI (1956) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1965) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (1973) wifi-model: wifi event: WIFI_EVENT_STA_CONNECTED[0m
+[0;32mI (1979) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (1979) display: cfg read successful[0m
+[0;32mI (1985) wifi:[0;32mI (1984) time: event: VIEW_EVENT_WIFI_ST[0m[0m
+<ba-add>idx:0 (ifx:0, cc:2d:e0:b3:b2:51), tid:0, ssn:3, winSize:64[0;32mI (1994) city: event: VIEW_EVENT_WIFI_ST[0m
+
+[0;32mI (2012) view: event: VIEW_EVENT_WIFI_CONNECT_RET[0m
+[0;32mI (2012) view: event: VIEW_EVENT_DISPLAY_CFG[0m
+[0;32mI (2071) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (2917) time: need update time view[0m
+[0;32mI (2917) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (2917) time: Thu Jan  1 01:00:02 1970[0m
+[0;32mI (2973) esp_netif_handlers: sta ip: 192.168.1.119, mask: 255.255.255.0, gw: 192.168.1.1[0m
+[0;32mI (2973) wifi-model: got ip:192.168.1.119[0m
+[0;32mI (2976) wifi-model: Last network exception, check network...[0m
+[0;32mI (3325) ntp: Notification of a time synchronization event[0m
+[0;32mI (3325) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (3917) time: need update time view[0m
+[0;32mI (3917) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (3917) time: Sat Mar 21 13:55:40 2026[0m
+[0;32mI (7846) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7846) view: update tvoc:0[0m
+[0;32mI (7848) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (7848) view: update co2:640[0m
+
+--- 1.1.1.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 66ms
+[0;32mI (7982) view: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7984) time: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7988) city: event: VIEW_EVENT_WIFI_ST[0m
+[0;32mI (7993) city: start Get city and time zone[0m
+[0;32mI (8025) city: DNS lookup succeeded. IP=208.95.112.1[0m
+[0;32mI (8025) city: ... allocated socket[0m
+[0;32mI (8131) city: ... connected[0m
+[0;32mI (8132) city: ... socket send success[0m
+[0;32mI (8132) city: ... set socket receiving timeout success[0m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                               [0;32mI (8267) city: ... done reading from socket. Last read return=0 errno=128.[0m
+[0;32mI (8282) city: Get succesfully[0m
+[0;32mI (8284) city: ip       : 151.41.119.231[0m
+[0;32mI (8289) city: city     : Florence[0m
+[0;32mI (8293) city: timezone : Europe/Rome[0m
+[0;32mI (8297) city: Get time zone...[0m
+[0;32mI (8297) view: event: VIEW_EVENT_CITY[0m
+[0;32mI (9073) city: Connection established...[0m
+[0;32mI (9074) city: 124 bytes written[0m
+[0;32mI (9074) city: Reading HTTP response...[0m
+HTTP/1.1 200 OK
+Server: nginx/1.29.4
+Date: Sat, 21 Mar 2026 12:55:45 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+3fd
+{"timeZone":"Europe/Rome","currentLocalTime":"2026-03-21T13:55:45.0494681","currentUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"standardUtcOffset":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"hasDayLightSaving":true,"isDayLightSavingActive":false,"dstInterval":{"dstName":"CEST","dstOffsetToUtc":{"seconds":7200,"milliseconds":7200000,"ticks":72000000000,"nanoseconds":7200000000000},"dstOffsetToStandardTime":{"seconds":3600,"milliseconds":3600000,"ticks":36000000000,"nanoseconds":3600000000000},"dstStart":"2026-03-29T01:00:00Z","dstEnd":"2026-10-25T01:00:00Z","dstDuration":{"days":210,"nanosecondOfDay":0,"hours":0,"minutes":0,"seconds":0,"milliseconds":0,"subsecondTicks":0,"subsecondNanoseconds":0,"bclCompatibleTicks":181440000000000,"totalDays":210,"totalHours":5040,"totalMinutes":302400,"totalSeconds":18144000,"totalMilliseconds":18144000000,"totalTicks":181440000000000,"totalNanoseconds":18144000000000000}}}
+0
+
+[0;32mI (9212) city: local_utc_offset:3600s[0m
+[0;32mI (9215) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (10391) ntp: Notification of a time synchronization event[0m
+[0;32mI (10391) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (11746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:55:47 2026[0m
+[0;32mI (11746) sensor-model: Temp History day data valid[0m
+[0;32mI (11749) sensor-model: Temp History week data valid[0m
+[0;32mI (11755) sensor-model: Humidity History day data valid[0m
+[0;32mI (11761) sensor-model: Humidity History week data valid[0m
+[0;32mI (11767) sensor-model: CO2 index:0, data:524, time:1774008000[0m
+[0;32mI (11773) sensor-model: CO2 index:1, data:513, time:1774011600[0m
+[0;32mI (11780) sensor-model: CO2 index:2, data:501, time:1774015200[0m
+[0;32mI (11786) sensor-model: CO2 index:3, data:488, time:1774018800[0m
+[0;32mI (11793) sensor-model: CO2 index:4, data:502, time:1774022400[0m
+[0;32mI (11799) sensor-model: CO2 index:5, data:621, time:1774026000[0m
+[0;32mI (11806) sensor-model: CO2 index:22, data:430, time:1774087200[0m
+[0;32mI (11812) sensor-model: CO2 History day data valid[0m
+[0;32mI (11818) sensor-model: CO2, index:1, min:638, max:887, time:1773532800[0m
+[0;32mI (11825) sensor-model: CO2, index:5, min:751, max:821, time:1773878400[0m
+[0;32mI (11832) sensor-model: CO2 History week data valid[0m
+[0;32mI (11838) sensor-model: TVOC index:0, data:101, time:1774008000[0m
+[0;32mI (11845) sensor-model: TVOC index:1, data:100, time:1774011600[0m
+[0;32mI (11851) sensor-model: TVOC index:2, data:100, time:1774015200[0m
+[0;32mI (11858) sensor-model: TVOC index:3, data:101, time:1774018800[0m
+[0;32mI (11864) sensor-model: TVOC index:4, data:97, time:1774022400[0m
+[0;32mI (11871) sensor-model: TVOC index:5, data:63, time:1774026000[0m
+[0;32mI (11877) sensor-model: TVOC index:22, data:26, time:1774087200[0m
+[0;32mI (11884) sensor-model: TVOC History day data valid[0m
+[0;32mI (11890) sensor-model: TVOC, index:1, min:0, max:115, time:1773532800[0m
+[0;32mI (11897) sensor-model: TVOC, index:5, min:0, max:107, time:1773878400[0m
+[0;32mI (11904) sensor-model: TVOC History week data valid[0m
+[0;32mI (11910) sensor-model: update day history data[0m
+[0;32mI (11917) sensor-model: sensor history data save successful[0m
+[0;32mI (11921) sensor-model: update week history data[0m
+[0;32mI (11929) sensor-model: sensor history data save successful[0m
+[0;32mI (13094) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13094) view: update tvoc:0[0m
+[0;32mI (13097) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (13097) view: update co2:623[0m
+[0;32mI (18342) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18342) view: update tvoc:0[0m
+[0;32mI (18348) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (18348) view: update co2:615[0m
+[0;32mI (21746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:55:57 2026[0m
+[0;32mI (23591) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23591) view: update tvoc:0[0m
+[0;32mI (23593) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (23593) view: update co2:614[0m
+[0;32mI (23917) time: need update time view[0m
+[0;32mI (23917) time: Sat Mar 21 13:56:00 2026[0m
+[0;32mI (23938) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (28839) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28839) view: update tvoc:0[0m
+[0;32mI (28841) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (28842) view: update co2:600[0m
+[0;32mI (31746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:07 2026[0m
+[0;32mI (34087) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34087) view: update tvoc:0[0m
+[0;32mI (34090) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (34090) view: update co2:595[0m
+[0;32mI (39335) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39335) view: update tvoc:0[0m
+[0;32mI (39338) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (39338) view: update co2:603[0m
+[0;32mI (41746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:17 2026[0m
+[0;32mI (44583) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44583) view: update tvoc:0[0m
+[0;32mI (44586) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (44586) view: update co2:599[0m
+[0;32mI (49832) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49832) view: update tvoc:0[0m
+[0;32mI (49834) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (49834) view: update co2:598[0m
+[0;32mI (51746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:27 2026[0m
+[0;32mI (55080) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55080) view: update tvoc:0[0m
+[0;32mI (55082) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (55082) view: update co2:598[0m
+[0;32mI (60328) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60328) view: update tvoc:0[0m
+[0;32mI (60331) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (60331) view: update co2:599[0m
+[0;32mI (61746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:37 2026[0m
+[0;32mI (65576) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65576) view: update tvoc:0[0m
+[0;32mI (65579) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (65579) view: update co2:599[0m
+[0;32mI (70824) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70824) view: update tvoc:0[0m
+[0;32mI (70827) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (70827) view: update co2:599[0m
+[0;32mI (71746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:47 2026[0m
+[0;32mI (76073) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76073) view: update tvoc:0[0m
+[0;32mI (76075) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (76075) view: update co2:599[0m
+[0;32mI (81321) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81321) view: update tvoc:0[0m
+[0;32mI (81323) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (81323) view: update co2:599[0m
+[0;32mI (81746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:56:57 2026[0m
+[0;32mI (83917) time: need update time view[0m
+[0;32mI (83917) view: event: VIEW_EVENT_TIME[0m
+[0;32mI (83917) time: Sat Mar 21 13:57:00 2026[0m
+[0;32mI (86569) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86569) view: update tvoc:0[0m
+[0;32mI (86572) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (86572) view: update co2:599[0m
+[0;32mI (91746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:57:07 2026[0m
+[0;32mI (91817) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91817) view: update tvoc:0[0m
+[0;32mI (91820) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (91820) view: update co2:599[0m
+[0;32mI (97066) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97066) view: update tvoc:0[0m
+[0;32mI (97068) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (97068) view: update co2:599[0m
+[0;32mI (101746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:57:17 2026[0m
+[0;32mI (102314) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102314) view: update tvoc:0[0m
+[0;32mI (102316) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (102317) view: update co2:599[0m
+[0;32mI (107562) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107562) view: update tvoc:0[0m
+[0;32mI (107565) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (107565) view: update co2:598[0m
+[0;32mI (111746) sensor-model: __sensor_history_data_update_callback: Sat Mar 21 13:57:27 2026[0m
+[0;32mI (112810) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112810) view: update tvoc:0[0m
+[0;32mI (112813) view: event: VIEW_EVENT_SENSOR_DATA[0m
+[0;32mI (112813) view: update co2:599[0m

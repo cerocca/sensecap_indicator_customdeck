@@ -4,29 +4,29 @@
 Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).  
 Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).  
 Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)  
-Path locale: `/Users/ciru/sensecap_indicator_cirutech`
+Path locale: `/Users/ciru/sensecap_indicator_cirutech`  
 Build:
 ```bash
 source ~/esp/esp-idf/export.sh   # ogni nuovo terminale
 cd firmware && idf.py build flash monitor
 ```
-Porta seriale: `/dev/cu.usbserial-1110`
+Porta seriale: `/dev/cu.usbserial-1110`  
 Flash esplicito: `idf.py -p /dev/cu.usbserial-1110 flash monitor`
 
-> **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build` per far rilevare i nuovi file a CMake.
+> **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build`.
 
 ---
 
 ## Regole fondamentali
 
 1. **Non toccare mai** le schermate originali Seeed: clock, sensors — né il pulsante fisico.
-2. La schermata **settings** originale Seeed viene **sostituita** dalla settings custom (che include Wi-Fi + tutte le config).
+2. La schermata **settings** originale Seeed viene **sostituita** dalla settings custom.
 3. Le altre schermate custom si **aggiungono** alla navigazione.
 4. Aggiornamenti UI sempre con `lv_port_sem_take()` / `lv_port_sem_give()` — mai `lv_lock()`/`lv_unlock()`.
 5. Buffer HTTP: minimo **2048 bytes** (1024 causa parse failure silenzioso su `/api/4/fs`).
 6. Struct grandi in task FreeRTOS: sempre `static` — evita stack overflow.
 7. Pattern reference per nuovi task HTTP polling: `indicator_glances.c`.
-8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`) — non inizializzare tutto al boot nel main task.
+8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`).
 
 ---
 
@@ -48,7 +48,7 @@ clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai �
 | 4 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
 | 5 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
 | 6 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
-| 7 | `screen_ai` | Custom — placeholder | Tastiera touch ora; microfono Grove in futuro |
+| 7 | `screen_ai` | Custom — placeholder | Tastiera touch ora |
 
 ### Struttura file
 ```
@@ -56,6 +56,8 @@ clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai �
 ├── CLAUDE.md
 ├── TODO.md
 ├── README.md
+├── SETUP.md
+├── CHANGELOG.md
 ├── sdkconfig.defaults                     # fix PSRAM XIP + mbedTLS dynamic — NON toccare
 └── firmware/                              ← codice firmware
     ├── CMakeLists.txt                     # EXTRA_COMPONENT_DIRS = ../components
@@ -65,7 +67,7 @@ clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai �
         ├── app_config.h                   # defaults NVS + chiavi NVS (NON usare NVS key > 15 char)
         ├── ui/
         │   ├── ui_manager.c/.h            # navigazione schermate + init tutte le custom
-        │   ├── screen_settings_custom.c/.h  # settings custom (5 tab: Wi-Fi·Hue·Server·Proxy·AI)
+        │   ├── screen_settings_custom.c/.h
         │   ├── screen_hue.c/.h
         │   ├── screen_sibilla.c/.h
         │   ├── screen_launcher.c/.h
@@ -78,29 +80,22 @@ clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai �
 
 ---
 
-## Configurazione
-
-Tutti i valori configurabili (IP, porte, API key, nomi luci, label launcher) sono centralizzati in `main/app_config.h`. La schermata Settings permette di modificarli a runtime (salvati in NVS). Fallback ai valori hardcoded se NVS vuoto.
-
----
-
 ## Schermata 3 — Settings (custom)
 
-File: `screen_settings_custom.c/.h` — sostituisce la schermata settings originale Seeed nella navigazione.
-Layout: **tabview LVGL** (44px header), 5 tab orizzontali.
+Layout: tabview LVGL (44px header), 5 tab orizzontali.
 
 | Tab | Contenuto |
 |---|---|
-| **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna a settings_custom via `ui_screen_last`) |
+| **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna via `ui_screen_last`) |
 | **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
-| **Server** | IP Sibilla, porta Glances → NVS |
+| **Server** | IP LocalServer, porta Glances → NVS |
 | **Proxy** | IP + porta proxy Mac → NVS |
 | **AI** | Claude API key, endpoint → NVS |
 
 - Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
 - Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
-- `ui_screen_last` in `ui.c` è **non-static** (necessario per permettere il return da `ui_screen_wifi`).
-- Tutti i default e le chiavi NVS centralizzati in `main/app_config.h` (chiavi max 15 char).
+- `ui_screen_last` in `ui.c` è **non-static** (necessario per return da `ui_screen_wifi`).
+- Chiavi NVS max 15 char — centralizzate in `app_config.h`.
 
 ---
 
@@ -120,22 +115,21 @@ PUT  /clip/v2/resource/light/<ID>          # body: {"dimming":{"brightness":80.0
 
 ### UI
 - Lista 4 luci: nome + stato ON/OFF + slider luminosità (0–100%)
-- Toggle ON/OFF al tap
-- Polling stato ogni 5 secondi
+- Toggle ON/OFF al tap, polling ogni 5 secondi
 - Feedback visivo su errore di rete
 
 ---
 
-## Schermata 5 — Sibilla Dashboard
+## Schermata 5 — LocalServer Dashboard
 
 ### Sorgenti dati
-- **Glances API:** `http://192.168.1.69:61208/api/4/`
+- **Glances API:** `http://<LOCALSERVER_IP>:<GLANCES_PORT>/api/4/`
   - CPU: `/cpu` → `total`
   - RAM: `/mem` → `percent`
   - Disco: `/fs` → primo elemento, `percent`
   - Uptime: `/uptime`
   - Load avg: `/load`
-- **Uptime Kuma:** via proxy Mac → `GET http://192.168.1.70:8765/uptime` → JSON compatto
+- **Uptime Kuma:** via proxy Mac → `GET http://<PROXY_IP>:<PROXY_PORT>/uptime` → JSON compatto
 
 ### Layout UI — posizioni y (480×480)
 ```
@@ -159,46 +153,39 @@ y=278+i×22  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non u
 
 ## Schermata 6 — Launcher
 
-- 4 pulsanti griglia 2×2 (200×170 px): GitHub, Strava, Garmin, Intervals
-- Al tap: `GET http://192.168.1.70:8765/open/<n>` (n=1..4)
+- 4 pulsanti griglia 2×2 (200×170 px)
+- Al tap: `GET http://<PROXY_IP>:<PROXY_PORT>/open/<n>` (n=1..4)
 - Il proxy Python apre l'URL corrispondente sul Mac
 
 ---
 
 ## Schermata 7 — AI (placeholder)
 
-- Schermata presente ma non funzionale finché non disponibile hardware Grove
-- UI attuale: tastiera touch LVGL + area testo per input/output
-- **Futuro:** tap/wake word → microfono Grove → Whisper → Claude API → TTS speaker Grove
-- **Vincolo futuro:** una sola connessione TLS attiva alla volta — sospendere polling Hue/Glances durante sessione vocale
-- Buffer audio in PSRAM (`MALLOC_CAP_SPIRAM`)
+- UI attuale: tastiera touch LVGL + area testo
+- Futuro: valutare XIAO come coprocessore audio (vedi TODO)
+- Potrebbe essere rimossa in release futura (vedi TODO)
+- **Vincolo futuro:** una sola connessione TLS attiva alla volta — sospendere polling Hue/Glances durante sessione AI
 
 ---
 
 ## ⚠️ Warning critici
 
 ### sdkconfig — non rigenerare da zero
-`sdkconfig` ha precedenza su `sdkconfig.defaults`. Se corrotto (device si resetta in loop standalone):
+`sdkconfig` ha precedenza su `sdkconfig.defaults`. Se corrotto:
 ```bash
 cd firmware && rm sdkconfig && idf.py build
-grep -E "SPIRAM_XIP_FROM_PSRAM|MEMPROT_FEATURE|MBEDTLS_DYNAMIC_BUFFER|MAIN_TASK_STACK|UART_ISR" sdkconfig
+grep -E "SPIRAM_XIP_FROM_PSRAM|MEMPROT_FEATURE|MBEDTLS_DYNAMIC_BUFFER|MAIN_TASK_STACK|STA_DISCONNECTED_PM" sdkconfig
 ```
-Valori attesi: `XIP_FROM_PSRAM=y` · `MEMPROT_FEATURE=n` · `DYNAMIC_BUFFER=y` · `MAIN_TASK_STACK_SIZE=16384` · `UART_ISR_IN_IRAM=y` · `STA_DISCONNECTED_PM_ENABLE=n`
+Valori attesi: `XIP_FROM_PSRAM=y` · `MEMPROT_FEATURE=n` · `DYNAMIC_BUFFER=y` · `MAIN_TASK_STACK_SIZE=16384` · `STA_DISCONNECTED_PM_ENABLE=n`
 
 ### Bug Seeed — VIEW_EVENT_WIFI_ST null-check (fixato)
-In `indicator_view.c`, il handler `VIEW_EVENT_WIFI_ST` lasciava `p_src = NULL` quando
-`p_st->is_connected = true` ma `wifi_rssi_level_get()` restituiva un valore fuori da {1,2,3}.
-La chiamata `lv_img_set_src(obj, NULL)` causava `LoadProhibited` in `handler_execute`.
-Fix applicato: guard `if (p_src != NULL)` prima dei 7 `lv_img_set_src`.
+In `indicator_view.c`: `wifi_rssi_level_get()` fuori range {1,2,3} lasciava `p_src = NULL`.
+`lv_img_set_src(obj, NULL)` causava `LoadProhibited`. Fix: guard `if (p_src != NULL)`.
 
 ### TLS simultanee — heap ESP32
-Default mbedTLS alloca 16KB+4KB per connessione → `mbedtls_ssl_setup -0x7F00` (heap esaurito).  
-Fix in `sdkconfig.defaults`: `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y`.  
-In ESP-IDF 5.3 solo questa opzione serve (DYNAMIC_RX/TX non esistono come kconfig symbol).
+`CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` in `sdkconfig.defaults`. In ESP-IDF 5.3 basta questa.
 
 ### InstrFetchProhibited crash (PSRAM + Wi-Fi)
-Crash in `idle_hook_cb` subito dopo connessione Wi-Fi.  
-Causa: Wi-Fi sospende cache Flash ~200µs — codice non in IRAM inaccessibile.  
 Fix in `sdkconfig.defaults`:
 ```
 CONFIG_SPIRAM_XIP_FROM_PSRAM=y
@@ -206,59 +193,42 @@ CONFIG_ESP_SYSTEM_MEMPROT_FEATURE=n
 ```
 
 ### Stack overflow main task — LVGL object creation
-Init di 5+ schermate LVGL custom crea 60+ oggetti con call chain profonde → silent stack overflow.
-Il crash si manifesta più tardi (backtrace corrotto, `VIEW_EVENT_DISPLAY_CFG`, `IllegalInstruction`) — non al momento della vera causa.
-Fix in `sdkconfig.defaults`: `CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384` (8192 non sufficiente per 5 schermate custom).
-**Regola**: schermate con molti widget usano il pattern lazy init (vedi sotto).
+Init di 5+ schermate LVGL custom → silent stack overflow → crash tardivo (`IllegalInstruction`, backtrace corrotto).
+Fix: `CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384` in `sdkconfig.defaults`.
 
 ### Lazy init — schermate pesanti (pattern obbligatorio)
-Schermate con molti oggetti LVGL non vanno inizializzate completamente al boot nel main task.
-Pattern: split `screen_xxx_init()` in due funzioni:
-- `screen_xxx_init()` — lightweight: solo `lv_obj_create(NULL)` + stile base. Chiamata al boot da `ui_manager_init()`. Garantisce che il puntatore sia non-NULL (necessario per `_ui_screen_change` da handler Seeed).
-- `screen_xxx_populate()` — heavy: tabview, widget, eventi. Chiamata lazily al primo swipe verso la schermata.
-
-Pattern in `ui_manager.c`:
+Split `screen_xxx_init()` (lightweight, al boot) e `screen_xxx_populate()` (heavy, lazy al primo swipe).
 ```c
 static bool s_xxx_populated = false;
 static void ensure_xxx_populated(void) {
     if (!s_xxx_populated) { screen_xxx_populate(); s_xxx_populated = true; }
 }
 ```
-La populate avviene nello stesso event dispatch del gesture → prima che `lv_timer_handler` esegua l'animazione → contenuto visibile al primo frame.
-Per gestire la navigate da Seeed (handler registrato prima del nostro): aggiungere un handler su `ui_screen_sensor` in `ui_manager_init()` che chiama solo `ensure_xxx_populated()` senza navigare. Il handler Seeed (che naviga) è già registrato e gira per primo; il nostro popola nello stesso tick.
+La populate avviene nello stesso event dispatch del gesture → contenuto visibile al primo frame.
+Aggiungere un handler su `ui_screen_sensor` in `ui_manager_init()` che chiama solo `ensure_xxx_populated()` senza navigare — il handler Seeed naviga già per primo.
 
 ### Wi-Fi power management crash (esp_phy_enable / ppTask / pm_dream)
-Crash in `esp_phy_enable → pm_dream → ppTask` durante wake dal sleep mode Wi-Fi.
 Fix obbligatorio in **due posti**:
 1. `sdkconfig.defaults`: `CONFIG_ESP_WIFI_STA_DISCONNECTED_PM_ENABLE=n`
-2. `indicator_wifi.c`: `esp_wifi_set_ps(WIFI_PS_NONE)` dopo **ogni** `esp_wifi_start()` (scan, connect, reconnect, init con/senza SSID)
+2. `indicator_wifi.c`: `esp_wifi_set_ps(WIFI_PS_NONE)` dopo **ogni** `esp_wifi_start()`
 
 ```c
 ESP_ERROR_CHECK(esp_wifi_start());
 esp_wifi_set_ps(WIFI_PS_NONE);   // obbligatorio — crash senza
 ```
 
-Senza entrambi i fix il device crasha sporadicamente dopo la connessione Wi-Fi.
-
 ### CONFIG_UART_ISR_IN_IRAM — incompatibile con SPIRAM_XIP_FROM_PSRAM
-**NON aggiungere** `CONFIG_UART_ISR_IN_IRAM=y` con `SPIRAM_XIP_FROM_PSRAM=y`.
-Causa boot loop immediato (app non parte, nessun log). Il WDT `sys_evt` stuck in `uart_tx_char` ha una causa diversa — non è un problema di ISR IRAM.
-NON aggiungere mai questa opzione a `sdkconfig.defaults`.
+**NON aggiungere** — causa boot loop immediato. NON aggiungere mai a `sdkconfig.defaults`.
 
 ### Flash incompleto — "invalid segment length 0xffffffff"
-Se `idf.py flash` viene interrotto (es. pipe rotta con `head`, Ctrl+C, timeout), il binario in flash è troncato.
-Il bootloader carica i segmenti iniziali ma poi legge `0xffffffff` come lunghezza del segmento successivo → `E (xxx) boot: Factory app partition is not bootable` → boot loop.
-**Non** è un crash del firmware — basta ri-flashare completamente.
-Regola: non usare `| head` su `idf.py flash`, non interrompere il processo di scrittura.
+Non interrompere `idf.py flash`. Non usare `| head`. Se incompleto: ri-flashare completamente.
 
 ### Navigazione swipe LVGL — guard anti-reentrant
-Obbligatorio in ogni gesture handler. Senza di esso swipe doppio durante animazione blocca la navigazione.  
-Tutti i container child: `lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE)`.
-
+Obbligatorio in ogni gesture handler. Tutti i container child: `lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE)`.
 ```c
 static void ui_event_screen_xxx(lv_event_t *e) {
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
-    if (lv_scr_act() != ui_screen_xxx) return;          // guard anti-reentrant
+    if (lv_scr_act() != ui_screen_xxx) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT)
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
@@ -266,20 +236,6 @@ static void ui_event_screen_xxx(lv_event_t *e) {
         _ui_screen_change(prev, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 ```
-
----
-
-## Ordine di implementazione
-
-1. **Setup** — dal repo Seeed copiare **solo** `examples/indicator_basis/` in `firmware/` (non tutta la cartella `examples/`), verifica build pulita, flash base funzionante
-2. **Analisi** — mappare navigazione esistente, pulsante fisico, comportamenti UI prima di toccare nulla
-3. **Navigazione** — aggiungere schermate vuote nello stack senza rompere nulla, verificare swipe
-4. **Screen Settings** — tab Wi-Fi (comportamento Seeed) + tab Hue/Server/Proxy con NVS
-5. **Screen Hue** — toggle ON/OFF, poi slider luminosità
-6. **Screen Sibilla** — Glances prima, poi Uptime Kuma via proxy
-7. **Screen Launcher** — 4 pulsanti proxy Mac
-8. **Screen AI** — placeholder tastiera touch
-9. **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
 
 ---
 

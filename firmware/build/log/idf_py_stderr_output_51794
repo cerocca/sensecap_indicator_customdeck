@@ -1,0 +1,63 @@
+[0;33m--- esp-idf-monitor 1.9.0 on /dev/cu.usbserial-1110 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x420a19bc: [0;33mwep_encap[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420a19c0: [0;33mwep_encap[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4037ecdc: [0;33msystimer_ticks_to_us[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/port/esp32s3/systimer.c[0m[0m:[1;31m15[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x420a19bd: [0;33mwep_encap[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420a250f: [0;33mpm_sleep_delay_timeout_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420a9c61: [0;33mRC_GetCtsTime[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420dffb1: [0;33mpp_timer_do_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40389d89: [0;33mppTask[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x4037615a: [0;33mpanic_abort[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m463[0m
+[0m--- 0x403809dd: [0;33mesp_system_abort[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/esp_system_chip.c[0m[0m:[1;31m92[0m
+[0m--- 0x40389179: [0;33m__assert_func[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/newlib/assert.c[0m[0m:[1;31m80[0m
+[0m--- 0x4038172b: [0;33mspinlock_release[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/include/spinlock.h[0m[0m:[1;31m190[0m
+[0m--- (inlined by) [0;33mvPortExitCritical[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m501[0m
+[0m--- 0x4037cc4b: [0;33mvPortExitCriticalSafe[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include/freertos/portmacro.h[0m[0m:[1;31m594[0m
+[0m--- (inlined by) [0;33mgdma_reset[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/dma/gdma.c[0m[0m:[1;31m584[0m
+[0m--- 0x42046d30: [0;33mesp_lcd_rgb_panel_refresh[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_lcd/rgb/esp_lcd_panel_rgb.c[0m[0m:[1;31m469[0m
+[0m--- 0x42013453: [0;33mlcd_task[0m[0m at [0;32m/Users/ciru/sensecap_indicator_cirutech/components/bsp/src/peripherals/bsp_lcd.c[0m[0m:[1;31m104[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x420e0565: [0;33mhandler_execute[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m135[0m
+[0m--- (inlined by) [0;33mesp_event_loop_run[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m576[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x420e0562: [0;33mhandler_execute[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m129[0m
+[0m--- (inlined by) [0;33mesp_event_loop_run[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m576[0m
+[0m--- 0x420e06bc: [0;33mesp_event_loop_run_task[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m105[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x403799a0: [0;33mtimer_insert[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_timer/src/esp_timer.c[0m[0m:[1;31m318[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x403761bb: [0;33mpanicHandler[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/panic_handler.c[0m[0m:[1;31m245[0m
+[0m--- 0x420c2327: [0;33mbias_reg_set[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x420c2324: [0;33mbias_reg_set[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4037b5c5: [0;33mram_phy_wakeup_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x4037b3a7: [0;33mphy_wakeup_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420ac687: [0;33mesp_phy_enable[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_phy/src/phy_init.c[0m[0m:[1;31m266[0m
+[0m--- 0x420e2b69: [0;33mesp_phy_enable_wrapper[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_wifi/esp32s3/esp_adapter.c[0m[0m:[1;31m616[0m
+[0m--- 0x4003ad27: [0;33mwifi_rf_phy_enable[0m[0m in [0;32mROM[0m
+[0m--- 0x420a1c48: [0;33mpm_disconnected_wake[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x420a1d2a: [0;33mpm_wake_up[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42094b97: [0;33mieee80211_ioctl_process[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40389da1: [0;33mppTask[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x42002f40: [0;33mpanic_print_str[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m136[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x4037ecdc: [0;33msystimer_ticks_to_us[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_hw_support/port/esp32s3/systimer.c[0m[0m:[1;31m15[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x420e05a5: [0;33mhandler_execute[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m135[0m
+[0m--- (inlined by) [0;33mesp_event_loop_run[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m584[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x420e05a2: [0;33mhandler_execute[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m129[0m
+[0m--- (inlined by) [0;33mesp_event_loop_run[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m584[0m
+[0m--- 0x420e06bc: [0;33mesp_event_loop_run_task[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m105[0m
+[0m--- 0x403760b8: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp:*)",
+      "Bash(source ~/esp/esp-idf/export.sh)",
+      "Bash(idf.py build:*)",
+      "Bash(idf.py flash:*)",
+      "Bash(ls:*)",
+      "Bash(idf.py -p /dev/cu.usbserial-1110 flash monitor)",
+      "Bash(idf.py -p /dev/cu.usbserial-1110 flash)",
+      "Bash(idf.py reconfigure:*)",
+      "Bash(kill 53607)",
+      "Bash(python3:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(idf.py -p /dev/cu.usbserial-1110 monitor)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

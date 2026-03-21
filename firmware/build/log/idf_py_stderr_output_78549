@@ -1,0 +1,290 @@
+[0;33m--- esp-idf-monitor 1.9.0 on /dev/cu.usbserial-1110 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x403761ef: [0;33mpanicHandler[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/panic_handler.c[0m[0m:[1;31m245[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x403760ec: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x42049188: [0;33mesp_task_wdt_reset[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m713[0m
+[0m--- 0x4204918c: [0;33mesp_task_wdt_reset[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m716[0m
+[0m--- 0x4204918c: [0;33mesp_task_wdt_reset[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m716[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x4038789a: [0;33muart_ll_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m339[0m
+[0m--- (inlined by) [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m32[0m
+[0m--- 0x403878a6: [0;33muart_hal_write_txfifo[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/hal/uart_hal_iram.c[0m[0m:[1;31m33[0m
+[0m--- 0x403743c0: [0;33m_DoubleExceptionVector[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m564[0m
+[0m--- 0x42095965: [0;33mieee80211_ioctl[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40056f5c: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x40056f72: [0;33mmemcpy[0m[0m in [0;32mROM[0m
+[0m--- 0x42095962: [0;33mieee80211_ioctl[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42097401: [0;33mesp_wifi_ipc_internal[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42097577: [0;33mesp_wifi_internal_reg_netstack_buf_cb[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x42069a46: [0;33mwifi_start[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_wifi/src/wifi_default.c[0m[0m:[1;31m59[0m
+[0m--- 0x42069aaf: [0;33mwifi_default_action_sta_start[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_wifi/src/wifi_default.c[0m[0m:[1;31m74[0m
+[0m--- 0x420df51d: [0;33mhandler_execute[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m135[0m
+[0m--- (inlined by) [0;33mesp_event_loop_run[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m592[0m
+[0m--- 0x420df5ec: [0;33mesp_event_loop_run_task[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_event/esp_event.c[0m[0m:[1;31m105[0m
+[0m--- 0x403760ec: [0;33mesp_restart_noos[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m158[0m
+[0m--- 0x403761ef: [0;33mpanicHandler[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/panic_handler.c[0m[0m:[1;31m245[0m
+[0m--- 0x42003000: [0;33mpanic_print_str[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m136[0m
+[0m--- 0x403761ef: [0;33mpanicHandler[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/port/panic_handler.c[0m[0m:[1;31m245[0m
+[0m--- 0x42003000: [0;33mpanic_print_str[0m[0m at [0;32m/Users/ciru/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m136[0m
+[1;31m--- Error: read failed: [Errno 6] Device not configured[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m.[0m[0;33m[0m
+[0m

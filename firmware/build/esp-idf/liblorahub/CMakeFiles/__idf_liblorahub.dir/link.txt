@@ -1,0 +1,2 @@
+/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ar qc libliblorahub.a CMakeFiles/__idf_liblorahub.dir/lorahub_aux.c.obj CMakeFiles/__idf_liblorahub.dir/lorahub_hal.c.obj CMakeFiles/__idf_liblorahub.dir/lorahub_hal_rx.c.obj CMakeFiles/__idf_liblorahub.dir/lorahub_hal_tx.c.obj
+/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ranlib libliblorahub.a
