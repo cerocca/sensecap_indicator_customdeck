@@ -33,8 +33,30 @@ cd firmware && idf.py build flash monitor
 Swipe LEFT = avanti, swipe RIGHT = indietro.
 
 ```
-clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai ↔ (torna a clock)
+clock ↔ sensors ↔ settings_custom ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [ai] ↔ (torna a clock)
 ```
+
+Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
+Clock, sensors e settings_custom sono sempre visibili.
+
+**Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
+```c
+// Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=ai
+static lv_obj_t *next_from(int cur, int dir) {
+    for (int i = 1; i < N_SCREENS; i++) {
+        int idx = ((cur + dir * i) % N_SCREENS + N_SCREENS) % N_SCREENS;
+        if (scr_enabled(idx)) return s_scr[idx];
+    }
+    return s_scr[cur];
+}
+```
+Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` dopo gli `screen_xxx_init()`.
+
+**Flag di abilitazione schermate:**
+- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_ai_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
+- Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
+- Aggiornati live da `screen_settings_custom.c` (tab "Schermate") al toggle switch
+- Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
 
 ### Schermate
 | # | Nome | Tipo | Note |
@@ -79,7 +101,7 @@ clock ↔ sensors ↔ settings_custom ↔ hue ↔ sibilla ↔ launcher ↔ ai �
 
 ## Schermata 3 — Settings (custom)
 
-Layout: tabview LVGL (44px header), 5 tab orizzontali.
+Layout: tabview LVGL (44px header), 6 tab orizzontali.
 
 | Tab | Contenuto |
 |---|---|
@@ -88,6 +110,7 @@ Layout: tabview LVGL (44px header), 5 tab orizzontali.
 | **Server** | IP LocalServer, porta Glances → NVS |
 | **Proxy** | IP + porta proxy Mac → NVS |
 | **AI** | Claude API key, endpoint → NVS |
+| **Schermate** | 4 switch ON/OFF (Hue, LocalServer, Launcher, AI) → aggiornano `g_scr_xxx_enabled` + NVS |
 
 - Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
 - Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
@@ -228,11 +251,26 @@ static void ui_event_screen_xxx(lv_event_t *e) {
     if (lv_scr_act() != ui_screen_xxx) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT)
-        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+        _ui_screen_change(next_from(idx, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
     else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(prev, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+        _ui_screen_change(next_from(idx, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 ```
+
+### Bug Seeed — ui_event_screen_time target hardcoded (fixato)
+`ui_event_screen_time` in `ui.c` aveva `_ui_screen_change(ui_screen_ai, ...)` hardcoded su swipe RIGHT,
+ignorando i flag di abilitazione schermate.
+
+**Fix:** in `ui_manager_init()`:
+```c
+lv_obj_remove_event_cb(ui_screen_time, ui_event_screen_time);  // rimuove handler Seeed
+lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_ALL, NULL);  // sostituisce
+```
+`gesture_clock()` in `ui_manager.c` replica LEFT e BOTTOM identici a Seeed; RIGHT usa `next_from(0, -1)`.
+
+**Perché non aggiungere un secondo handler "override":** `lv_scr_load_anim` chiamato due volte
+nello stesso tick carica *immediatamente* la prima schermata (flash visivo) e poi anima alla seconda
+(`lv_disp.c:229`, controllo `d->scr_to_load`). L'unico modo sicuro è *rimuovere* il primo handler.
 
 ---
 
