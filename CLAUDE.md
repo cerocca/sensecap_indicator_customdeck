@@ -24,6 +24,7 @@ cd firmware && idf.py build flash monitor
 6. Struct grandi in task FreeRTOS: sempre `static` — evita stack overflow.
 7. Pattern reference per nuovi task HTTP polling: `indicator_glances.c`.
 8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`).
+9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: includere `"esp_wifi.h"` — non `"esp_netif.h"`. Il tipo corretto per il metodo HTTP client è `esp_http_client_method_t` (non `esp_http_method_t`).
 
 ---
 

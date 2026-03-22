@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `model/indicator_hue.c/.h`: polling HTTPS ogni 5s verso Hue Bridge API v2 — GET stato luce (on/off + brightness), PUT toggle e brightness, task one-shot per comandi, aggiornamento ottimistico; avviato su `IP_EVENT_STA_GOT_IP` con 3s delay (dopo config fetch)
+- `ui/screen_hue.c/.h`: 4 card con nome luce, switch ON/OFF (colore ambra), slider luminosità 1-100 (colore ambra); pattern lazy populate; callback UI registrata in `screen_hue_populate()`; `ensure_hue_populated()` in `ui_manager.c` prima delle transizioni verso screen_hue
 - `sensedeck_proxy.py`: proxy Python completo (sostituisce `sibilla_proxy.py`); endpoint `/config` GET/POST e `/config/ui` Web UI dark theme per configurazione centralizzata
 - `config.json`: file configurazione generato dal proxy (in `.gitignore`); include hue bridge/api/luci + ID UUID luci Hue + server + proxy + launcher URLs
 - `model/indicator_config.c/.h`: fetch configurazione dal proxy al boot — handler `IP_EVENT_STA_GOT_IP` → task FreeRTOS (1.5s delay, guard `s_boot_fetched`)
