@@ -41,3 +41,9 @@
 
 #define NVS_KEY_AI_API_KEY      "ai_api_key"
 #define NVS_KEY_AI_ENDPOINT     "ai_endpoint"
+
+/* ── Screen enable flags (default: 1 = enabled) ────────────── */
+#define NVS_KEY_SCR_HUE_EN      "scr_hue_en"
+#define NVS_KEY_SCR_SRV_EN      "scr_srv_en"
+#define NVS_KEY_SCR_LNCH_EN     "scr_lnch_en"
+#define NVS_KEY_SCR_AI_EN       "scr_ai_en"

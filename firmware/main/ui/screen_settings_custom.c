@@ -1,5 +1,6 @@
 #include "screen_settings_custom.h"
 #include "ui_helpers.h"           /* _ui_screen_change */
+#include "ui_manager.h"           /* g_scr_xxx_enabled */
 #include "indicator_storage.h"
 #include "app_config.h"
 #include "esp_log.h"
@@ -33,6 +34,12 @@ static lv_obj_t *ta_proxy_port;
 /* ─── AI tab textareas ──────────────────────────────────────── */
 static lv_obj_t *ta_ai_key;
 static lv_obj_t *ta_ai_endpoint;
+
+/* ─── Schermate tab switches ─────────────────────────────────── */
+static lv_obj_t *sw_hue;
+static lv_obj_t *sw_srv;
+static lv_obj_t *sw_lnch;
+static lv_obj_t *sw_ai;
 
 /***********************************************************
  * helpers
@@ -281,6 +288,92 @@ static lv_obj_t *build_tab_ai(lv_obj_t *tabview)
 }
 
 /***********************************************************
+ * Schermate tab
+ ***********************************************************/
+
+/* Write bool flag to NVS as "1" or "0". */
+static void nvs_write_flag(const char *key, bool value)
+{
+    const char *v = value ? "1" : "0";
+    indicator_storage_write((char *)key, (void *)v, 2); /* "1\0" or "0\0" */
+}
+
+/* Row: label on left, switch on right. Returns the switch object. */
+static lv_obj_t *make_switch_row(lv_obj_t *parent, int y, const char *label_text)
+{
+    lv_obj_t *lbl = lv_label_create(parent);
+    lv_label_set_text(lbl, label_text);
+    lv_obj_set_pos(lbl, 40, y + 4);
+    lv_obj_set_style_text_font(lbl, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl, lv_color_hex(0xdddddd), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t *sw = lv_switch_create(parent);
+    lv_obj_set_size(sw, 60, 30);
+    lv_obj_set_pos(sw, 360, y);
+    lv_obj_set_style_bg_color(sw, lv_color_hex(0x529d53), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    return sw;
+}
+
+static void on_sw_hue(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_hue_enabled = lv_obj_has_state(sw_hue, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_HUE_EN, g_scr_hue_enabled);
+    ESP_LOGI(TAG, "scr_hue_enabled = %d", g_scr_hue_enabled);
+}
+
+static void on_sw_srv(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_srv_enabled = lv_obj_has_state(sw_srv, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_SRV_EN, g_scr_srv_enabled);
+    ESP_LOGI(TAG, "scr_srv_enabled = %d", g_scr_srv_enabled);
+}
+
+static void on_sw_lnch(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_lnch_enabled = lv_obj_has_state(sw_lnch, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_LNCH_EN, g_scr_lnch_enabled);
+    ESP_LOGI(TAG, "scr_lnch_enabled = %d", g_scr_lnch_enabled);
+}
+
+static void on_sw_ai(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_ai_enabled = lv_obj_has_state(sw_ai, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_AI_EN, g_scr_ai_enabled);
+    ESP_LOGI(TAG, "scr_ai_enabled = %d", g_scr_ai_enabled);
+}
+
+static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
+{
+    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Schermate");
+    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_t *hdr = lv_label_create(tab);
+    lv_label_set_text(hdr, "Abilita / disabilita schermate");
+    lv_obj_set_pos(hdr, 40, 10);
+    lv_obj_set_style_text_font(hdr, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(hdr, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    int y = 50;
+    sw_hue  = make_switch_row(tab, y, "Hue Control");
+    lv_obj_add_event_cb(sw_hue,  on_sw_hue,  LV_EVENT_VALUE_CHANGED, NULL);
+    y += 60;
+    sw_srv  = make_switch_row(tab, y, "LocalServer");
+    lv_obj_add_event_cb(sw_srv,  on_sw_srv,  LV_EVENT_VALUE_CHANGED, NULL);
+    y += 60;
+    sw_lnch = make_switch_row(tab, y, "Launcher");
+    lv_obj_add_event_cb(sw_lnch, on_sw_lnch, LV_EVENT_VALUE_CHANGED, NULL);
+    y += 60;
+    sw_ai   = make_switch_row(tab, y, "AI");
+    lv_obj_add_event_cb(sw_ai,   on_sw_ai,   LV_EVENT_VALUE_CHANGED, NULL);
+
+    return tab;
+}
+
+/***********************************************************
  * SCREEN_LOAD_START → populate fields from NVS
  ***********************************************************/
 
@@ -303,6 +396,16 @@ static void on_screen_load_start(lv_event_t *e)
 
     nvs_read_str(NVS_KEY_AI_API_KEY,  ta_ai_key,        APP_CFG_AI_API_KEY);
     nvs_read_str(NVS_KEY_AI_ENDPOINT, ta_ai_endpoint,   APP_CFG_AI_ENDPOINT);
+
+    /* Schermate switches: riflette i flag globali (già caricati da NVS al boot). */
+    if (g_scr_hue_enabled)  lv_obj_add_state(sw_hue,  LV_STATE_CHECKED);
+    else                     lv_obj_clear_state(sw_hue,  LV_STATE_CHECKED);
+    if (g_scr_srv_enabled)  lv_obj_add_state(sw_srv,  LV_STATE_CHECKED);
+    else                     lv_obj_clear_state(sw_srv,  LV_STATE_CHECKED);
+    if (g_scr_lnch_enabled) lv_obj_add_state(sw_lnch, LV_STATE_CHECKED);
+    else                     lv_obj_clear_state(sw_lnch, LV_STATE_CHECKED);
+    if (g_scr_ai_enabled)   lv_obj_add_state(sw_ai,   LV_STATE_CHECKED);
+    else                     lv_obj_clear_state(sw_ai,   LV_STATE_CHECKED);
 }
 
 /***********************************************************
@@ -343,12 +446,13 @@ void screen_settings_custom_populate(void)
     lv_obj_set_style_border_color(tab_bar, lv_color_hex(0x529d53),
                                   LV_PART_ITEMS | LV_STATE_CHECKED);
 
-    /* build tabs (order matters: tab index 0..4) */
+    /* build tabs (order matters: tab index 0..5) */
     build_tab_wifi(tv);
     build_tab_hue(tv);
     build_tab_server(tv);
     build_tab_proxy(tv);
     build_tab_ai(tv);
+    build_tab_screens(tv);
 
     /* populate fields on screen load */
     lv_obj_add_event_cb(ui_screen_settings_custom, on_screen_load_start,
