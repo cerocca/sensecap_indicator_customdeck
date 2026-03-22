@@ -17,9 +17,10 @@
 #define APP_CFG_HUE_LIGHT_3_ID  ""
 #define APP_CFG_HUE_LIGHT_4_ID  ""
 
-/* ── Server Sibilla ─────────────────────────────────────────── */
+/* ── Server LocalServer ─────────────────────────────────────── */
 #define APP_CFG_SERVER_IP       "192.168.1.69"
 #define APP_CFG_SERVER_PORT     "61208"
+#define APP_CFG_SERVER_NAME     "LocalServer"
 
 /* ── Proxy Mac ──────────────────────────────────────────────── */
 #define APP_CFG_PROXY_IP        "192.168.1.70"
@@ -43,6 +44,7 @@
 
 #define NVS_KEY_SERVER_IP       "srv_ip"
 #define NVS_KEY_SERVER_PORT     "srv_port"
+#define NVS_KEY_SERVER_NAME     "srv_name"      /* max 15 char valore */
 
 #define NVS_KEY_PROXY_IP        "proxy_ip"
 #define NVS_KEY_PROXY_PORT      "proxy_port"

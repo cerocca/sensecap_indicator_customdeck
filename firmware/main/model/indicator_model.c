@@ -7,6 +7,7 @@
 #include "indicator_city.h"
 #include "indicator_config.h"
 #include "indicator_hue.h"
+#include "indicator_system.h"
 
 int indicator_model_init(void)
 {
@@ -15,6 +16,7 @@ int indicator_model_init(void)
     indicator_wifi_init();
     indicator_config_init();   /* registra fetch config al primo IP_EVENT_STA_GOT_IP */
     indicator_hue_init();      /* registra poll Hue al primo IP_EVENT_STA_GOT_IP */
+    indicator_system_init();   /* registra fetch hostname Glances (5s delay, dopo config) */
     indicator_time_init();
     indicator_city_init();
     indicator_display_init();  // lcd bl on

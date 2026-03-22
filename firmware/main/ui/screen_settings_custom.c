@@ -30,6 +30,7 @@ static lv_obj_t *ta_hue_l1, *ta_hue_l2, *ta_hue_l3, *ta_hue_l4;
 /* ─── Server tab textareas ──────────────────────────────────── */
 static lv_obj_t *ta_srv_ip;
 static lv_obj_t *ta_srv_port;
+static lv_obj_t *ta_srv_name;
 
 /* ─── Proxy tab textareas + feedback label ───────────────────── */
 static lv_obj_t *ta_proxy_ip;
@@ -115,6 +116,11 @@ static lv_obj_t *make_save_btn(lv_obj_t *parent, int y, lv_event_cb_t cb)
  * keyboard management
  ***********************************************************/
 
+/* Tabview reference — saved at populate time, used for resize on kb open/close. */
+static lv_obj_t *s_tv               = NULL;
+static lv_obj_t *s_kb_tab_panel     = NULL;  /* tab panel active when kb opened  */
+static bool      s_kb_tab_scrollable = false; /* was it scrollable before kb open */
+
 static void kb_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -122,6 +128,15 @@ static void kb_event_cb(lv_event_t *e)
         if (s_kb != NULL) {
             lv_obj_del(s_kb);
             s_kb = NULL;
+        }
+        /* Restore tabview to full screen height */
+        if (s_tv) lv_obj_set_height(s_tv, 480);
+        /* Restore tab scrollability and scroll back to top */
+        if (s_kb_tab_panel) {
+            if (!s_kb_tab_scrollable)
+                lv_obj_clear_flag(s_kb_tab_panel, LV_OBJ_FLAG_SCROLLABLE);
+            lv_obj_scroll_to_y(s_kb_tab_panel, 0, LV_ANIM_OFF);
+            s_kb_tab_panel = NULL;
         }
     }
 }
@@ -136,8 +151,23 @@ static void ta_focused_cb(lv_event_t *e)
         lv_obj_add_event_cb(s_kb, kb_event_cb, LV_EVENT_ALL, NULL);
         lv_obj_set_style_text_font(s_kb, &lv_font_montserrat_14,
                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        /* Fix Bug 2: explicit pressed-key highlight (#4a90d9) */
+        lv_obj_set_style_bg_color(s_kb, lv_color_hex(0x4a90d9),
+                                  LV_PART_ITEMS | LV_STATE_PRESSED);
+        lv_obj_set_style_bg_opa(s_kb, LV_OPA_COVER,
+                                LV_PART_ITEMS | LV_STATE_PRESSED);
+        /* Fix Bug 1: cap keyboard at 200px so tab content remains visible */
+        lv_obj_set_height(s_kb, 200);
+        /* Shrink tabview to 280px (480 - 200) so nothing hides behind keyboard */
+        if (s_tv) lv_obj_set_height(s_tv, 280);
     }
     lv_keyboard_set_textarea(s_kb, ta);
+
+    /* Temporarily enable scroll on the active tab and bring textarea into view */
+    s_kb_tab_panel = lv_obj_get_parent(ta);
+    s_kb_tab_scrollable = lv_obj_has_flag(s_kb_tab_panel, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(s_kb_tab_panel, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_scroll_to_view_recursive(ta, LV_ANIM_ON);
 }
 
 /***********************************************************
@@ -157,7 +187,7 @@ static lv_obj_t *build_tab_wifi(lv_obj_t *tabview)
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t *lbl = lv_label_create(tab);
-    lv_label_set_text(lbl, "Gestisci la connessione Wi-Fi");
+    lv_label_set_text(lbl, "Manage Wi-Fi connection");
     lv_obj_set_style_text_font(lbl, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(lbl, lv_color_hex(0xcccccc), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_pos(lbl, 40, 20);
@@ -169,7 +199,7 @@ static lv_obj_t *build_tab_wifi(lv_obj_t *tabview)
     lv_obj_add_event_cb(btn, on_wifi_btn, LV_EVENT_CLICKED, NULL);
 
     lv_obj_t *btn_lbl = lv_label_create(btn);
-    lv_label_set_text(btn_lbl, "Configura Wi-Fi");
+    lv_label_set_text(btn_lbl, "Configure Wi-Fi");
     lv_obj_center(btn_lbl);
     lv_obj_set_style_text_font(btn_lbl, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -201,13 +231,13 @@ static lv_obj_t *build_tab_hue(lv_obj_t *tabview)
     ta_hue_ip  = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_hue_ip,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 46;
     make_label(tab, y, "API Key");        y += 18;
     ta_hue_key = make_ta(tab, y, "");            lv_obj_add_event_cb(ta_hue_key, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 46;
-    make_label(tab, y, "Luce 1");         y += 18;
+    make_label(tab, y, "Light 1");        y += 18;
     ta_hue_l1  = make_ta(tab, y, "Light 1");    lv_obj_add_event_cb(ta_hue_l1,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 46;
-    make_label(tab, y, "Luce 2");         y += 18;
+    make_label(tab, y, "Light 2");        y += 18;
     ta_hue_l2  = make_ta(tab, y, "Light 2");    lv_obj_add_event_cb(ta_hue_l2,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 46;
-    make_label(tab, y, "Luce 3");         y += 18;
+    make_label(tab, y, "Light 3");        y += 18;
     ta_hue_l3  = make_ta(tab, y, "Light 3");    lv_obj_add_event_cb(ta_hue_l3,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 46;
-    make_label(tab, y, "Luce 4");         y += 18;
+    make_label(tab, y, "Light 4");        y += 18;
     ta_hue_l4  = make_ta(tab, y, "Light 4");    lv_obj_add_event_cb(ta_hue_l4,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_save_btn(tab, y, on_save_hue);
 
@@ -222,6 +252,7 @@ static void on_save_server(lv_event_t *e)
 {
     nvs_write_ta(NVS_KEY_SERVER_IP,   ta_srv_ip);
     nvs_write_ta(NVS_KEY_SERVER_PORT, ta_srv_port);
+    nvs_write_ta(NVS_KEY_SERVER_NAME, ta_srv_name);
     ESP_LOGI(TAG, "Server config saved");
 }
 
@@ -231,10 +262,13 @@ static lv_obj_t *build_tab_server(lv_obj_t *tabview)
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     int y = 20;
-    make_label(tab, y, "IP Sibilla");   y += 18;
+    make_label(tab, y, "IP Local Server"); y += 18;
     ta_srv_ip   = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_srv_ip,   ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_label(tab, y, "Porta Glances"); y += 18;
+    make_label(tab, y, "Glances Port");   y += 18;
     ta_srv_port = make_ta(tab, y, "61208");        lv_obj_add_event_cb(ta_srv_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
+    make_label(tab, y, "Server Name");    y += 18;
+    ta_srv_name = make_ta(tab, y, "LocalServer");  lv_obj_add_event_cb(ta_srv_name, ta_focused_cb, LV_EVENT_CLICKED, NULL);
+    lv_textarea_set_max_length(ta_srv_name, 15);   y += 54;
     make_save_btn(tab, y, on_save_server);
 
     return tab;
@@ -264,7 +298,7 @@ static void config_reload_task(void *arg)
             lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0x7ec8a0),
                                         LV_PART_MAIN | LV_STATE_DEFAULT);
         } else {
-            lv_label_set_text(lbl_cfg_status, "Errore");
+            lv_label_set_text(lbl_cfg_status, "Error");
             lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0xe07070),
                                         LV_PART_MAIN | LV_STATE_DEFAULT);
         }
@@ -284,7 +318,7 @@ static void on_reload_config(lv_event_t *e)
 
     /* Feedback immediato */
     if (lbl_cfg_status != NULL) {
-        lv_label_set_text(lbl_cfg_status, "Caricamento...");
+        lv_label_set_text(lbl_cfg_status, "Loading...");
         lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0xaaaaaa),
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
     }
@@ -299,9 +333,9 @@ static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     int y = 20;
-    make_label(tab, y, "IP Proxy Mac");  y += 18;
+    make_label(tab, y, "Mac Proxy IP");  y += 18;
     ta_proxy_ip   = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_proxy_ip,   ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_label(tab, y, "Porta");          y += 18;
+    make_label(tab, y, "Port");           y += 18;
     ta_proxy_port = make_ta(tab, y, "8765");         lv_obj_add_event_cb(ta_proxy_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_save_btn(tab, y, on_save_proxy); y += 60;
 
@@ -314,7 +348,7 @@ static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
     lv_obj_add_event_cb(btn_reload, on_reload_config, LV_EVENT_CLICKED, NULL);
 
     lv_obj_t *btn_lbl = lv_label_create(btn_reload);
-    lv_label_set_text(btn_lbl, "Ricarica config");
+    lv_label_set_text(btn_lbl, "Reload config");
     lv_obj_center(btn_lbl);
     lv_obj_set_style_text_font(btn_lbl, &lv_font_montserrat_14,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -417,11 +451,11 @@ static void on_sw_ai(lv_event_t *e)
 
 static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
 {
-    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Schermate");
+    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Screens");
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t *hdr = lv_label_create(tab);
-    lv_label_set_text(hdr, "Abilita / disabilita schermate");
+    lv_label_set_text(hdr, "Enable / disable screens");
     lv_obj_set_pos(hdr, 40, 10);
     lv_obj_set_style_text_font(hdr, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(hdr, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -459,6 +493,7 @@ static void on_screen_load_start(lv_event_t *e)
 
     nvs_read_str(NVS_KEY_SERVER_IP,   ta_srv_ip,        APP_CFG_SERVER_IP);
     nvs_read_str(NVS_KEY_SERVER_PORT, ta_srv_port,      APP_CFG_SERVER_PORT);
+    nvs_read_str(NVS_KEY_SERVER_NAME, ta_srv_name,      APP_CFG_SERVER_NAME);
 
     nvs_read_str(NVS_KEY_PROXY_IP,    ta_proxy_ip,      APP_CFG_PROXY_IP);
     nvs_read_str(NVS_KEY_PROXY_PORT,  ta_proxy_port,    APP_CFG_PROXY_PORT);
@@ -499,6 +534,7 @@ void screen_settings_custom_populate(void)
 {
     /* tabview — 44px tab bar height */
     lv_obj_t *tv = lv_tabview_create(ui_screen_settings_custom, LV_DIR_TOP, 44);
+    s_tv = tv;
     lv_obj_set_size(tv, 480, 480);
     lv_obj_set_pos(tv, 0, 0);
     lv_obj_set_style_bg_color(tv, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);

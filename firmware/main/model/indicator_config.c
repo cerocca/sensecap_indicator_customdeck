@@ -147,6 +147,7 @@ int config_fetch_from_proxy(void)
     save_json_str(root, "hue_light_4_id", NVS_KEY_HUE_LIGHT_4_ID);
     save_json_str(root, "server_ip",      NVS_KEY_SERVER_IP);
     save_json_str(root, "server_port",    NVS_KEY_SERVER_PORT);
+    save_json_str(root, "srv_name",       NVS_KEY_SERVER_NAME);
     save_json_str(root, "proxy_ip",       NVS_KEY_PROXY_IP);
     save_json_str(root, "proxy_port",     NVS_KEY_PROXY_PORT);
     save_json_str(root, "launcher_url_1", NVS_KEY_LNCH_URL_1);

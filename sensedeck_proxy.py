@@ -38,6 +38,7 @@ DEFAULT_CONFIG = {
     "hue_light_4_id": "",
     "server_ip":      "192.168.1.69",
     "server_port":    "61208",
+    "srv_name":       "LocalServer",
     "proxy_ip":       "192.168.1.70",
     "proxy_port":     "8765",
     "launcher_url_1": "https://github.com/cerocca/",
@@ -200,6 +201,8 @@ def build_config_ui(cfg):
     {hint("ID univoco della luce (UUID dal Hue Bridge)")}
 
     <h2>LocalServer (Glances)</h2>
+    {field("Server Name", "srv_name", cfg.get("srv_name",""), "LocalServer")}
+    {hint("Nome visualizzato sul device — sovrascrive l'hostname rilevato automaticamente")}
     {field("IP Server", "server_ip", cfg.get("server_ip",""), "192.168.1.x")}
     {field("Porta Glances", "server_port", cfg.get("server_port",""), "61208")}
 
