@@ -36,6 +36,12 @@
 - [ ] Valutare sostituzione schermata AI con schermata Weather (meteo locale):
       OpenWeatherMap API gratuita, icone meteo via font custom LVGL o image array,
       temperatura attuale + condizione + umidità + vento + previsione 3-5 giorni
+- [ ] Valutare schermata Traffico: Google Maps Distance Matrix API
+      (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
+      Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
+      UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
+- [ ] Schermata Clock: valutare sfondo personalizzato a tema circuito PCB
+      (immagine C array via LVGL image converter, sostituisce sfondo nero)
 
 ## Futuro
 - [ ] **Nota schermata AI:** Visti i limiti hardware del SI (GPIO Grove su RP2040, conflitto Wi-Fi/BT per audio),
