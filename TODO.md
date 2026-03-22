@@ -21,7 +21,7 @@
 - [x] Screen Hue — toggle ON/OFF + slider luminosità
 - [ ] Screen LocalServer Dashboard — Glances + Uptime Kuma via proxy
 - [ ] Screen LocalServer Dashboard — aggiunta top 3 processi per CPU e/o RAM (via Glances API /api/4/processlist)
-- [ ] Screen LocalServer Dashboard — Nome server LocalServer parametrico (da NVS?)
+- [x] Screen LocalServer Dashboard — Nome server LocalServer parametrico (da NVS)
 - [ ] Screen Launcher — 4 pulsanti proxy Mac
 - [ ] Screen AI — placeholder tastiera touch
 

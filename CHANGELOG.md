@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Added
+- `model/indicator_system.c/.h`: fetch hostname da Glances `/api/4/system` al boot (5s delay, dopo indicator_config); sovrascrive `srv_name` in NVS solo se vuoto o uguale al default "LocalServer" — nome personalizzato impostato dall'utente non viene mai toccato
+- Settings keyboard layout keyboard-aware: tabview ridimensionato a 280px all'apertura tastiera (keyboard 200px fissi), tab panel scrollabile temporaneamente, `lv_obj_scroll_to_view_recursive` porta la textarea in vista; ripristino completo (height 480px, scroll y=0, scrollable flag) alla chiusura
+- Feedback visivo tasti tastiera LVGL: `LV_PART_ITEMS | LV_STATE_PRESSED` con `bg_color #4a90d9`, `bg_opa COVER` — pressed state esplicito, visibile su touch capacitivo
+- UI strings tutte in inglese: Settings labels, bottoni, tab names, messaggi di stato
 - `model/indicator_hue.c/.h`: polling HTTPS ogni 5s verso Hue Bridge API v2 — GET stato luce (on/off + brightness), PUT toggle e brightness, task one-shot per comandi, aggiornamento ottimistico; avviato su `IP_EVENT_STA_GOT_IP` con 3s delay (dopo config fetch)
 - `ui/screen_hue.c/.h`: 4 card con nome luce, switch ON/OFF (colore ambra), slider luminosità 1-100 (colore ambra); pattern lazy populate; callback UI registrata in `screen_hue_populate()`; `ensure_hue_populated()` in `ui_manager.c` prima delle transizioni verso screen_hue
 - `sensedeck_proxy.py`: proxy Python completo (sostituisce `sibilla_proxy.py`); endpoint `/config` GET/POST e `/config/ui` Web UI dark theme per configurazione centralizzata

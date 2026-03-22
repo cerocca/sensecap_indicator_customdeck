@@ -199,14 +199,14 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | `/config/ui` | GET | Web UI configurazione (dark theme) |
 
 `config.json` è nella stessa directory dello script; è in `.gitignore` (non versionato).
-DEFAULT_CONFIG nel proxy: 18 campi (hue bridge/api/luci/ID, server, proxy, launcher URLs). Merge con defaults su POST per backward compat.
+DEFAULT_CONFIG nel proxy: 19 campi (hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs). Merge con defaults su POST per backward compat.
 
 ### Boot config fetch — `indicator_config.c`
 
 `indicator_config_init()` registra un handler su `IP_EVENT_STA_GOT_IP`.
 L'handler lancia `config_boot_fetch_task` (FreeRTOS, stack 4096, una sola volta — guard `s_boot_fetched`):
 1. `vTaskDelay` 1500 ms (stabilizzazione stack IP)
-2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva 18 campi NVS
+2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva 19 campi NVS
 
 ### "Ricarica config" — tab Proxy in Settings
 
@@ -216,6 +216,17 @@ Bottone lancia `config_reload_task` async:
 3. Aggiorna `lbl_cfg_status`: "OK" (#7ec8a0) o "Errore" (#e07070)
 
 Aggiornamento UI dal task: obbligatorio `lv_port_sem_take()` / `lv_port_sem_give()`.
+
+### Hostname fetch — `indicator_system.c`
+
+`indicator_system_init()` registra handler su `IP_EVENT_STA_GOT_IP`.
+L'handler lancia `system_fetch_task` (FreeRTOS, stack 4096, una sola volta):
+1. `vTaskDelay` 5000 ms (attende che indicator_config abbia scritto SERVER_IP/PORT in NVS)
+2. Legge `NVS_KEY_SERVER_IP` / `NVS_KEY_SERVER_PORT` da NVS
+3. GET `http://<srv_ip>:<srv_port>/api/4/system` → parsa `hostname`
+4. **Scrive `srv_name` in NVS solo se il valore attuale è vuoto o uguale a `"LocalServer"` (default)** — un nome personalizzato impostato dall'utente non viene mai sovrascritto
+
+Priorità `srv_name`: hardcoded default → proxy fetch (boot) → manuale Settings → Glances hostname (boot+5s, sovrascrive solo il default).
 
 ---
 
@@ -295,6 +306,26 @@ static void ui_event_screen_xxx(lv_event_t *e) {
     else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(idx, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
+```
+
+### LVGL keyboard — layout keyboard-aware in Settings
+
+La tastiera LVGL (`lv_keyboard_create`) su uno schermo 480px occupa di default il 50% = 240px.
+Tutti i tab container in Settings hanno `LV_OBJ_FLAG_SCROLLABLE` rimosso (necessario per i gesture).
+Risultato: il contenuto del tab viene nascosto sotto la tastiera e non è scrollabile.
+
+**Fix in `ta_focused_cb` / `kb_event_cb`:**
+- All'apertura: `lv_obj_set_height(s_kb, 200)` + `lv_obj_set_height(s_tv, 280)` → area content = 236px
+- `lv_obj_get_parent(ta)` restituisce il tab panel; aggiungere temporaneamente `LV_OBJ_FLAG_SCROLLABLE`
+- `lv_obj_scroll_to_view_recursive(ta, LV_ANIM_ON)` porta la textarea in vista
+- Alla chiusura: ripristinare height tabview a 480px, `lv_obj_scroll_to_y(panel, 0, LV_ANIM_OFF)`, rimuovere `LV_OBJ_FLAG_SCROLLABLE` se non era presente prima
+
+**Pressed feedback tasti:**
+Il default theme LVGL cambia solo l'opacità su `LV_STATE_PRESSED` — impercettibile su touch capacitivo.
+Fix: aggiungere stile esplicito al momento della creazione della tastiera:
+```c
+lv_obj_set_style_bg_color(s_kb, lv_color_hex(0x4a90d9), LV_PART_ITEMS | LV_STATE_PRESSED);
+lv_obj_set_style_bg_opa(s_kb,   LV_OPA_COVER,           LV_PART_ITEMS | LV_STATE_PRESSED);
 ```
 
 ### Bug Seeed — ui_event_screen_time target hardcoded (fixato)
