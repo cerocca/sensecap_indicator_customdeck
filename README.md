@@ -63,9 +63,11 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 ## Features
 
 ### Settings
-- Unified settings screen with tabs: Wi-Fi · Hue · Server · Proxy · AI
+- Unified settings screen with tabs: Wi-Fi · Hue · Server · Proxy · AI · Screens
 - All values editable on-device and persisted to NVS
 - Fallback to hardcoded defaults if NVS is empty
+- Configuration can also be managed via the Mac proxy Web UI (`http://localhost:8765/config/ui`)
+- On Wi-Fi connect, device automatically fetches latest config from the proxy (no reboot needed)
 
 ### Hue Control
 - Toggle ON/OFF and adjust brightness (0–100%) for 4 configurable Philips Hue lights
