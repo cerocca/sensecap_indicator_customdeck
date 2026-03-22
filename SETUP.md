@@ -32,47 +32,31 @@ cd sensecap_indicator_customdeck
 
 ## Configurazione
 
-Apri `firmware/main/app_config.h` e imposta i tuoi valori:
+La configurazione avviene principalmente tramite la **Web UI del proxy** (`http://localhost:8765/config/ui`) — non è necessario modificare `app_config.h` per l'uso normale.
 
-### Philips Hue
-```c
-#define HUE_BRIDGE_IP    "192.168.x.x"      // IP del tuo Hue Bridge
-#define HUE_API_KEY      "la-tua-api-key"   // API key Hue Bridge
+`app_config.h` contiene i valori di fallback usati solo se NVS è vuoto e il proxy non è raggiungibile.
 
-#define HUE_LIGHT_1_ID   "uuid-luce-1"
-#define HUE_LIGHT_1_NAME "Nome Luce 1"
-// ripeti per le luci 2, 3, 4
-```
+### Primo avvio: flusso consigliato
 
-**Come ottenere l'API key Hue:**
+1. Avvia `sensedeck_proxy.py` sul Mac
+2. Apri `http://localhost:8765/config/ui` e inserisci tutti i valori
+3. Clicca **Salva** — la config viene scritta in `config.json`
+4. Accendi il device e connettilo al Wi-Fi (Settings → tab Wi-Fi)
+5. Il device scarica automaticamente la config dal proxy al boot
+
+### Come ottenere l'API key Hue
+
 1. Vai su `https://<HUE_BRIDGE_IP>/debug/clip.html`
 2. POST su `/api` con body `{"devicetype":"sensecap_indicator"}`
 3. Premi il pulsante fisico sul Bridge entro 30 secondi
 4. Copia il token dalla risposta
 
-**Come ottenere gli ID delle luci:**
-- GET su `https://<HUE_BRIDGE_IP>/clip/v2/resource/light` con header `hue-application-key: <API_KEY>`
+### Come ottenere gli ID UUID delle luci Hue
 
-### LocalServer (Glances + Uptime Kuma)
-```c
-#define LOCALSERVER_IP   "192.168.x.x"  // IP del server con Glances
-#define GLANCES_PORT     61208
 ```
-
-### Proxy Mac
-```c
-#define PROXY_IP    "192.168.x.x"  // IP del Mac con il proxy Python
-#define PROXY_PORT  8765
+GET https://<HUE_BRIDGE_IP>/clip/v2/resource/light
+Header: hue-application-key: <API_KEY>
 ```
-
-### Launcher — label pulsanti
-```c
-#define LAUNCHER_1_LABEL  "Website1"
-#define LAUNCHER_2_LABEL  "Website2"
-#define LAUNCHER_3_LABEL  "Website3"
-#define LAUNCHER_4_LABEL  "Website4"
-```
-Configura gli URL corrispondenti nel proxy Python.
 
 ---
 
@@ -100,24 +84,60 @@ ls /dev/ttyUSB* /dev/ttyACM*
 
 ---
 
-## Configurazione runtime (opzionale)
+## Configurazione runtime
 
-Tutti i valori di `app_config.h` possono essere modificati direttamente sul device dalla schermata **Settings** (swipe fino alla terza schermata). I valori vengono salvati in NVS e persistono al reboot.
+I valori possono essere aggiornati in tre modi, senza ricompilare:
+
+1. **Web UI proxy** (`http://localhost:8765/config/ui`) → Salva → il device li scarica al prossimo boot o con "Ricarica config"
+2. **Direttamente sul device** — schermata Settings (terza schermata, swipe). I valori vengono salvati in NVS e persistono al reboot.
+3. **"Ricarica config"** — Settings → tab Proxy → pulsante per aggiornare da proxy senza riavviare.
 
 ---
 
 ## Proxy Python (Mac)
 
 Il proxy è necessario per la schermata LocalServer Dashboard (Uptime Kuma) e la schermata Launcher.
+Gestisce anche la configurazione centralizzata del device tramite Web UI.
 
-Avvia il proxy sul Mac:
+### Avvio
+
 ```bash
-python3 proxy.py
+python3 sensedeck_proxy.py
 ```
 
-Il proxy espone:
-- `GET /uptime` → stato servizi Uptime Kuma (JSON compatto)
-- `GET /open/<n>` → apre URL n-esimo nel browser del Mac
+### Configurazione via Web UI
+
+Apri nel browser: `http://localhost:8765/config/ui`
+
+Dalla Web UI puoi configurare:
+- **Hue Bridge:** IP, API key, nome e ID UUID di ogni luce
+- **LocalServer:** IP e porta Glances
+- **Proxy:** IP e porta del Mac
+- **Launcher:** URL 1–4
+
+La configurazione viene salvata in `config.json` nella stessa directory del proxy.
+
+**Come ottenere gli ID UUID delle luci Hue:**
+```
+GET https://<HUE_BRIDGE_IP>/clip/v2/resource/light
+Header: hue-application-key: <API_KEY>
+```
+
+### Sincronizzazione con il device
+
+- **Al boot:** il device scarica automaticamente la config dal proxy dopo la connessione Wi-Fi
+- **Senza riavvio:** Settings → tab Proxy → pulsante **"Ricarica config"**
+
+### Endpoint disponibili
+
+| Endpoint | Metodo | Descrizione |
+|---|---|---|
+| `/uptime` | GET | stato servizi Uptime Kuma (JSON compatto) |
+| `/open/<n>` | GET | apre URL n nel browser del Mac (n=1..4) |
+| `/ping` | GET | health check |
+| `/config` | GET | restituisce configurazione corrente (JSON) |
+| `/config` | POST | salva nuova configurazione in `config.json` |
+| `/config/ui` | GET | Web UI configurazione (dark theme) |
 
 ---
 
