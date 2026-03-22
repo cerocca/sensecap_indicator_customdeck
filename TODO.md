@@ -17,7 +17,7 @@
 - [x] Restart firmware da base pulita (indicator_basis)
 - [x] Navigazione circolare bidirezionale (tutte le schermate vuote)
 - [x] Screen Settings — tab Wi-Fi + Hue + Server + Proxy + AI con NVS
-- [ ] Sistema configurazione per nuovi utenti (quali schermate abilitare) con switch su ogni screen
+- [x] Sistema configurazione per nuovi utenti (quali schermate abilitare) con switch su ogni screen
 - [ ] Screen Hue — toggle ON/OFF + slider luminosità
 - [ ] Screen LocalServer Dashboard — Glances + Uptime Kuma via proxy
 - [ ] Screen LocalServer Dashboard — aggiunta top 3 processi per CPU e/o RAM (via Glances API /api/4/processlist)
