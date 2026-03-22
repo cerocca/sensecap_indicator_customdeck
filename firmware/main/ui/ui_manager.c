@@ -92,6 +92,17 @@ static void ensure_settings_populated(void)
     }
 }
 
+/* ─── lazy init screen_hue ──────────────────────────────────── */
+static bool s_hue_populated = false;
+
+static void ensure_hue_populated(void)
+{
+    if (!s_hue_populated) {
+        screen_hue_populate();
+        s_hue_populated = true;
+    }
+}
+
 /* ─── gesture handlers ─────────────────────────────────────── */
 
 /*
@@ -134,9 +145,10 @@ static void gesture_settings_custom(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_settings_custom) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
+    if (dir == LV_DIR_LEFT) {
+        ensure_hue_populated(); /* lazy populate prima dell'animazione */
         _ui_screen_change(next_from(2, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT)
+    } else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(2, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
@@ -160,8 +172,10 @@ static void gesture_sibilla(lv_event_t *e)
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT)
         _ui_screen_change(next_from(4, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT)
+    else if (dir == LV_DIR_RIGHT) {
+        ensure_hue_populated(); /* lazy populate prima dell'animazione */
         _ui_screen_change(next_from(4, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    }
 }
 
 static void gesture_launcher(lv_event_t *e)
