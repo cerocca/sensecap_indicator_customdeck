@@ -77,6 +77,8 @@ Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata i
 ├── README.md
 ├── SETUP.md
 ├── CHANGELOG.md
+├── sensedeck_proxy.py                     # proxy Mac — /uptime, /open/<n>, /config, /config/ui
+├── config.json                            # generato dal proxy — non in git (in .gitignore)
 ├── sdkconfig.defaults                     # fix PSRAM XIP + mbedTLS dynamic — NON toccare
 └── firmware/                              ← codice firmware
     ├── CMakeLists.txt                     # EXTRA_COMPONENT_DIRS = ../components
@@ -92,6 +94,7 @@ Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata i
         │   ├── screen_launcher.c/.h
         │   └── screen_ai.c/.h
         └── model/
+            ├── indicator_config.c/.h      # fetch config dal proxy al boot (IP_EVENT_STA_GOT_IP)
             ├── indicator_glances.c/.h
             ├── indicator_uptime_kuma.c/.h
             └── indicator_hue.c/.h
@@ -108,7 +111,7 @@ Layout: tabview LVGL (44px header), 6 tab orizzontali.
 | **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna via `ui_screen_last`) |
 | **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
 | **Server** | IP LocalServer, porta Glances → NVS |
-| **Proxy** | IP + porta proxy Mac → NVS |
+| **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot |
 | **AI** | Claude API key, endpoint → NVS |
 | **Schermate** | 4 switch ON/OFF (Hue, LocalServer, Launcher, AI) → aggiornano `g_scr_xxx_enabled` + NVS |
 
@@ -176,6 +179,42 @@ y=278+i×22  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non u
 - 4 pulsanti griglia 2×2 (200×170 px)
 - Al tap: `GET http://<PROXY_IP>:<PROXY_PORT>/open/<n>` (n=1..4)
 - Il proxy Python apre l'URL corrispondente sul Mac
+
+---
+
+## Proxy Mac — sensedeck_proxy.py
+
+Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione servizi locali.
+
+### Endpoints
+
+| Endpoint | Metodo | Descrizione |
+|---|---|---|
+| `/uptime` | GET | stato servizi Uptime Kuma (JSON compatto) |
+| `/open/<n>` | GET | apre URL n in Firefox (n=1..4) |
+| `/ping` | GET | health check |
+| `/config` | GET | configurazione device (JSON, da `config.json`) |
+| `/config` | POST | salva nuova config in `config.json` |
+| `/config/ui` | GET | Web UI configurazione (dark theme) |
+
+`config.json` è nella stessa directory dello script; è in `.gitignore` (non versionato).
+DEFAULT_CONFIG nel proxy: 18 campi (hue bridge/api/luci/ID, server, proxy, launcher URLs). Merge con defaults su POST per backward compat.
+
+### Boot config fetch — `indicator_config.c`
+
+`indicator_config_init()` registra un handler su `IP_EVENT_STA_GOT_IP`.
+L'handler lancia `config_boot_fetch_task` (FreeRTOS, stack 4096, una sola volta — guard `s_boot_fetched`):
+1. `vTaskDelay` 1500 ms (stabilizzazione stack IP)
+2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva 18 campi NVS
+
+### "Ricarica config" — tab Proxy in Settings
+
+Bottone lancia `config_reload_task` async:
+1. Salva PROXY_IP/PORT in NVS
+2. Chiama `config_fetch_from_proxy()`
+3. Aggiorna `lbl_cfg_status`: "OK" (#7ec8a0) o "Errore" (#e07070)
+
+Aggiornamento UI dal task: obbligatorio `lv_port_sem_take()` / `lv_port_sem_give()`.
 
 ---
 

@@ -28,7 +28,7 @@
 ## Post release 0.1
 - [ ] Crediti cirutech + versione in UI
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico
-- [ ] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
+- [x] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
 - [ ] Uniformare documentazione: scegliere tutto italiano o tutto inglese
       (attualmente CLAUDE.md e TODO.md in italiano, README.md e SETUP.md in inglese)
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
