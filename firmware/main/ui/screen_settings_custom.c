@@ -2,8 +2,12 @@
 #include "ui_helpers.h"           /* _ui_screen_change */
 #include "ui_manager.h"           /* g_scr_xxx_enabled */
 #include "indicator_storage.h"
+#include "indicator_config.h"     /* config_fetch_from_proxy */
 #include "app_config.h"
+#include "lv_port.h"              /* lv_port_sem_take/give */
 #include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <string.h>
 
 static const char *TAG = "settings_custom";
@@ -27,9 +31,10 @@ static lv_obj_t *ta_hue_l1, *ta_hue_l2, *ta_hue_l3, *ta_hue_l4;
 static lv_obj_t *ta_srv_ip;
 static lv_obj_t *ta_srv_port;
 
-/* ─── Proxy tab textareas ───────────────────────────────────── */
+/* ─── Proxy tab textareas + feedback label ───────────────────── */
 static lv_obj_t *ta_proxy_ip;
 static lv_obj_t *ta_proxy_port;
+static lv_obj_t *lbl_cfg_status;
 
 /* ─── AI tab textareas ──────────────────────────────────────── */
 static lv_obj_t *ta_ai_key;
@@ -246,6 +251,48 @@ static void on_save_proxy(lv_event_t *e)
     ESP_LOGI(TAG, "Proxy config saved");
 }
 
+/* Task async per config_fetch_from_proxy() — non blocca il task LVGL. */
+static void config_reload_task(void *arg)
+{
+    int ret = config_fetch_from_proxy();
+
+    /* Aggiorna il label di stato con il lock LVGL */
+    lv_port_sem_take();
+    if (lbl_cfg_status != NULL) {
+        if (ret == 0) {
+            lv_label_set_text(lbl_cfg_status, "OK");
+            lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0x7ec8a0),
+                                        LV_PART_MAIN | LV_STATE_DEFAULT);
+        } else {
+            lv_label_set_text(lbl_cfg_status, "Errore");
+            lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0xe07070),
+                                        LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+    }
+    lv_port_sem_give();
+
+    vTaskDelete(NULL);
+}
+
+static void on_reload_config(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_CLICKED) return;
+
+    /* Salva prima i valori correnti del tab Proxy in NVS, così il fetch usa IP/porta aggiornati */
+    nvs_write_ta(NVS_KEY_PROXY_IP,   ta_proxy_ip);
+    nvs_write_ta(NVS_KEY_PROXY_PORT, ta_proxy_port);
+
+    /* Feedback immediato */
+    if (lbl_cfg_status != NULL) {
+        lv_label_set_text(lbl_cfg_status, "Caricamento...");
+        lv_obj_set_style_text_color(lbl_cfg_status, lv_color_hex(0xaaaaaa),
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+    }
+
+    /* Stack 4KB — config_fetch_from_proxy usa malloc per il buffer HTTP */
+    xTaskCreate(config_reload_task, "cfg_reload", 4096, NULL, 5, NULL);
+}
+
 static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
 {
     lv_obj_t *tab = lv_tabview_add_tab(tabview, "Proxy");
@@ -256,7 +303,29 @@ static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
     ta_proxy_ip   = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_proxy_ip,   ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_label(tab, y, "Porta");          y += 18;
     ta_proxy_port = make_ta(tab, y, "8765");         lv_obj_add_event_cb(ta_proxy_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_save_btn(tab, y, on_save_proxy);
+    make_save_btn(tab, y, on_save_proxy); y += 60;
+
+    /* Pulsante Ricarica config */
+    lv_obj_t *btn_reload = lv_btn_create(tab);
+    lv_obj_set_size(btn_reload, 180, 40);
+    lv_obj_set_pos(btn_reload, 40, y);
+    lv_obj_set_style_bg_color(btn_reload, lv_color_hex(0x2c5aa0),
+                              LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_add_event_cb(btn_reload, on_reload_config, LV_EVENT_CLICKED, NULL);
+
+    lv_obj_t *btn_lbl = lv_label_create(btn_reload);
+    lv_label_set_text(btn_lbl, "Ricarica config");
+    lv_obj_center(btn_lbl);
+    lv_obj_set_style_text_font(btn_lbl, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    y += 50;
+
+    /* Label feedback stato */
+    lbl_cfg_status = lv_label_create(tab);
+    lv_label_set_text(lbl_cfg_status, "");
+    lv_obj_set_pos(lbl_cfg_status, 40, y);
+    lv_obj_set_style_text_font(lbl_cfg_status, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
 
     return tab;
 }
