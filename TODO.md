@@ -43,6 +43,9 @@
 - [ ] Schermata Clock: valutare sfondo personalizzato a tema circuito PCB
       (immagine C array via LVGL image converter, sostituisce sfondo nero)
 
+- [ ] Rimuovere vecchio progetto: eliminare repo locale `/Users/ciru/SenseCAP_Indicator_ESP32`
+      e archiviare/eliminare repo GitHub `cerocca/mySenseCAP_Indicator_ESP32`
+
 ## Futuro
 - [ ] **Nota schermata AI:** Visti i limiti hardware del SI (GPIO Grove su RP2040, conflitto Wi-Fi/BT per audio),
       Valutare scheda esterna XIAO (ESP32-S3 o RP2040) come coprocessore audio:
