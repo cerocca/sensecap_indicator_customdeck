@@ -297,18 +297,23 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                 with urllib.request.urlopen(req, timeout=5) as resp:
                     raw = json.loads(resp.read())
 
+                monitor_list = raw.get("monitorList", {})
                 result = []
                 for monitor_id, heartbeats in raw.get("heartbeatList", {}).items():
                     if not heartbeats:
                         continue
                     last = heartbeats[-1]
+                    info = monitor_list.get(str(monitor_id), {})
+                    name = info.get("name", f"Monitor {monitor_id}")
+                    # Escludi intestazioni gruppo (es. "0-Infra")
+                    if name.startswith("0-"):
+                        continue
                     result.append({
-                        "id":     int(monitor_id),
-                        "status": last["status"],
-                        "ping":   last.get("ping", 0),
+                        "name": name,
+                        "up":   last["status"] == 1,
                     })
 
-                self.send_json({"monitors": result})
+                self.send_json(result)
 
             except Exception as e:
                 print(f"[uptime] error: {e}")

@@ -11,6 +11,7 @@
 //#include "indicator_controller.h"
 #include "ui_manager.h"
 #include "indicator_glances.h"
+#include "indicator_uptime_kuma.h"
 
 static const char *TAG = "app_main";
 
@@ -57,6 +58,7 @@ void app_main(void)
 
     indicator_model_init();
     indicator_glances_init();
+    indicator_uptime_kuma_init();
     indicator_controller_init();
 
     static char buffer[128];    /* Make sure buffer is enough for `sprintf` */

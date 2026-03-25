@@ -153,7 +153,7 @@ PUT  /clip/v2/resource/light/<ID>          # body: {"dimming":{"brightness":80.0
   - Disco: `/fs` → primo elemento, `percent`
   - Uptime: `/uptime`
   - Load avg: `/load`
-- **Uptime Kuma:** via proxy Mac → `GET http://<PROXY_IP>:<PROXY_PORT>/uptime` → JSON compatto
+- **Uptime Kuma:** via proxy Mac → `GET http://<PROXY_IP>:<PROXY_PORT>/uptime` → array JSON `[{"name": "...", "up": true/false}]`; nomi da `monitorList` Uptime Kuma; gruppi "0-..." esclusi
 
 ### Layout UI — posizioni y (480×480)
 ```

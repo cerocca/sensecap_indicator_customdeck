@@ -1,5 +1,6 @@
 #include "screen_sibilla.h"
 #include "indicator_glances.h"
+#include "indicator_uptime_kuma.h"
 #include "indicator_storage.h"
 #include "app_config.h"
 #include "lvgl/lvgl.h"
@@ -167,6 +168,37 @@ static void on_glances_data(float cpu, float ram, float dsk,
     }
 }
 
+/* ─── Uptime Kuma callback (chiamata con LVGL sem già acquisito) ──────────── */
+
+static void on_uptime_data(int total, int up,
+                            const char names_down[UK_MAX_DOWN][32],
+                            int n_down)
+{
+    if (!s_populated) return;
+
+    char buf[32];
+
+    /* Label "Servizi: X/Y UP" */
+    snprintf(buf, sizeof(buf), "Servizi: %d/%d UP", up, total);
+    lv_label_set_text(s_services_lbl, buf);
+    lv_color_t col = (n_down == 0)
+                     ? lv_color_hex(0x7ec8a0)   /* verde = tutti UP */
+                     : lv_color_hex(0xe07070);   /* rosso = qualcuno DOWN */
+    lv_obj_set_style_text_color(s_services_lbl, col,
+                                 LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    /* Righe DOWN: mostra quelle usate, nasconde le altre */
+    for (int i = 0; i < 6; i++) {
+        if (i < n_down) {
+            lv_label_set_text(s_down_lbls[i], names_down[i]);
+            lv_obj_clear_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_label_set_text(s_down_lbls[i], "");
+            lv_obj_add_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+}
+
 /* ─── Populate (lazy — prima del primo render) ────────────────────────────── */
 
 void screen_sibilla_populate(void)
@@ -260,8 +292,9 @@ void screen_sibilla_populate(void)
         lv_obj_add_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
     }
 
-    /* Registra la callback Glances: da qui i dati aggiornano i widget */
+    /* Registra le callback: Glances e Uptime Kuma aggiornano i widget */
     indicator_glances_set_callback(on_glances_data);
+    indicator_uptime_kuma_set_callback(on_uptime_data);
 
     s_populated = true;
 }
