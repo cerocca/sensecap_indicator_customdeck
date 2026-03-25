@@ -176,10 +176,10 @@ static void on_uptime_data(int total, int up,
 {
     if (!s_populated) return;
 
-    char buf[32];
+    char buf[48];
 
-    /* Label "Servizi: X/Y UP" */
-    snprintf(buf, sizeof(buf), "Servizi: %d/%d UP", up, total);
+    /* Label "Monitored Services: X/Y UP" */
+    snprintf(buf, sizeof(buf), "Monitored Services: %d/%d UP", up, total);
     lv_label_set_text(s_services_lbl, buf);
     lv_color_t col = (n_down == 0)
                      ? lv_color_hex(0x7ec8a0)   /* verde = tutti UP */
@@ -273,7 +273,7 @@ void screen_sibilla_populate(void)
 
     /* ── Label servizi Uptime Kuma (placeholder) — 2 righe sotto il terzo container ── */
     s_services_lbl = lv_label_create(scr);
-    lv_label_set_text(s_services_lbl, "Servizi: --/-- UP");
+    lv_label_set_text(s_services_lbl, "Monitored Services: --/-- UP");
     lv_obj_set_style_text_color(s_services_lbl, lv_color_white(),
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(s_services_lbl, &lv_font_montserrat_16,
