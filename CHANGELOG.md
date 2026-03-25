@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `model/indicator_glances.c/.h`: modulo polling Glances API ogni 10s — CPU (`/api/4/cpu`), RAM (`/api/4/mem`), disco (`/api/4/fs`), uptime (`/api/4/uptime`), load avg (`/api/4/load`), top 3 container Docker per RAM (`/api/4/containers`); buffer containers (32KB) allocato in PSRAM (`heap_caps_malloc MALLOC_CAP_SPIRAM`); task avviato su `IP_EVENT_STA_GOT_IP`; callback UI registrata da `screen_sibilla_populate()`
+- `ui/screen_sibilla.c`: implementazione completa con lazy populate — 3 barre metriche (CPU/RAM/DSK), uptime, load avg, separatore, header "Top Docker (RAM)", 3 righe container (nome a sinistra max 32 char + MB allineato a destra in label separato), placeholder "Servizi" + 6 label DOWN pre-allocate nascoste; `format_uptime()` converte stringa raw Glances in formato compatto (1d 2h 34m)
 - `model/indicator_system.c/.h`: fetch hostname da Glances `/api/4/system` al boot (5s delay, dopo indicator_config); sovrascrive `srv_name` in NVS solo se vuoto o uguale al default "LocalServer" — nome personalizzato impostato dall'utente non viene mai toccato
 - Settings keyboard layout keyboard-aware: tabview ridimensionato a 280px all'apertura tastiera (keyboard 200px fissi), tab panel scrollabile temporaneamente, `lv_obj_scroll_to_view_recursive` porta la textarea in vista; ripristino completo (height 480px, scroll y=0, scrollable flag) alla chiusura
 - Feedback visivo tasti tastiera LVGL: `LV_PART_ITEMS | LV_STATE_PRESSED` con `bg_color #4a90d9`, `bg_opa COVER` — pressed state esplicito, visibile su touch capacitivo

@@ -7,7 +7,7 @@
 3. [x] **Navigazione** — aggiungere schermate vuote nello stack senza rompere nulla, verificare swipe
 4. [x] **Screen Settings** — tab Wi-Fi (comportamento Seeed) + tab Hue/Server/Proxy con NVS
 5. [x] **Screen Hue** — toggle ON/OFF, poi slider luminosità
-6. [ ] **Screen Sibilla** — Glances prima, poi Uptime Kuma via proxy
+6. [~] **Screen Sibilla** — Glances ✓ (CPU/RAM/DSK/uptime/load/top Docker) · Uptime Kuma via proxy TODO
 7. [ ] **Screen Launcher** — 4 pulsanti proxy Mac
 8. [ ] **Screen AI** — placeholder tastiera touch
 9. [ ] **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
@@ -19,8 +19,8 @@
 - [x] Screen Settings — tab Wi-Fi + Hue + Server + Proxy + AI con NVS
 - [x] Sistema configurazione per nuovi utenti (quali schermate abilitare) con switch su ogni screen
 - [x] Screen Hue — toggle ON/OFF + slider luminosità
-- [ ] Screen LocalServer Dashboard — Glances + Uptime Kuma via proxy
-- [ ] Screen LocalServer Dashboard — aggiunta top 3 processi per CPU e/o RAM (via Glances API /api/4/processlist)
+- [~] Screen LocalServer Dashboard — Glances ✓ · Uptime Kuma via proxy TODO
+- [x] Screen LocalServer Dashboard — top 3 container Docker per RAM (via Glances API /api/4/containers)
 - [x] Screen LocalServer Dashboard — Nome server LocalServer parametrico (da NVS)
 - [ ] Screen Launcher — 4 pulsanti proxy Mac
 - [ ] Screen AI — placeholder tastiera touch

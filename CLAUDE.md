@@ -162,9 +162,13 @@ y=105  RAM bar
 y=145  DSK bar
 y=185  Uptime
 y=215  Load avg (1m · 5m · 15m) — spazio dopo ":"
-y=242  Separatore
-y=254  "Servizi: X/Y UP" (verde=tutti UP, arancione=qualcuno DOWN)
-y=278+i×22  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non usate)
+y=242  Separatore orizzontale
+y=254  "Top Docker (RAM):" — header, font16, #7ec8a0
+y=276+i×22  Righe container Docker (i=0..2, y=276/298/320):
+              nome: label sx x=10, width=330, LV_LABEL_LONG_DOT, font16, #b0c8e0
+              MB:   label dx x=350, width=100, LV_TEXT_ALIGN_RIGHT, font16, #b0c8e0
+y=366  "Servizi: X/Y UP" (verde=tutti UP, arancione=qualcuno DOWN), font16, white
+y=388+i×16  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non usate), font14
 ```
 
 ### Note critiche
@@ -287,6 +291,20 @@ Fix obbligatorio in **due posti**:
 ESP_ERROR_CHECK(esp_wifi_start());
 esp_wifi_set_ps(WIFI_PS_NONE);   // obbligatorio — crash senza
 ```
+
+### Buffer HTTP grandi (>16KB) — allocare in PSRAM, non in DRAM statica
+
+Buffer statici da 32KB in DRAM (`.bss`) possono esaurire la DRAM disponibile al boot e causare crash silenziosi nell'init UI.
+**Regola**: buffer HTTP > 8KB → `heap_caps_malloc(size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)` nel task, con guard su NULL.
+```c
+static char *s_cont_buf = NULL;
+// All'inizio del task:
+if (!s_cont_buf) {
+    s_cont_buf = heap_caps_malloc(SIZE, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+    if (!s_cont_buf) { vTaskDelete(NULL); return; }
+}
+```
+**Attenzione**: quando si passa da `static char buf[N]` a `static char *buf`, `sizeof(buf)` diventa `sizeof(char*) = 4` invece di `N`. Passare sempre la costante esplicita alla funzione HTTP: `glances_http_get(url, buf, BUFFER_SIZE)` — mai `sizeof(buf)`.
 
 ### CONFIG_UART_ISR_IN_IRAM — incompatibile con SPIRAM_XIP_FROM_PSRAM
 **NON aggiungere** — causa boot loop immediato. NON aggiungere mai a `sdkconfig.defaults`.

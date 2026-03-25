@@ -10,6 +10,7 @@
 #include "indicator_view.h"
 //#include "indicator_controller.h"
 #include "ui_manager.h"
+#include "indicator_glances.h"
 
 static const char *TAG = "app_main";
 
@@ -55,6 +56,7 @@ void app_main(void)
     lv_port_sem_give();
 
     indicator_model_init();
+    indicator_glances_init();
     indicator_controller_init();
 
     static char buffer[128];    /* Make sure buffer is enough for `sprintf` */
