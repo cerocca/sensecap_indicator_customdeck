@@ -26,6 +26,7 @@
 - [ ] Screen AI — placeholder tastiera touch
 
 ## Post release 0.1
+- [ ] aggiornare readmme su LocalServer Dashboard per mettere  LAN server monitoring via Glances API + Uptime Kuma + Beszel
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] aggiornare SETUP.md con istruzioni uso proxy e setup varie schermate
 - [ ] aggiungere in UI (es. tab Proxy in Settings) la riga con l'indirizzo web del config proxy: `http://localhost:8765/config/ui`
