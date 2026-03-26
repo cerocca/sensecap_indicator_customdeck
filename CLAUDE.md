@@ -196,6 +196,7 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | Endpoint | Metodo | Descrizione |
 |---|---|---|
 | `/uptime` | GET | stato servizi Uptime Kuma (JSON compatto) |
+| `/docker` | GET | top 3 container per RAM da Beszel → `[{"name":..., "mem_mb":...}]` |
 | `/open/<n>` | GET | apre URL n in Firefox (n=1..4) |
 | `/ping` | GET | health check |
 | `/config` | GET | configurazione device (JSON, da `config.json`) |
@@ -203,14 +204,36 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | `/config/ui` | GET | Web UI configurazione (dark theme) |
 
 `config.json` è nella stessa directory dello script; è in `.gitignore` (non versionato).
-DEFAULT_CONFIG nel proxy: 19 campi (hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs). Merge con defaults su POST per backward compat.
+DEFAULT_CONFIG nel proxy: campi hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs + nomi (`lnch_name_1..4`), Beszel (`beszel_port`, `beszel_user`, `beszel_password`). Merge con defaults su POST per backward compat.
+
+### Beszel Docker integration — `/docker`
+
+Beszel è una dashboard per container Docker (PocketBase-based). Il proxy autentica e fornisce un endpoint compatto al firmware.
+
+**Auth:**
+```
+POST http://<server_ip>:<beszel_port>/api/collections/users/auth-with-password
+Body: {"identity": "<user>", "password": "<password>"}
+Response: {"token": "...", ...}
+```
+Token cachato in `_beszel_token` globale; su 401 si esegue refresh automatico.
+
+**Container stats:**
+```
+GET http://<server_ip>:<beszel_port>/api/collections/container_stats/records?sort=-created&perPage=1
+Header: Authorization: <token>
+Response: {"items": [{"stats": [{"n":"name","m":203.7,"c":0.5,"b":...}, ...]}]}
+```
+Campi record: `n`=nome container, `m`=RAM MB (RSS reale, non page-cached), `c`=CPU%, `b`=network.
+
+**Nota:** `memory_usage` di Glances `/api/4/containers` include page cache (inflated). Beszel `m` è RSS reale — usare sempre Beszel per RAM container.
 
 ### Boot config fetch — `indicator_config.c`
 
 `indicator_config_init()` registra un handler su `IP_EVENT_STA_GOT_IP`.
 L'handler lancia `config_boot_fetch_task` (FreeRTOS, stack 4096, una sola volta — guard `s_boot_fetched`):
 1. `vTaskDelay` 1500 ms (stabilizzazione stack IP)
-2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva 19 campi NVS
+2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva campi NVS (hue, server, proxy, launcher URL+nomi)
 
 ### "Ricarica config" — tab Proxy in Settings
 

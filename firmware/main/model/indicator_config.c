@@ -150,10 +150,14 @@ int config_fetch_from_proxy(void)
     save_json_str(root, "srv_name",       NVS_KEY_SERVER_NAME);
     save_json_str(root, "proxy_ip",       NVS_KEY_PROXY_IP);
     save_json_str(root, "proxy_port",     NVS_KEY_PROXY_PORT);
-    save_json_str(root, "launcher_url_1", NVS_KEY_LNCH_URL_1);
-    save_json_str(root, "launcher_url_2", NVS_KEY_LNCH_URL_2);
-    save_json_str(root, "launcher_url_3", NVS_KEY_LNCH_URL_3);
-    save_json_str(root, "launcher_url_4", NVS_KEY_LNCH_URL_4);
+    save_json_str(root, "launcher_url_1",  NVS_KEY_LNCH_URL_1);
+    save_json_str(root, "launcher_url_2",  NVS_KEY_LNCH_URL_2);
+    save_json_str(root, "launcher_url_3",  NVS_KEY_LNCH_URL_3);
+    save_json_str(root, "launcher_url_4",  NVS_KEY_LNCH_URL_4);
+    save_json_str(root, "lnch_name_1",     NVS_KEY_LNCH_NAME_1);
+    save_json_str(root, "lnch_name_2",     NVS_KEY_LNCH_NAME_2);
+    save_json_str(root, "lnch_name_3",     NVS_KEY_LNCH_NAME_3);
+    save_json_str(root, "lnch_name_4",     NVS_KEY_LNCH_NAME_4);
 
     cJSON_Delete(root);
     ESP_LOGI(TAG, "Config fetched and saved to NVS");

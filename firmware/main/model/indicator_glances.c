@@ -28,6 +28,8 @@ static const char *TAG = "GLANCES";
 
 static char              s_server_ip[64];
 static char              s_server_port[8];
+static char              s_proxy_ip[64];
+static char              s_proxy_port[8];
 static bool              s_task_started  = false;
 static volatile bool     s_poll_running  = false;
 static glances_data_cb_t s_data_cb       = NULL;
@@ -57,6 +59,10 @@ static void glances_read_config(void)
                  APP_CFG_SERVER_IP);
     nvs_read_str(NVS_KEY_SERVER_PORT, s_server_port, sizeof(s_server_port),
                  APP_CFG_SERVER_PORT);
+    nvs_read_str(NVS_KEY_PROXY_IP,   s_proxy_ip,   sizeof(s_proxy_ip),
+                 APP_CFG_PROXY_IP);
+    nvs_read_str(NVS_KEY_PROXY_PORT, s_proxy_port, sizeof(s_proxy_port),
+                 APP_CFG_PROXY_PORT);
 }
 
 /* ─── HTTP GET helper ─────────────────────────────────────────────────────── */
@@ -116,9 +122,10 @@ static float parse_float_key(const char *json, const char *key)
 }
 
 /*
- * Trova i top 3 container per memory_usage (solo status "running").
- * La risposta di /api/4/containers è un array JSON: ogni elemento ha
- * "name" (stringa), "memory_usage" (bytes, intero), "status" (stringa).
+ * Parsa la risposta di GET /docker dal proxy Mac.
+ * Formato: array JSON già ordinato per mem_mb desc:
+ *   [{"name": "uptime-kuma", "mem_mb": 203.73}, ...]
+ * Prende i primi 3 elementi (proxy pre-ordina e pre-filtra).
  */
 static void parse_top_docker(const char *json, glances_proc_t top[3])
 {
@@ -131,42 +138,18 @@ static void parse_top_docker(const char *json, glances_proc_t top[3])
     }
 
     int n = cJSON_GetArraySize(root);
-    for (int i = 0; i < n; i++) {
+    int filled = 0;
+    for (int i = 0; i < n && filled < 3; i++) {
         cJSON *item   = cJSON_GetArrayItem(root, i);
         if (!item) continue;
-
         cJSON *name   = cJSON_GetObjectItem(item, "name");
-        cJSON *status = cJSON_GetObjectItem(item, "status");
-        cJSON *mem    = cJSON_GetObjectItem(item, "memory_usage");
-        if (!cJSON_IsString(name) || !cJSON_IsString(status) || !cJSON_IsNumber(mem))
-            continue;
-        if (strcmp(status->valuestring, "running") != 0) continue;
-
-        uint32_t mem_mb = (uint32_t)((uint64_t)mem->valuedouble / 1048576ULL);
-
-        /* Trova il minimo nel top-3 corrente */
-        int min_idx = 0;
-        for (int j = 1; j < 3; j++) {
-            if (top[j].mem_mb < top[min_idx].mem_mb) min_idx = j;
-        }
-
-        if (mem_mb > top[min_idx].mem_mb || top[min_idx].name[0] == '\0') {
-            strncpy(top[min_idx].name, name->valuestring,
-                    sizeof(top[min_idx].name) - 1);
-            top[min_idx].name[sizeof(top[min_idx].name) - 1] = '\0';
-            top[min_idx].mem_mb = mem_mb;
-        }
-    }
-
-    /* Ordina top-3 decrescente (bubble sort su 3 elementi) */
-    for (int i = 0; i < 2; i++) {
-        for (int j = i + 1; j < 3; j++) {
-            if (top[j].mem_mb > top[i].mem_mb) {
-                glances_proc_t tmp = top[i];
-                top[i] = top[j];
-                top[j] = tmp;
-            }
-        }
+        cJSON *mem_mb = cJSON_GetObjectItem(item, "mem_mb");
+        if (!cJSON_IsString(name) || !cJSON_IsNumber(mem_mb)) continue;
+        strncpy(top[filled].name, name->valuestring,
+                sizeof(top[filled].name) - 1);
+        top[filled].name[sizeof(top[filled].name) - 1] = '\0';
+        top[filled].mem_mb = (uint32_t)mem_mb->valuedouble;
+        filled++;
     }
 
     cJSON_Delete(root);
@@ -276,22 +259,19 @@ static void glances_poll_task(void *arg)
             }
         }
 
-        /* ── Containers — top 3 running per memory_usage ── */
-        snprintf(s_url, sizeof(s_url), "http://%s:%s/api/4/containers",
-                 s_server_ip, s_server_port);
-        ESP_LOGI(TAG, "Fetching: %s", s_url);
+        /* ── Containers — top 3 via proxy Mac /docker (Beszel) ── */
+        snprintf(s_url, sizeof(s_url), "http://%s:%s/docker",
+                 s_proxy_ip, s_proxy_port);
         int cont_len = glances_http_get(s_url, s_cont_buf, GLANCES_CONT_BUF_SIZE);
-        ESP_LOGI(TAG, "containers len=%d", cont_len);
         if (cont_len > 0)
             parse_top_docker(s_cont_buf, s_top_docker);
 
         ESP_LOGI(TAG, "CPU=%.1f RAM=%.1f DSK=%.1f load=%.2f/%.2f/%.2f uptime=%s",
                  cpu, ram, dsk, load1, load5, load15, s_uptime);
-        for (int i = 0; i < 3; i++) {
-            if (s_top_docker[i].name[0] != '\0')
-                ESP_LOGI(TAG, "Docker top: %s %"PRIu32"MB",
-                         s_top_docker[i].name, s_top_docker[i].mem_mb);
-        }
+        ESP_LOGI(TAG, "docker[0]=%s %.0fMB  [1]=%s %.0fMB  [2]=%s %.0fMB",
+                 s_top_docker[0].name[0] ? s_top_docker[0].name : "(empty)", (float)s_top_docker[0].mem_mb,
+                 s_top_docker[1].name[0] ? s_top_docker[1].name : "(empty)", (float)s_top_docker[1].mem_mb,
+                 s_top_docker[2].name[0] ? s_top_docker[2].name : "(empty)", (float)s_top_docker[2].mem_mb);
 
         if (s_data_cb) {
             lv_port_sem_take();

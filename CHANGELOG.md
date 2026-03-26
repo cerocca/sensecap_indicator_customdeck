@@ -3,7 +3,13 @@
 ## [Unreleased]
 
 ### Added
-- `model/indicator_glances.c/.h`: modulo polling Glances API ogni 10s — CPU (`/api/4/cpu`), RAM (`/api/4/mem`), disco (`/api/4/fs`), uptime (`/api/4/uptime`), load avg (`/api/4/load`), top 3 container Docker per RAM (`/api/4/containers`); buffer containers (32KB) allocato in PSRAM (`heap_caps_malloc MALLOC_CAP_SPIRAM`); task avviato su `IP_EVENT_STA_GOT_IP`; callback UI registrata da `screen_sibilla_populate()`
+- `ui/screen_launcher.c/.h`: schermata Launcher completa — griglia 2×2 pulsanti (200×170px), feedback colore al press (#4a90d9 → #1e1e2e), HTTP fire-and-forget verso proxy `/open/<n>` su task FreeRTOS separato (stack 3072, heap-allocated args), titolo "Launcher" (font 20), lazy populate su `LV_EVENT_SCREEN_LOAD_START`
+- Nomi mnemonici pulsanti Launcher (`NVS_KEY_LNCH_NAME_1..4`, default GitHub/Strava/Garmin/Intervals) separati dagli URL; labels uppercase centrate con `lv_font_montserrat_20`; refresh da NVS ad ogni `SCREEN_LOAD_START`
+- `sensedeck_proxy.py`: endpoint `GET /docker` — autentica a Beszel via `/api/collections/users/auth-with-password`, recupera `container_stats` collection, ordina per `m` (RAM MB) desc, ritorna `[{"name":..., "mem_mb":...}]` top-3; token cached globalmente con refresh su 401
+- `sensedeck_proxy.py`: Web UI aggiornata — sezione Beszel (port/user/password) e launcher name fields paired con URL fields; `DEFAULT_CONFIG` esteso con `beszel_port`, `beszel_user`, `beszel_password`, `lnch_name_1..4`
+- `model/indicator_glances.c`: legge `NVS_KEY_PROXY_IP`/`PORT` in `glances_read_config()`; URL containers cambiato da `http://<server>/api/4/containers` a `http://<proxy>/docker`; `parse_top_docker()` riscritta per formato proxy `[{"name":..., "mem_mb":...}]`
+- `model/indicator_config.c`: salva `lnch_name_1..4` da JSON proxy in NVS al boot fetch
+- `model/indicator_glances.c/.h`: modulo polling Glances API ogni 10s — CPU (`/api/4/cpu`), RAM (`/api/4/mem`), disco (`/api/4/fs`), uptime (`/api/4/uptime`), load avg (`/api/4/load`), top 3 container Docker per RAM; buffer containers (32KB) allocato in PSRAM (`heap_caps_malloc MALLOC_CAP_SPIRAM`); task avviato su `IP_EVENT_STA_GOT_IP`; callback UI registrata da `screen_sibilla_populate()`
 - `model/indicator_uptime_kuma.c/.h`: polling proxy `/uptime` ogni 30s; parsing array `[{name, up}]`; esclude gruppi "0-..."; calcola totale/UP/DOWN (max 6); callback con LVGL sem; task avviato su `IP_EVENT_STA_GOT_IP` (8s delay)
 - `sensedeck_proxy.py`: endpoint `/uptime` aggiornato — ora ritorna array `[{name, up}]` con nomi da `monitorList`, esclude gruppi "0-"; non più `{"monitors": [{id, status}]}`
 - `ui/screen_sibilla.c`: implementazione completa con lazy populate — 3 barre metriche (CPU/RAM/DSK), uptime, load avg, separatore, header "Top Docker (RAM)", 3 righe container (nome a sinistra max 32 char + MB allineato a destra in label separato), label "Servizi: X/Y UP" (verde/rosso) + 6 righe DOWN pre-allocate aggiornate da Uptime Kuma; `format_uptime()` converte stringa raw Glances in formato compatto (1d 2h 34m)
@@ -30,6 +36,7 @@
 - `ui_screen_last` reso non-static in `ui.c` per permettere return da `ui_screen_wifi`
 
 ### Fixed
+- `ui/screen_sibilla.c`: Docker label reset bug — le label "Top Docker" non si resettavano tra poll consecutivi; aggiunto loop reset esplicito (→ "--"/""  ) prima del loop di aggiornamento in `on_glances_data()`
 - `indicator_view.c`: null-check su `p_src` in `VIEW_EVENT_WIFI_ST` (bug Seeed: crash `LoadProhibited` con rssi fuori range)
 - `indicator_wifi.c`: `esp_wifi_set_ps(WIFI_PS_NONE)` dopo ogni `esp_wifi_start()` — fix crash `pm_dream/ppTask`
 - `ui_event_screen_time` (Seeed `ui.c`): target hardcoded `ui_screen_ai` su swipe RIGHT — sostituito con `gesture_clock()` in `ui_manager.c` via `lv_obj_remove_event_cb`

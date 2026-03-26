@@ -63,6 +63,17 @@
 #define NVS_KEY_LNCH_URL_3      "lnch_url_3"
 #define NVS_KEY_LNCH_URL_4      "lnch_url_4"
 
+/* ── Launcher Names (label pulsante, separato dall'URL) ─────── */
+#define APP_CFG_LNCH_NAME_1     "GitHub"
+#define APP_CFG_LNCH_NAME_2     "Strava"
+#define APP_CFG_LNCH_NAME_3     "Garmin"
+#define APP_CFG_LNCH_NAME_4     "Intervals"
+
+#define NVS_KEY_LNCH_NAME_1     "lnch_name_1"
+#define NVS_KEY_LNCH_NAME_2     "lnch_name_2"
+#define NVS_KEY_LNCH_NAME_3     "lnch_name_3"
+#define NVS_KEY_LNCH_NAME_4     "lnch_name_4"
+
 /* ── Screen enable flags (default: 1 = enabled) ────────────── */
 #define NVS_KEY_SCR_HUE_EN      "scr_hue_en"
 #define NVS_KEY_SCR_SRV_EN      "scr_srv_en"

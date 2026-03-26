@@ -158,7 +158,11 @@ static void on_glances_data(float cpu, float ram, float dsk,
         lv_label_set_text(s_load_lbl, buf);
     }
 
-    /* Top Docker */
+    /* Top Docker — reset prima di sovrascrivere, così gli slot vuoti si puliscono */
+    for (int i = 0; i < 3; i++) {
+        lv_label_set_text(s_topram_name_lbls[i], "--");
+        lv_label_set_text(s_topram_mb_lbls[i],   "");
+    }
     for (int i = 0; i < 3; i++) {
         if (top_ram[i].name[0] != '\0') {
             lv_label_set_text(s_topram_name_lbls[i], top_ram[i].name);

@@ -45,10 +45,21 @@ DEFAULT_CONFIG = {
     "launcher_url_2": "https://www.strava.com",
     "launcher_url_3": "https://connect.garmin.com/",
     "launcher_url_4": "https://intervals.icu/",
+    "lnch_name_1":    "GitHub",
+    "lnch_name_2":    "Strava",
+    "lnch_name_3":    "Garmin",
+    "lnch_name_4":    "Intervals",
+    "beszel_port":    "8070",
+    "beszel_user":    "",
+    "beszel_password": "",
 }
 
 UPTIME_KUMA_URL = "http://192.168.1.69:3010/api/status-page/heartbeat/active"
 LISTEN_PORT     = 8765
+
+# ── Beszel token cache ──────────────────────────────────────────────────────────
+
+_beszel_token = None
 
 # ── Config helpers ──────────────────────────────────────────────────────────────
 
@@ -74,6 +85,78 @@ def save_config(data):
     except Exception as e:
         print(f"[config] save error: {e}")
         return False
+
+
+def get_beszel_token(cfg):
+    """Autentica su Beszel e cachea il token. Ritorna None se le credenziali mancano."""
+    global _beszel_token
+    if _beszel_token:
+        return _beszel_token
+    user     = cfg.get("beszel_user", "")
+    password = cfg.get("beszel_password", "")
+    host     = cfg.get("server_ip",    DEFAULT_CONFIG["server_ip"])
+    port     = cfg.get("beszel_port",  DEFAULT_CONFIG["beszel_port"])
+    if not user or not password:
+        return None
+    url  = f"http://{host}:{port}/api/collections/users/auth-with-password"
+    body = json.dumps({"identity": user, "password": password}).encode()
+    req  = urllib.request.Request(url, data=body,
+                                  headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            _beszel_token = json.loads(resp.read()).get("token")
+            return _beszel_token
+    except Exception as e:
+        print(f"[beszel] auth error: {e}")
+        return None
+
+
+def get_beszel_docker():
+    """
+    Chiama Beszel container_stats, ritorna lista container ordinata per RAM desc.
+    Formato: [{"name": "uptime-kuma", "mem_mb": 203.73}, ...]
+    """
+    global _beszel_token
+    cfg  = load_config()
+    host = cfg.get("server_ip",   DEFAULT_CONFIG["server_ip"])
+    port = cfg.get("beszel_port", DEFAULT_CONFIG["beszel_port"])
+
+    def fetch(token):
+        url = (f"http://{host}:{port}/api/collections/container_stats/records"
+               f"?sort=-created&perPage=1")
+        req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data  = json.loads(resp.read())
+            items = data.get("items", [])
+            if not items:
+                return []
+            stats = items[0].get("stats", [])
+            sorted_stats = sorted(stats, key=lambda x: x.get("m", 0), reverse=True)
+            return [{"name": c["n"], "mem_mb": round(c["m"], 1)}
+                    for c in sorted_stats if "n" in c and "m" in c]
+
+    token = get_beszel_token(cfg)
+    if not token:
+        return []
+    try:
+        return fetch(token)
+    except urllib.error.HTTPError as e:
+        if e.code == 401:
+            # Token scaduto — ri-autentica una volta
+            _beszel_token = None
+            token = get_beszel_token(cfg)
+            if not token:
+                return []
+            try:
+                return fetch(token)
+            except Exception as e2:
+                print(f"[beszel] docker retry error: {e2}")
+                return []
+        print(f"[beszel] docker error: {e}")
+        return []
+    except Exception as e:
+        print(f"[beszel] docker error: {e}")
+        return []
 
 
 def launcher_urls():
@@ -210,11 +293,21 @@ def build_config_ui(cfg):
     {field("IP Proxy", "proxy_ip", cfg.get("proxy_ip",""), "192.168.1.x")}
     {field("Porta", "proxy_port", cfg.get("proxy_port",""), "8765")}
 
+    <h2>Beszel</h2>
+    {hint("Host Beszel = stesso IP del server Glances")}
+    {field("Porta Beszel", "beszel_port", cfg.get("beszel_port",""), "8070")}
+    {field("Utente",       "beszel_user", cfg.get("beszel_user",""))}
+    {field("Password",     "beszel_password", cfg.get("beszel_password",""))}
+
     <h2>Launcher</h2>
-    {field("URL 1", "launcher_url_1", cfg.get("launcher_url_1",""))}
-    {field("URL 2", "launcher_url_2", cfg.get("launcher_url_2",""))}
-    {field("URL 3", "launcher_url_3", cfg.get("launcher_url_3",""))}
-    {field("URL 4", "launcher_url_4", cfg.get("launcher_url_4",""))}
+    {field("Nome 1", "lnch_name_1", cfg.get("lnch_name_1",""), "GitHub")}
+    {field("URL 1",  "launcher_url_1", cfg.get("launcher_url_1",""))}
+    {field("Nome 2", "lnch_name_2", cfg.get("lnch_name_2",""), "Strava")}
+    {field("URL 2",  "launcher_url_2", cfg.get("launcher_url_2",""))}
+    {field("Nome 3", "lnch_name_3", cfg.get("lnch_name_3",""), "Garmin")}
+    {field("URL 3",  "launcher_url_3", cfg.get("launcher_url_3",""))}
+    {field("Nome 4", "lnch_name_4", cfg.get("lnch_name_4",""), "Intervals")}
+    {field("URL 4",  "launcher_url_4", cfg.get("launcher_url_4",""))}
 
     <div class="actions">
       <button type="button" id="btn-save">Salva</button>
@@ -330,6 +423,14 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                 self.send_text(f"OK: {url}")
             else:
                 self.send_text(f"Unknown key: {key}", status=404)
+
+        # ── /docker ────────────────────────────────────────────────────────────
+        elif path == "/docker":
+            try:
+                self.send_json(get_beszel_docker())
+            except Exception as e:
+                print(f"[docker] error: {e}")
+                self.send_json([])
 
         # ── /ping ──────────────────────────────────────────────────────────────
         elif path == "/ping":
