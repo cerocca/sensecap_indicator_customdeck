@@ -38,7 +38,7 @@ The **[SenseCAP Indicator D1S](https://www.seeedstudio.com/SenseCAP-Indicator-D1
 - Swipe **UP** from Clock → **Custom Settings**
 - Swipe **DOWN** from Clock → **Default Settings**
 
-Screens in `[]` are optional and can be individually disabled from the Settings → Screens tab.
+Screens in `[]` are optional and can be individually disabled from the Custom Settings → Screens tab.
 
 ```
 Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔ [Traffic] ↔ (back to Clock)
