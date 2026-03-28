@@ -25,7 +25,7 @@
 
 ## What is this?
 
-The **SenseCAP Indicator D1S** is a 4-inch touch screen device powered by an ESP32-S3 dual-core MCU, with built-in CO2, tVOC, temperature and humidity sensors, Wi-Fi, Bluetooth, and two Grove connectors.
+The **[SenseCAP Indicator D1S](https://www.seeedstudio.com/SenseCAP-Indicator-D1-p-5643.html)** is a 4-inch touch screen device powered by an ESP32-S3 dual-core MCU, with built-in CO2, tVOC, temperature and humidity sensors, Wi-Fi, Bluetooth, and two Grove connectors.
 
 **SenseDeck** is a custom firmware for this device that turns it into a compact, always-on home automation panel. It is built on top of the official Seeed firmware and adds a set of custom screens for lights control, server monitoring, URL launching, weather, and traffic — all swipeable from a central clock screen, without touching any original Seeed functionality.
 
@@ -33,12 +33,10 @@ The **SenseCAP Indicator D1S** is a 4-inch touch screen device powered by an ESP
 
 ## Screens
 
-All original Seeed screens are preserved. Custom screens extend the navigation without modifying any Seeed files.
-
 **Navigation:**
 - Swipe **LEFT / RIGHT** to move between screens
-- Swipe **UP** from Clock → **Settings** (custom config screen)
-- Swipe **DOWN** from Clock → **Device Settings** (original Seeed Wi-Fi screen)
+- Swipe **UP** from Clock → **Custom Settings**
+- Swipe **DOWN** from Clock → **Default Settings**
 
 Screens in `[]` are optional and can be individually disabled from the Settings → Screens tab.
 
@@ -55,29 +53,56 @@ Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔
 | **Launcher** | Custom | 4 configurable buttons to open URLs on Mac |
 | **Weather** | Custom | Current conditions + 4-slot forecast via OpenWeatherMap |
 | **Traffic** | Custom | Estimated travel time + delta vs normal + green/yellow/red indicator |
-| **Settings** | Custom | Tabbed config screen — accessible via swipe UP from Clock |
+| **Custom Settings** | Custom | Tabbed config screen — accessible via swipe UP from Clock |
+| **Default Settings** | Original | Device Wi-Fi and display settings |
 
 ---
 
 ## Features
 
 ### Hue Control
+*Does not require SenseDeck Proxy on Mac*
+
 Toggle ON/OFF and adjust brightness (0–100%) for 4 configurable Philips Hue lights. Polling every 5 seconds via local Hue Bridge (HTTPS, self-signed cert accepted).
 
 ### LocalServer Dashboard
-Real-time CPU, RAM, disk usage, load average and uptime via [Glances](https://nicolargo.github.io/glances/) REST API. Top 3 Docker containers by RAM via [Beszel](https://github.com/henrygd/beszel). Service UP/DOWN status via [Uptime Kuma](https://github.com/louislam/uptime-kuma). *(requires SenseDeck Proxy on Mac)*
+*Requires SenseDeck Proxy on Mac*
+
+Real-time CPU, RAM, disk usage, load average and uptime via [Glances](https://nicolargo.github.io/glances/) REST API. Top 3 Docker containers by RAM via [Beszel](https://github.com/henrygd/beszel). Service UP/DOWN status via [Uptime Kuma](https://github.com/louislam/uptime-kuma).
 
 ### Launcher
-4 configurable buttons (2×2 grid) that open URLs on a Mac via a local Python proxy. Labels and URLs fully customizable. *(requires SenseDeck Proxy on Mac)*
+*Requires SenseDeck Proxy on Mac*
+
+4 configurable buttons (2×2 grid) that open URLs on a Mac via a local Python proxy. Labels and URLs fully customizable.
 
 ### Weather
-Current conditions (temperature, feels-like, description, humidity, wind speed) and 4-slot hourly forecast via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS — no proxy dependency. Refresh every 30 seconds; polling every 10 minutes.
+*Does not require SenseDeck Proxy on Mac*
+
+Current conditions (temperature, feels-like, description, humidity, wind speed) and 4-slot hourly forecast via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS. Refresh every 30 seconds; polling every 10 minutes.
 
 ### Traffic
-Estimated travel time from a configured origin to destination, delta vs baseline (normal traffic), and a green/yellow/red indicator via Google Maps Distance Matrix API. *(requires SenseDeck Proxy on Mac)*
+*Requires SenseDeck Proxy on Mac*
 
-### Settings
+Estimated travel time from a configured origin to destination, delta vs baseline (normal traffic), and a green/yellow/red indicator via Google Maps Distance Matrix API.
+
+### Custom Settings
 Tabbed configuration screen accessible via swipe UP from Clock (outside the horizontal rotation). Tabs: **Hue**, **Server**, **Proxy**, **Weather**, **Screens**. All values editable on-device and persisted to NVS. Full configuration also available via the proxy Web UI at `http://<mac-ip>:8765/config/ui`.
+
+---
+
+## SenseDeck Proxy
+
+The **SenseDeck Proxy** is a lightweight Python script that runs on your Mac (port **8765**). It is only required for screens that depend on services the firmware cannot reach directly.
+
+What it provides:
+
+- **Uptime Kuma** — compact JSON status endpoint for the LocalServer Dashboard
+- **Beszel Docker stats** — top 3 containers by RAM for the LocalServer Dashboard
+- **Launcher** — opens URLs in your browser on Mac when a button is tapped on the device
+- **Traffic** — fetches travel time from Google Maps Distance Matrix API and returns a compact response
+- **Config Web UI** — centralized configuration at `http://localhost:8765/config/ui` (dark theme, 3-column layout)
+
+The proxy is **not required** for Hue Control, Weather, or the built-in sensor screens, which connect directly to their respective services.
 
 ---
 

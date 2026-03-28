@@ -51,6 +51,11 @@ The SenseDeck Proxy is a lightweight Python script that runs on your Mac and act
 python3 sensedeck_proxy.py
 ```
 
+Two convenience scripts are also available in the root of the repo for macOS:
+
+- **`SenseDeck_Proxy_Start.command`** — start the proxy (double-click from Finder)
+- **`SenseDeck_Proxy_Stop.command`** — stop the proxy (double-click from Finder)
+
 The proxy listens on port **8765**. Web UI available at:
 ```
 http://localhost:8765/config/ui
@@ -95,7 +100,7 @@ Header: hue-application-key: <API_KEY>
 
 ## 4. On-device Configuration
 
-Swipe **UP** from the Clock screen to open the Settings screen. Tabs:
+Swipe **UP** from the Clock screen to open the Custom Settings screen. Tabs:
 
 | Tab | Content |
 |-----|---------|
@@ -110,7 +115,7 @@ Swipe **UP** from the Clock screen to open the Settings screen. Tabs:
 2. Open `http://localhost:8765/config/ui` and fill in all fields, then Save
 3. Power on the device and connect it to Wi-Fi (swipe DOWN from Clock → Wi-Fi settings)
 4. The device fetches the config from the proxy automatically after connecting
-5. Alternatively: swipe UP → Settings → Proxy → enter proxy IP:port → tap "Ricarica config"
+5. Alternatively: swipe UP → Custom Settings → Proxy → enter proxy IP:port → tap "Ricarica config"
 
 ---
 
