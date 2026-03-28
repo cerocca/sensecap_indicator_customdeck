@@ -2,16 +2,25 @@
 
 ## Implementation order
 
-1. [x] **Setup** — dal repo Seeed copiare **solo** `examples/indicator_basis/` in `firmware/` (non tutta la cartella `examples/`), verifica build pulita, flash base funzionante
-2. [x] **Analisi** — mappare navigazione esistente, pulsante fisico, comportamenti UI prima di toccare nulla
-3. [x] **Navigazione** — aggiungere schermate vuote nello stack senza rompere nulla, verificare swipe
-4. [x] **Screen Settings** — tab Wi-Fi (comportamento Seeed) + tab Hue/Server/Proxy con NVS
-5. [x] **Screen Hue** — toggle ON/OFF, poi slider luminosità
-6. [x] **Screen Sibilla** — Glances ✓ · Uptime Kuma via proxy ✓
-7. [x] **Screen Launcher** — 4 pulsanti proxy Mac
-8. [x] **Screen Weather** — meteo OWM diretto: temp, icona, umidità, vento, 4 slot forecast (sostituisce AI placeholder)
-9. [x] **Restyle navigazione** — settings_custom su swipe UP dal clock (fuori rotazione orizzontale); swipe DOWN dal clock → ui_screen_setting Seeed; rimosso auto-navigate al boot; rimosso tab Wi-Fi da settings_custom; nascosti elementi ridondanti in sensor e setting screen
-10. [ ] **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
+1. [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
+      (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
+      Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
+      UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
+2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
+3. [ ] **Schermata Clock**: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
+      convertire con LVGL image converter in C array, includere come `.c` nel progetto.
+      **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
+      Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
+4. [ ] **TEST COMPLETO** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
+5. [x] **Setup** — dal repo Seeed copiare **solo** `examples/indicator_basis/` in `firmware/` (non tutta la cartella `examples/`), verifica build pulita, flash base funzionante
+6. [x] **Analisi** — mappare navigazione esistente, pulsante fisico, comportamenti UI prima di toccare nulla
+7. [x] **Navigazione** — aggiungere schermate vuote nello stack senza rompere nulla, verificare swipe
+8. [x] **Screen Settings** — tab Wi-Fi (comportamento Seeed) + tab Hue/Server/Proxy con NVS
+9. [x] **Screen Hue** — toggle ON/OFF, poi slider luminosità
+10. [x] **Screen Sibilla** — Glances ✓ · Uptime Kuma via proxy ✓
+11. [x] **Screen Launcher** — 4 pulsanti proxy Mac
+12. [x] **Screen Weather** — meteo OWM diretto: temp, icona, umidità, vento, 4 slot forecast (sostituisce AI placeholder)
+13. [x] **Restyle navigazione** — settings_custom su swipe UP dal clock (fuori rotazione orizzontale); swipe DOWN dal clock → ui_screen_setting Seeed; rimosso auto-navigate al boot; rimosso tab Wi-Fi da settings_custom; nascosti elementi ridondanti in sensor e setting screen
 
 
 ## Various
@@ -22,15 +31,6 @@
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
-- [ ] Screen Weather: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
-- [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
-      (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
-      Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
-      UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
-- [ ] Schermata Clock: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
-      convertire con LVGL image converter in C array, includere come `.c` nel progetto.
-      **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
-      Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
 - [ ] Rimuovere vecchio progetto: eliminare repo locale `/Users/ciru/SenseCAP_Indicator_ESP32`
       e archiviare/eliminare repo GitHub `cerocca/mySenseCAP_Indicator_ESP32`
 - [x] Restart firmware da base pulita (indicator_basis)
