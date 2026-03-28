@@ -31,8 +31,6 @@
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [x] aggiornare SETUP.md con istruzioni uso proxy e setup varie schermate
 - [x] aggiungere in UI (es. tab Proxy in Settings) la riga con l'indirizzo web del config proxy: `http://localhost:8765/config/ui`
-- [ ] rendere proxy mac cliccabile
- Crediti cirutech + versione in UI
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
 - [x] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
 - [x] Layout Web UI proxy `/config/ui` a 3 colonne: Hue / LocalServer+Proxy / Launcher+Weather
@@ -51,7 +49,7 @@
       (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
       Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
       UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
-- [ ] Schermata Clock: immagine di sfondo custom (es. tema circuito PCB) —
+- [ ] Schermata Clock: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
       convertire con LVGL image converter in C array, includere come `.c` nel progetto.
       **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
       Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
