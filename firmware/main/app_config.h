@@ -74,8 +74,30 @@
 #define NVS_KEY_LNCH_NAME_3     "lnch_name_3"
 #define NVS_KEY_LNCH_NAME_4     "lnch_name_4"
 
+/* ── Weather (OWM) ──────────────────────────────────────────── */
+/* Nota: API key, lat, lon configurati dal proxy Web UI → NVS via /config */
+#define NVS_KEY_WTH_APIKEY      "wth_api_key"   /* OWM API key (32 char) */
+#define NVS_KEY_WTH_LAT         "wth_lat"        /* es. "43.7711"         */
+#define NVS_KEY_WTH_LON         "wth_lon"        /* es. "11.2486"         */
+#define NVS_KEY_WTH_UNITS       "wth_units"      /* "metric" | "imperial" */
+#define NVS_KEY_WTH_CITY        "wth_city"       /* nome città (display)  */
+#define NVS_KEY_WTH_LOCATION    "wth_location"   /* es. "Firenze, IT"     */
+#define DEFAULT_WTH_UNITS       "metric"
+
+/* ── Beszel ─────────────────────────────────────────────────── */
+#define NVS_KEY_BESZEL_PORT     "beszel_port"    /* porta Beszel dashboard */
+#define DEFAULT_BESZEL_PORT     "8090"
+
+/* ── Uptime Kuma ────────────────────────────────────────────── */
+#define NVS_KEY_UK_PORT         "uk_port"        /* porta Uptime Kuma */
+#define DEFAULT_UK_PORT         "3001"
+
 /* ── Screen enable flags (default: 1 = enabled) ────────────── */
 #define NVS_KEY_SCR_HUE_EN      "scr_hue_en"
 #define NVS_KEY_SCR_SRV_EN      "scr_srv_en"
 #define NVS_KEY_SCR_LNCH_EN     "scr_lnch_en"
-#define NVS_KEY_SCR_AI_EN       "scr_ai_en"
+#define NVS_KEY_SCR_AI_EN       "scr_ai_en"     /* mantenuto per compatibilità NVS */
+#define NVS_KEY_SCR_WTHR        "scr_wthr_en"
+#define DEFAULT_SCR_WTHR        "1"
+#define NVS_KEY_SCR_DEFSENS     "scr_defsens"   /* auto-naviga a sensors al boot */
+#define DEFAULT_SCR_DEFSENS     "1"

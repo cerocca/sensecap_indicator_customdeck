@@ -34,15 +34,15 @@ cd firmware && idf.py build flash monitor
 Swipe LEFT = avanti, swipe RIGHT = indietro.
 
 ```
-clock ↔ sensors ↔ settings_custom ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [ai] ↔ (torna a clock)
+clock ↔ sensors ↔ settings_custom ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [weather] ↔ (torna a clock)
 ```
 
 Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
-Clock, sensors e settings_custom sono sempre visibili.
+Clock e settings_custom sono sempre visibili. Sensors (idx 1) può essere disabilitata dalla navigazione tramite switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe).
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=ai
+// Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=weather
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
         int idx = ((cur + dir * i) % N_SCREENS + N_SCREENS) % N_SCREENS;
@@ -51,24 +51,36 @@ static lv_obj_t *next_from(int cur, int dir) {
     return s_scr[cur];
 }
 ```
+`scr_enabled(1)` ritorna `g_scr_defsens_enabled` (non più hardcoded `true`).
 Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` dopo gli `screen_xxx_init()`.
 
 **Flag di abilitazione schermate:**
-- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_ai_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
+- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
 - Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
 - Aggiornati live da `screen_settings_custom.c` (tab "Schermate") al toggle switch
 - Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
+
+**Auto-navigate a sensors al boot:**
+One-shot `lv_timer` (3000 ms) in `ui_manager_init()` — se `g_scr_defsens_enabled` e schermata attiva è clock, naviga automaticamente a sensors:
+```c
+static void auto_nav_sensors_cb(lv_timer_t *t) {
+    if (g_scr_defsens_enabled && lv_scr_act() == ui_screen_time)
+        _ui_screen_change(ui_screen_sensor, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+}
+lv_timer_t *t = lv_timer_create(auto_nav_sensors_cb, 3000, NULL);
+lv_timer_set_repeat_count(t, 1);
+```
 
 ### Schermate
 | # | Nome | Tipo | Note |
 |---|---|---|---|
 | 1 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 2 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità |
-| 3 | `screen_settings_custom` | Custom (sostituisce originale Seeed) | Tab: Wi-Fi · Hue · Server · Proxy · AI |
+| 3 | `screen_settings_custom` | Custom (sostituisce originale Seeed) | Tab: Wi-Fi · Hue · Server · Proxy · Meteo · Screens |
 | 4 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
 | 5 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
 | 6 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
-| 7 | `screen_ai` | Custom — placeholder | Tastiera touch ora |
+| 7 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
 
 ### Struttura file
 ```
@@ -93,11 +105,13 @@ Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata i
         │   ├── screen_hue.c/.h
         │   ├── screen_sibilla.c/.h
         │   ├── screen_launcher.c/.h
-        │   └── screen_ai.c/.h
+        │   └── screen_weather.c/.h
         └── model/
             ├── indicator_config.c/.h      # fetch config dal proxy al boot (IP_EVENT_STA_GOT_IP)
             ├── indicator_glances.c/.h
             ├── indicator_uptime_kuma.c/.h
+            ├── indicator_weather.c/.h
+            ├── indicator_system.c/.h      # fetch hostname Glances al boot (5s delay)
             └── indicator_hue.c/.h
 ```
 
@@ -111,10 +125,10 @@ Layout: tabview LVGL (44px header), 6 tab orizzontali.
 |---|---|
 | **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna via `ui_screen_last`) |
 | **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
-| **Server** | IP LocalServer, porta Glances → NVS |
-| **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot |
-| **AI** | Claude API key, endpoint → NVS |
-| **Schermate** | 4 switch ON/OFF (Hue, LocalServer, Launcher, AI) → aggiornano `g_scr_xxx_enabled` + NVS |
+| **Server** | Server IP, Server Name, Glances Port, Beszel Port, Uptime Kuma Port → NVS (5 campi) |
+| **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot · label "Config UI: http://..." con recolor LVGL (bianco + #7ec8e0), aggiornata dinamicamente da NVS |
+| **Meteo** | Info URL proxy Web UI (dinamico) + switch ON/OFF schermata Weather → `g_scr_wthr_enabled` + NVS |
+| **Screens** | 4 switch: Default sensor screen (`g_scr_defsens_enabled`), Hue, LocalServer, Launcher → aggiornano flag + NVS |
 
 - Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
 - Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
@@ -204,7 +218,17 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | `/config/ui` | GET | Web UI configurazione (dark theme) |
 
 `config.json` è nella stessa directory dello script; è in `.gitignore` (non versionato).
-DEFAULT_CONFIG nel proxy: campi hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs + nomi (`lnch_name_1..4`), Beszel (`beszel_port`, `beszel_user`, `beszel_password`). Merge con defaults su POST per backward compat.
+DEFAULT_CONFIG nel proxy: campi hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs + nomi (`lnch_name_1..4`), Beszel (`beszel_port`, `beszel_user`, `beszel_password`), OWM (`owm_api_key`, `owm_lat`, `owm_lon`, `owm_units`, `owm_city_name`, `owm_location`), Uptime Kuma port (`uk_port`). Merge con defaults su POST per backward compat.
+
+### Web UI — `/config/ui`
+
+Layout a **3 colonne flex** (dark theme):
+- Colonna 1: **Hue** (bridge IP, API key, nomi 4 luci; ID UUID come hidden inputs)
+- Colonna 2: **LocalServer** (IP, Glances port, Beszel port/user/password, server name) + **Proxy** (IP, port)
+- Colonna 3: **Launcher** (4 URL + nome) + **Weather** (OWM API key, lat, lon, units select, city name, location)
+
+`owm_city_name` è hidden input (sovrascritta da hostname Glances); `owm_location` è campo visibile.
+JS raccoglie tutti `input, select` e fa POST `/config`. Checkmark/cross Unicode per feedback.
 
 ### Beszel Docker integration — `/docker`
 
@@ -233,7 +257,7 @@ Campi record: `n`=nome container, `m`=RAM MB (RSS reale, non page-cached), `c`=C
 `indicator_config_init()` registra un handler su `IP_EVENT_STA_GOT_IP`.
 L'handler lancia `config_boot_fetch_task` (FreeRTOS, stack 4096, una sola volta — guard `s_boot_fetched`):
 1. `vTaskDelay` 1500 ms (stabilizzazione stack IP)
-2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva campi NVS (hue, server, proxy, launcher URL+nomi)
+2. `config_fetch_from_proxy()`: legge PROXY_IP/PORT da NVS → GET `/config` → cJSON parse → salva campi NVS (hue, server, proxy, launcher URL+nomi, OWM including `owm_location`)
 
 ### "Ricarica config" — tab Proxy in Settings
 
@@ -257,12 +281,62 @@ Priorità `srv_name`: hardcoded default → proxy fetch (boot) → manuale Setti
 
 ---
 
-## Schermata 7 — AI (placeholder)
+## Schermata 7 — Weather (sostituisce AI)
 
-- UI attuale: tastiera touch LVGL + area testo
-- Futuro: valutare XIAO come coprocessore audio (vedi TODO)
-- Potrebbe essere rimossa in release futura (vedi TODO)
-- **Vincolo futuro:** una sola connessione TLS attiva alla volta — sospendere polling Hue/Glances durante sessione AI
+### Sorgenti dati
+Il firmware chiama **OpenWeatherMap direttamente** (HTTPS), senza passare dal proxy Mac.
+Il proxy serve solo per configurare i parametri (API key, lat/lon, units, location) via Web UI → saved in NVS via `indicator_config.c` al boot (GET `/config`).
+
+- **Current:** `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units={units}`
+- **Forecast:** `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={key}&units={units}&cnt=4`
+
+### NVS keys
+| Chiave | Contenuto |
+|---|---|
+| `wth_api_key` | OWM API key (32 char) |
+| `wth_lat` | Latitudine es. "43.7711" |
+| `wth_lon` | Longitudine es. "11.2486" |
+| `wth_units` | "metric" o "imperial" |
+| `wth_city` | Nome città (es. "Firenze") |
+| `wth_location` | Stringa location display (es. "Firenze, IT") — priorità su wth_city |
+| `scr_wthr_en` | Flag abilitazione schermata |
+
+### Location label — priorità
+`update_city_label()` cerca in ordine:
+1. `wth_location` (NVS) — es. "Firenze, IT"
+2. `wth_city` (NVS) — es. "Firenze"
+3. Fallback: lat/lon formattato — es. "43.77°N 11.25°E"
+
+### Layout UI (480×480)
+- `y=0-44` Header "Weather" — font20, **bianco**
+- `y=57` Città/location — font14, #aaaaaa
+- `y=93` Icona condizione — testo ASCII font20, bianco (LVGL Montserrat non supporta emoji — icone PNG sono TODO futuro)
+- `y=123` Temperatura — font20, bianco
+- `y=171` Feels like — font14, #888888
+- `y=195` Descrizione — font16, #cccccc
+- `y=227` Umidità + vento — font14, #aaaaaa
+- `y=257` Separatore
+- `y=267` "Next hours" — font12, #7ec8e0
+- `y=293` Ora forecast (4 colonne 120px)
+- `y=317` Icona forecast
+- `y=339` Temp forecast
+- `y=361` Separatore
+- `LV_ALIGN_BOTTOM_MID` "Updated X min ago" — font12, #555555
+- `LV_ALIGN_BOTTOM_MID` Label errore — font12, #e07070
+
+### Icone meteo (ASCII fallback)
+Mapping OWM icon code → testo breve (font Montserrat non ha emoji):
+`01d`→SUN, `01n`→MOON, `02x`→PRTC, `03x`→CLD, `04x`→OCLD, `09x`→DRZL, `10x`→RAIN, `11x`→STRM, `13x`→SNOW, `50x`→FOG
+
+### Polling
+- Ogni **10 minuti** (WEATHER_POLL_MS = 600000 ms)
+- Prima poll: 5 s dopo boot (WEATHER_FIRST_DELAY_MS)
+- Se `wth_api_key` NVS vuota → non polla, `valid = false`
+- Buffer response: 2048 byte in stack (response ~700 byte current, ~1500 byte forecast cnt=4)
+- TLS: `skip_cert_common_name_check=true, use_global_ca_store=false, cert_pem=NULL` → MBEDTLS_SSL_VERIFY_NONE (stesso pattern Hue)
+
+### Timer UI
+`lv_timer_create(weather_refresh_cb, 30000, NULL)` — refresh ogni 30s nel timer cb (già in LVGL context → NO lv_port_sem_take/give nel cb stesso)
 
 ---
 
@@ -378,7 +452,7 @@ ignorando i flag di abilitazione schermate.
 lv_obj_remove_event_cb(ui_screen_time, ui_event_screen_time);  // rimuove handler Seeed
 lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_ALL, NULL);  // sostituisce
 ```
-`gesture_clock()` in `ui_manager.c` replica LEFT e BOTTOM identici a Seeed; RIGHT usa `next_from(0, -1)`.
+`gesture_clock()` in `ui_manager.c`: LEFT usa `next_from(0, +1)` (con guard `ensure_settings_populated()` se destinazione è settings); RIGHT usa `next_from(0, -1)`; BOTTOM replica Seeed.
 
 **Perché non aggiungere un secondo handler "override":** `lv_scr_load_anim` chiamato due volte
 nello stesso tick carica *immediatamente* la prima schermata (flash visivo) e poi anima alla seconda

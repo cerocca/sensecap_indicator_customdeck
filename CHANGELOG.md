@@ -3,6 +3,36 @@
 ## [Unreleased]
 
 ### Added
+- `app_config.h`: `NVS_KEY_WTH_CITY`, `NVS_KEY_WTH_LOCATION`, `NVS_KEY_BESZEL_PORT` + `DEFAULT_BESZEL_PORT "8090"`, `NVS_KEY_UK_PORT "uk_port"` + `DEFAULT_UK_PORT "3001"`, `NVS_KEY_SCR_DEFSENS "scr_defsens"` + `DEFAULT_SCR_DEFSENS "1"`
+- Settings tab Server: campi Beszel Port e Uptime Kuma Port; ora 5 campi totali (Server IP, Server Name, Glances Port, Beszel Port, UK Port)
+- Settings tab Proxy: label dinamica "Config UI: http://…/config/ui" con recolor LVGL — "Config UI:" bianco, URL in #7ec8e0; aggiornata da NVS al SCREEN_LOAD_START
+- Settings tab Screens: switch "Default sensor screen" come primo switch (`g_scr_defsens_enabled`, NVS `scr_defsens`) — quando OFF, `screen_sensors` viene saltata nello swipe
+- `ui_manager.c/.h`: flag `g_scr_defsens_enabled`; `scr_enabled(1)` usa il flag (non più hardcoded true); one-shot `lv_timer` 3000ms in `ui_manager_init()` per auto-navigare a sensors al boot se defsens abilitato; `gesture_clock` LEFT usa `next_from(0,+1)` con guard `ensure_settings_populated()`
+- `sensedeck_proxy.py`: campo `owm_location` in `DEFAULT_CONFIG` e Web UI; campo `uk_port` in `DEFAULT_CONFIG`; Web UI `/config/ui` ristrutturata a 3 colonne flex (Hue / LocalServer+Proxy / Launcher+Weather); helper `field()`, `pwd_field()`, `select_field()`; Hue IDs come hidden inputs; `/uptime` URL costruito dinamicamente da `server_ip` + `uk_port`
+- `model/indicator_config.c`: salva `owm_location` (`NVS_KEY_WTH_LOCATION`) da JSON proxy al boot fetch
+- `ui/screen_weather.c`: label città/location con priorità `wth_location` → `wth_city` → lat/lon formattato; tutti gli elementi sotto y=44 shiftati di +35px; font città font14 #aaaaaa; titolo colore bianco
+- `ui/screen_sibilla.c`: titolo colore bianco (era #7ec8a0), posizione y=10
+- `model/indicator_weather.c/.h`: polling OpenWeatherMap `/data/2.5/weather` + `/data/2.5/forecast?cnt=4` direttamente (HTTPS, no proxy) ogni 10 minuti; parse current (temp/feels/icon/desc/hum/wind) + 4 slot forecast 3h; buffer 2048 byte; TLS no-verify; task avviato con 8s delay; `weather_icon_label()` mappa codice OWM → testo ASCII breve
+- `ui/screen_weather.c/.h`: schermata meteo con lazy init — icona ASCII, temperatura, feels_like, descrizione, umidità+vento, 4 slot forecast 3h (ora/icona/temp), label "Updated X min ago", label errore; timer `lv_timer` 30s per refresh display; gesture handler anti-reentrant con `next_from(6, ±1)`; sostituisce `screen_ai` (idx 6)
+- `app_config.h`: chiavi NVS `wth_api_key`, `wth_lat`, `wth_lon`, `wth_units`, `wth_city`, `wth_location`, `scr_wthr_en`; `DEFAULT_WTH_UNITS = "metric"`
+- `model/indicator_config.c`: salva `owm_api_key`, `owm_lat`, `owm_lon`, `owm_units`, `owm_city_name`, `owm_location` da JSON proxy in NVS al boot fetch
+- `sensedeck_proxy.py`: campi weather in `DEFAULT_CONFIG`; sezione "Meteo (OpenWeatherMap)" nella Web UI `/config/ui`
+- Settings tab "Meteo" (sostituisce "AI"): info URL proxy Web UI dinamica + switch ON/OFF schermata Weather
+- Settings tab "Screens": rimosso switch AI, rimangono Hue/LocalServer/Launcher (3 switch); switch Weather in tab Meteo
+
+### Changed
+- OWM API URLs: rimosso `&lang=it` — descrizioni meteo in inglese (lingua di sistema OWM)
+- Settings tab Server: reintrodotto campo Server IP come primo campo (era stato rimosso per errore)
+- `ui_manager.c/.h`: `screen_ai` → `screen_weather` (idx 6), `g_scr_ai_enabled` → `g_scr_wthr_enabled`, NVS key `scr_wthr_en`; aggiunto `indicator_weather_init()` in `ui_manager_init()`
+- Navigazione: `clock ↔ [sensors] ↔ settings ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [weather] ↔ clock` (sensors ora opzionale via switch)
+- Font temperatura schermata Weather: `lv_font_montserrat_20`
+- `sensedeck_proxy.py`: URL Uptime Kuma costruito dinamicamente da `server_ip` + `uk_port` (rimosso `UPTIME_KUMA_URL` costante globale)
+
+### Fixed
+- `sensedeck_proxy.py`: aggiunta dichiarazione encoding `# -*- coding: utf-8 -*-` (fix SyntaxError con Python 2)
+- `sensedeck_proxy.py`: rimosso riferimento a `UPTIME_KUMA_URL` rimossa; startup print aggiornato
+
+
 - `ui/screen_launcher.c/.h`: schermata Launcher completa — griglia 2×2 pulsanti (200×170px), feedback colore al press (#4a90d9 → #1e1e2e), HTTP fire-and-forget verso proxy `/open/<n>` su task FreeRTOS separato (stack 3072, heap-allocated args), titolo "Launcher" (font 20), lazy populate su `LV_EVENT_SCREEN_LOAD_START`
 - Nomi mnemonici pulsanti Launcher (`NVS_KEY_LNCH_NAME_1..4`, default GitHub/Strava/Garmin/Intervals) separati dagli URL; labels uppercase centrate con `lv_font_montserrat_20`; refresh da NVS ad ogni `SCREEN_LOAD_START`
 - `sensedeck_proxy.py`: endpoint `GET /docker` — autentica a Beszel via `/api/collections/users/auth-with-password`, recupera `container_stats` collection, ordina per `m` (RAM MB) desc, ritorna `[{"name":..., "mem_mb":...}]` top-3; token cached globalmente con refresh su 401

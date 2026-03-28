@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 sensedeck_proxy.py — Server proxy per SenseCAP Indicator Deck
 Gira sul Mac, ascolta sulla porta 8765
@@ -49,12 +50,18 @@ DEFAULT_CONFIG = {
     "lnch_name_2":    "Strava",
     "lnch_name_3":    "Garmin",
     "lnch_name_4":    "Intervals",
-    "beszel_port":    "8070",
+    "beszel_port":    "8090",
     "beszel_user":    "",
     "beszel_password": "",
+    "uk_port":        "3001",
+    "owm_api_key":    "",
+    "owm_lat":        "",
+    "owm_lon":        "",
+    "owm_units":      "metric",
+    "owm_city_name":  "",
+    "owm_location":   "",   # es. "Firenze, IT" — sovrascrive lat/lon display
 }
 
-UPTIME_KUMA_URL = "http://192.168.1.69:3010/api/status-page/heartbeat/active"
 LISTEN_PORT     = 8765
 
 # ── Beszel token cache ──────────────────────────────────────────────────────────
@@ -172,14 +179,88 @@ def launcher_urls():
 
 def build_config_ui(cfg):
     def field(label, name, value, placeholder=""):
-        return f"""
-        <div class="field">
-          <label for="{name}">{label}</label>
-          <input type="text" id="{name}" name="{name}" value="{value}" placeholder="{placeholder}">
-        </div>"""
+        return (
+            f'<div class="field">'
+            f'<label for="{name}">{label}</label>'
+            f'<input type="text" id="{name}" name="{name}" value="{value}" placeholder="{placeholder}">'
+            f'</div>'
+        )
 
-    def hint(text):
-        return f'<p class="hint">{text}</p>'
+    def pwd_field(label, name, value):
+        return (
+            f'<div class="field">'
+            f'<label for="{name}">{label}</label>'
+            f'<input type="password" id="{name}" name="{name}" value="{value}">'
+            f'</div>'
+        )
+
+    def select_field(label, name, value, options):
+        opts = "".join(
+            f'<option value="{v}"{" selected" if v == value else ""}>{l}</option>'
+            for v, l in options
+        )
+        return (
+            f'<div class="field">'
+            f'<label for="{name}">{label}</label>'
+            f'<select id="{name}" name="{name}">{opts}</select>'
+            f'</div>'
+        )
+
+    def sep():
+        return '<hr class="sep">'
+
+    # Hue light IDs: not shown in columns but preserved as hidden inputs
+    hidden = "".join(
+        f'<input type="hidden" name="hue_light_{i}_id" value="{cfg.get(f"hue_light_{i}_id","")}">'
+        for i in range(1, 5)
+    )
+    # owm_city_name preserved as hidden (superseded by owm_location in UI)
+    hidden += f'<input type="hidden" name="owm_city_name" value="{cfg.get("owm_city_name","")}">'
+
+    col1 = (
+        "<h2>Hue Bridge</h2>"
+        + field("IP Bridge",  "hue_bridge_ip", cfg.get("hue_bridge_ip",""), "192.168.1.x")
+        + field("API Key",    "hue_api_key",   cfg.get("hue_api_key",""))
+        + field("Light 1",    "hue_light_1",   cfg.get("hue_light_1",""),   "Light 1")
+        + field("Light 2",    "hue_light_2",   cfg.get("hue_light_2",""),   "Light 2")
+        + field("Light 3",    "hue_light_3",   cfg.get("hue_light_3",""),   "Light 3")
+        + field("Light 4",    "hue_light_4",   cfg.get("hue_light_4",""),   "Light 4")
+    )
+
+    col2 = (
+        "<h2>LocalServer</h2>"
+        + field("Server Name",      "srv_name",    cfg.get("srv_name",""),    "LocalServer")
+        + field("Server IP",        "server_ip",   cfg.get("server_ip",""),   "192.168.1.x")
+        + field("Glances Port",     "server_port", cfg.get("server_port",""), "61208")
+        + field("Uptime Kuma Port", "uk_port",     cfg.get("uk_port",""),     "3001")
+        + field("Beszel Port",      "beszel_port", cfg.get("beszel_port",""), "8090")
+        + field("Beszel User",      "beszel_user", cfg.get("beszel_user",""))
+        + pwd_field("Beszel Password", "beszel_password", cfg.get("beszel_password",""))
+        + sep()
+        + "<h2>Proxy Mac</h2>"
+        + field("Proxy IP",   "proxy_ip",   cfg.get("proxy_ip",""),   "192.168.1.x")
+        + field("Proxy Port", "proxy_port", cfg.get("proxy_port",""), "8765")
+    )
+
+    col3 = (
+        "<h2>Launcher</h2>"
+        + field("Nome 1", "lnch_name_1",   cfg.get("lnch_name_1",""),   "GitHub")
+        + field("URL 1",  "launcher_url_1", cfg.get("launcher_url_1",""))
+        + field("Nome 2", "lnch_name_2",   cfg.get("lnch_name_2",""),   "Strava")
+        + field("URL 2",  "launcher_url_2", cfg.get("launcher_url_2",""))
+        + field("Nome 3", "lnch_name_3",   cfg.get("lnch_name_3",""),   "Garmin")
+        + field("URL 3",  "launcher_url_3", cfg.get("launcher_url_3",""))
+        + field("Nome 4", "lnch_name_4",   cfg.get("lnch_name_4",""),   "Intervals")
+        + field("URL 4",  "launcher_url_4", cfg.get("launcher_url_4",""))
+        + sep()
+        + "<h2>Weather (OpenWeatherMap)</h2>"
+        + field("OWM API Key", "owm_api_key",  cfg.get("owm_api_key",""),  "32 caratteri")
+        + field("Location",    "owm_location", cfg.get("owm_location",""), "es. Firenze, IT")
+        + field("Latitude",    "owm_lat",      cfg.get("owm_lat",""),      "es. 43.7711")
+        + field("Longitude",   "owm_lon",      cfg.get("owm_lon",""),      "es. 11.2486")
+        + select_field("Units", "owm_units", cfg.get("owm_units","metric"),
+                       [("metric","metric (°C, km/h)"), ("imperial","imperial (°F, mph)")])
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="it">
@@ -202,10 +283,13 @@ def build_config_ui(cfg):
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #7ec8a0;
-      margin: 28px 0 12px;
+      margin: 20px 0 12px;
       padding-bottom: 6px;
       border-bottom: 1px solid #2a2a3a;
     }}
+    h2:first-child {{ margin-top: 0; }}
+    .cols {{ display: flex; gap: 24px; align-items: flex-start; }}
+    .col {{ flex: 1; min-width: 0; }}
     .field {{ margin-bottom: 14px; }}
     label {{
       display: block;
@@ -213,9 +297,8 @@ def build_config_ui(cfg):
       color: #999;
       margin-bottom: 4px;
     }}
-    input[type="text"] {{
+    input[type="text"], input[type="password"], select {{
       width: 100%;
-      max-width: 480px;
       background: #1e1e2e;
       border: 1px solid #333;
       border-radius: 6px;
@@ -225,15 +308,12 @@ def build_config_ui(cfg):
       outline: none;
       transition: border-color .15s;
     }}
-    input[type="text"]:focus {{ border-color: #7ec8a0; }}
-    .actions {{
-      margin-top: 32px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }}
+    input[type="text"]:focus, input[type="password"]:focus, select:focus {{ border-color: #7ec8a0; }}
+    select option {{ background: #1e1e2e; }}
+    .sep {{ border: none; border-top: 1px solid #2a2a3a; margin: 20px 0; }}
+    .actions {{ margin-top: 32px; display: flex; justify-content: center; }}
     button {{
-      padding: 10px 24px;
+      padding: 10px 32px;
       border: none;
       border-radius: 6px;
       font-size: 0.9rem;
@@ -242,20 +322,15 @@ def build_config_ui(cfg):
       transition: opacity .15s;
     }}
     button:hover {{ opacity: 0.85; }}
-    #btn-save   {{ background: #529d53; color: #fff; }}
-    #btn-send   {{ background: #2a2a3a; color: #888; border: 1px solid #444; cursor: not-allowed; }}
+    #btn-save {{ background: #529d53; color: #fff; }}
     #status-msg {{
       margin-top: 16px;
       font-size: 0.85rem;
       min-height: 1.2em;
       color: #7ec8a0;
+      text-align: center;
     }}
-    .hint {{
-      font-size: 0.72rem;
-      color: #555;
-      margin-top: -10px;
-      margin-bottom: 14px;
-    }}
+    @media (max-width: 900px) {{ .cols {{ flex-direction: column; }} }}
   </style>
 </head>
 <body>
@@ -263,57 +338,14 @@ def build_config_ui(cfg):
   <div class="subtitle">Configurazione dispositivo — sensecap_indicator_customdeck/config.json</div>
 
   <form id="cfg-form">
-    <h2>Hue Bridge</h2>
-    {field("IP Bridge", "hue_bridge_ip", cfg.get("hue_bridge_ip",""), "192.168.1.x")}
-    {field("API Key", "hue_api_key", cfg.get("hue_api_key",""))}
-    {field("Luce 1 — Nome", "hue_light_1", cfg.get("hue_light_1",""), "Light 1")}
-    {hint("Nome visualizzato sul device (libero, non deve corrispondere al nome in Hue)")}
-    {field("Luce 1 — ID", "hue_light_1_id", cfg.get("hue_light_1_id",""), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")}
-    {hint("ID univoco della luce (UUID dal Hue Bridge)")}
-    {field("Luce 2 — Nome", "hue_light_2", cfg.get("hue_light_2",""), "Light 2")}
-    {hint("Nome visualizzato sul device (libero, non deve corrispondere al nome in Hue)")}
-    {field("Luce 2 — ID", "hue_light_2_id", cfg.get("hue_light_2_id",""), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")}
-    {hint("ID univoco della luce (UUID dal Hue Bridge)")}
-    {field("Luce 3 — Nome", "hue_light_3", cfg.get("hue_light_3",""), "Light 3")}
-    {hint("Nome visualizzato sul device (libero, non deve corrispondere al nome in Hue)")}
-    {field("Luce 3 — ID", "hue_light_3_id", cfg.get("hue_light_3_id",""), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")}
-    {hint("ID univoco della luce (UUID dal Hue Bridge)")}
-    {field("Luce 4 — Nome", "hue_light_4", cfg.get("hue_light_4",""), "Light 4")}
-    {hint("Nome visualizzato sul device (libero, non deve corrispondere al nome in Hue)")}
-    {field("Luce 4 — ID", "hue_light_4_id", cfg.get("hue_light_4_id",""), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")}
-    {hint("ID univoco della luce (UUID dal Hue Bridge)")}
-
-    <h2>LocalServer (Glances)</h2>
-    {field("Server Name", "srv_name", cfg.get("srv_name",""), "LocalServer")}
-    {hint("Nome visualizzato sul device — sovrascrive l'hostname rilevato automaticamente")}
-    {field("IP Server", "server_ip", cfg.get("server_ip",""), "192.168.1.x")}
-    {field("Porta Glances", "server_port", cfg.get("server_port",""), "61208")}
-
-    <h2>Proxy Mac</h2>
-    {field("IP Proxy", "proxy_ip", cfg.get("proxy_ip",""), "192.168.1.x")}
-    {field("Porta", "proxy_port", cfg.get("proxy_port",""), "8765")}
-
-    <h2>Beszel</h2>
-    {hint("Host Beszel = stesso IP del server Glances")}
-    {field("Porta Beszel", "beszel_port", cfg.get("beszel_port",""), "8070")}
-    {field("Utente",       "beszel_user", cfg.get("beszel_user",""))}
-    {field("Password",     "beszel_password", cfg.get("beszel_password",""))}
-
-    <h2>Launcher</h2>
-    {field("Nome 1", "lnch_name_1", cfg.get("lnch_name_1",""), "GitHub")}
-    {field("URL 1",  "launcher_url_1", cfg.get("launcher_url_1",""))}
-    {field("Nome 2", "lnch_name_2", cfg.get("lnch_name_2",""), "Strava")}
-    {field("URL 2",  "launcher_url_2", cfg.get("launcher_url_2",""))}
-    {field("Nome 3", "lnch_name_3", cfg.get("lnch_name_3",""), "Garmin")}
-    {field("URL 3",  "launcher_url_3", cfg.get("launcher_url_3",""))}
-    {field("Nome 4", "lnch_name_4", cfg.get("lnch_name_4",""), "Intervals")}
-    {field("URL 4",  "launcher_url_4", cfg.get("launcher_url_4",""))}
-
+    {hidden}
+    <div class="cols">
+      <div class="col">{col1}</div>
+      <div class="col">{col2}</div>
+      <div class="col">{col3}</div>
+    </div>
     <div class="actions">
-      <button type="button" id="btn-save">Salva</button>
-      <button type="button" id="btn-send" disabled title="Non ancora implementato">
-        Invia al device
-      </button>
+      <button type="button" id="btn-save">Salva tutto</button>
     </div>
     <div id="status-msg"></div>
   </form>
@@ -322,8 +354,8 @@ def build_config_ui(cfg):
     document.getElementById('btn-save').addEventListener('click', async () => {{
       const form = document.getElementById('cfg-form');
       const data = {{}};
-      form.querySelectorAll('input[type="text"]').forEach(el => {{
-        data[el.name] = el.value;
+      form.querySelectorAll('input, select').forEach(el => {{
+        if (el.name) data[el.name] = el.value;
       }});
       const msg = document.getElementById('status-msg');
       msg.style.color = '#7ec8a0';
@@ -335,14 +367,14 @@ def build_config_ui(cfg):
           body: JSON.stringify(data)
         }});
         if (res.ok) {{
-          msg.textContent = '✓ Salvato';
+          msg.textContent = '\u2713 Salvato';
         }} else {{
           msg.style.color = '#e07070';
-          msg.textContent = '✗ Errore ' + res.status;
+          msg.textContent = '\u2717 Errore ' + res.status;
         }}
       }} catch(e) {{
         msg.style.color = '#e07070';
-        msg.textContent = '✗ ' + e.message;
+        msg.textContent = '\u2717 ' + e.message;
       }}
     }});
   </script>
@@ -386,7 +418,11 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         # ── /uptime ────────────────────────────────────────────────────────────
         if path == "/uptime":
             try:
-                req = urllib.request.Request(UPTIME_KUMA_URL)
+                _cfg = load_config()
+                _uk_host = _cfg.get("server_ip", DEFAULT_CONFIG["server_ip"])
+                _uk_port = _cfg.get("uk_port",   DEFAULT_CONFIG["uk_port"])
+                _uk_url  = f"http://{_uk_host}:{_uk_port}/api/status-page/heartbeat/active"
+                req = urllib.request.Request(_uk_url)
                 with urllib.request.urlopen(req, timeout=5) as resp:
                     raw = json.loads(resp.read())
 
@@ -481,7 +517,7 @@ if __name__ == "__main__":
     cfg = load_config()
     server = http.server.HTTPServer(("0.0.0.0", LISTEN_PORT), ProxyHandler)
     print(f"sensedeck_proxy listening on port {LISTEN_PORT}")
-    print(f"  /uptime     → Uptime Kuma {UPTIME_KUMA_URL}")
+    print(f"  /uptime     → Uptime Kuma {cfg.get('server_ip','?')}:{cfg.get('uk_port','?')}")
     for k in ["1", "2", "3", "4"]:
         print(f"  /open/{k}     → {cfg.get(f'launcher_url_{k}', '?')}")
     print(f"  /config     → GET config / POST save")

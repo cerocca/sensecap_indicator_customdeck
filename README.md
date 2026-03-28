@@ -25,7 +25,7 @@
 
 ## What is this?
 
-This is a personal firmware project for the **SenseCAP Indicator D1S** by Seeed Studio. The goal is to transform the device into a compact, always-on home automation panel — a physical dashboard for lights, server monitoring, URL launching, and AI interaction.
+This is a personal firmware project for the **SenseCAP Indicator D1S** by Seeed Studio. The goal is to transform the device into a compact, always-on home automation panel — a physical dashboard for lights, server monitoring, URL launching, and weather.
 
 The project is built on top of the official Seeed firmware (`examples/indicator_basis`) and extends it with custom screens, without modifying any of the original functionality.
 
@@ -56,14 +56,14 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 | 4 | **Hue Control** | Custom | Toggle + brightness slider for 4 Philips Hue lights |
 | 5 | **LocalServer Dashboard** | Custom | LAN server monitoring via Glances API + Uptime Kuma |
 | 6 | **Launcher** | Custom | 4 buttons to open URLs on Mac via local Python proxy |
-| 7 | **AI** | Custom | Text interface for AI interaction (placeholder) |
+| 7 | **Weather** | Custom | Current conditions + 4-slot forecast via OpenWeatherMap |
 
 ---
 
 ## Features
 
 ### Settings
-- Unified settings screen with tabs: Wi-Fi · Hue · Server · Proxy · AI · Screens
+- Unified settings screen with tabs: Wi-Fi · Hue · Server · Proxy · Meteo · Screens
 - All values editable on-device and persisted to NVS
 - Fallback to hardcoded defaults if NVS is empty
 - Configuration can also be managed via the Mac proxy Web UI (`http://localhost:8765/config/ui`)
@@ -84,9 +84,12 @@ All original Seeed screens are preserved. Custom screens are added to the circul
 - 4 configurable buttons (2×2 grid) that open URLs on a Mac via a local Python proxy
 - Fully customizable labels and endpoints
 
-### AI (placeholder)
-- Touch keyboard interface for AI text interaction
-- Future: voice input/output via external coprocessor (see roadmap)
+### Weather
+- Current conditions: temperature, feels-like, description, humidity, wind speed
+- 4-slot forecast (+0h, +3h, +6h, +9h) via OpenWeatherMap free tier
+- Data fetched directly from OWM (HTTPS) — no Mac proxy dependency
+- Configurable via proxy Web UI (API key, lat/lon, units); synced to device on reload
+- Display refresh every 30 seconds; polling every 10 minutes
 
 ---
 

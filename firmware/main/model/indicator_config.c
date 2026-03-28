@@ -159,6 +159,17 @@ int config_fetch_from_proxy(void)
     save_json_str(root, "lnch_name_3",     NVS_KEY_LNCH_NAME_3);
     save_json_str(root, "lnch_name_4",     NVS_KEY_LNCH_NAME_4);
 
+    /* Weather (OWM) — configurati dal proxy Web UI */
+    save_json_str(root, "owm_api_key",     NVS_KEY_WTH_APIKEY);
+    save_json_str(root, "owm_lat",         NVS_KEY_WTH_LAT);
+    save_json_str(root, "owm_lon",         NVS_KEY_WTH_LON);
+    save_json_str(root, "owm_units",       NVS_KEY_WTH_UNITS);
+    save_json_str(root, "owm_city_name",   NVS_KEY_WTH_CITY);
+    save_json_str(root, "owm_location",   NVS_KEY_WTH_LOCATION);
+
+    /* Beszel */
+    save_json_str(root, "beszel_port",     NVS_KEY_BESZEL_PORT);
+
     cJSON_Delete(root);
     ESP_LOGI(TAG, "Config fetched and saved to NVS");
     return 0;

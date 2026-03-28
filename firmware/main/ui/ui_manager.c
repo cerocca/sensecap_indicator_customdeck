@@ -1,6 +1,7 @@
 #include "ui_manager.h"
 #include "ui_helpers.h"   /* _ui_screen_change, include ui.h → ui_screen_time, ui_screen_setting */
 #include "indicator_storage.h"
+#include "indicator_weather.h"
 #include "app_config.h"
 
 /* ui_screen_last è non-static in ui.c (necessario per il ritorno da ui_screen_wifi). */
@@ -13,7 +14,7 @@ extern void ui_event_screen_time(lv_event_t *e);
 /*
  * Navigazione circolare bidirezionale (swipe LEFT = avanti, swipe RIGHT = indietro):
  *
- *  clock ↔ sensors ↔ settings ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [ai] ↔ (clock)
+ *  clock ↔ sensors ↔ settings ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [weather] ↔ (clock)
  *
  * Le schermate tra [] sono opzionali: se disabilitate vengono saltate.
  * Clock, sensors e settings sono sempre visibili.
@@ -27,15 +28,16 @@ extern void ui_event_screen_time(lv_event_t *e);
 
 /* ─── screen enable flags ──────────────────────────────────────
  * Caricati da NVS in ui_manager_init().
- * Aggiornati live da screen_settings_custom (tab Schermate).
+ * Aggiornati live da screen_settings_custom (tab Meteo / Schermate).
  * ─────────────────────────────────────────────────────────────*/
+bool g_scr_defsens_enabled = true;
 bool g_scr_hue_enabled  = true;
 bool g_scr_srv_enabled  = true;
 bool g_scr_lnch_enabled = true;
-bool g_scr_ai_enabled   = true;
+bool g_scr_wthr_enabled = true;
 
 /* ─── screen order for skip logic ─────────────────────────────
- * Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=ai
+ * Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=weather
  * ─────────────────────────────────────────────────────────────*/
 #define N_SCREENS 7
 
@@ -44,11 +46,12 @@ static lv_obj_t *s_scr[N_SCREENS]; /* popolato in ui_manager_init */
 static bool scr_enabled(int i)
 {
     switch (i) {
+        case 1: return g_scr_defsens_enabled; /* sensors: skippa se switch OFF */
         case 3: return g_scr_hue_enabled;
         case 4: return g_scr_srv_enabled;
         case 5: return g_scr_lnch_enabled;
-        case 6: return g_scr_ai_enabled;
-        default: return true; /* clock, sensors, settings sempre abilitati */
+        case 6: return g_scr_wthr_enabled;
+        default: return true; /* clock (0), settings (2) sempre abilitati */
     }
 }
 
@@ -75,10 +78,11 @@ static bool nvs_read_flag(const char *key)
 
 static void load_screen_flags(void)
 {
-    g_scr_hue_enabled  = nvs_read_flag(NVS_KEY_SCR_HUE_EN);
-    g_scr_srv_enabled  = nvs_read_flag(NVS_KEY_SCR_SRV_EN);
-    g_scr_lnch_enabled = nvs_read_flag(NVS_KEY_SCR_LNCH_EN);
-    g_scr_ai_enabled   = nvs_read_flag(NVS_KEY_SCR_AI_EN);
+    g_scr_defsens_enabled = nvs_read_flag(NVS_KEY_SCR_DEFSENS);
+    g_scr_hue_enabled     = nvs_read_flag(NVS_KEY_SCR_HUE_EN);
+    g_scr_srv_enabled     = nvs_read_flag(NVS_KEY_SCR_SRV_EN);
+    g_scr_lnch_enabled    = nvs_read_flag(NVS_KEY_SCR_LNCH_EN);
+    g_scr_wthr_enabled    = nvs_read_flag(NVS_KEY_SCR_WTHR);
 }
 
 /* ─── lazy init settings_custom ────────────────────────────── */
@@ -114,21 +118,35 @@ static void ensure_launcher_populated(void)
     }
 }
 
+/* ─── lazy init screen_weather ──────────────────────────────── */
+static bool s_weather_populated = false;
+
+static void ensure_weather_populated(void)
+{
+    if (!s_weather_populated) {
+        screen_weather_populate();
+        s_weather_populated = true;
+    }
+}
+
 /* ─── gesture handlers ─────────────────────────────────────── */
 
 /*
  * Sostituzione dell'handler Seeed ui_event_screen_time per ui_screen_time.
  * LEFT e BOTTOM replicano il comportamento Seeed invariato.
  * RIGHT usa next_from() per saltare le schermate disabilitate anziché
- * puntare hardcoded a ui_screen_ai.
+ * puntare hardcoded a ui_screen_weather.
  */
 static void gesture_clock(lv_event_t *e)
 {
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_time) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
-        _ui_screen_change(ui_screen_sensor, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+    if (dir == LV_DIR_LEFT) {
+        lv_obj_t *next = next_from(0, +1);
+        if (next == ui_screen_settings_custom) ensure_settings_populated();
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+    }
     else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(0, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
     else if (dir == LV_DIR_BOTTOM) {
@@ -195,21 +213,30 @@ static void gesture_launcher(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_launcher) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
+    if (dir == LV_DIR_LEFT) {
+        ensure_weather_populated(); /* lazy populate prima dell'animazione */
         _ui_screen_change(next_from(5, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT)
+    } else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(5, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
-static void gesture_ai(lv_event_t *e)
+static void gesture_weather(lv_event_t *e)
 {
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
-    if (lv_scr_act() != ui_screen_ai) return;
+    if (lv_scr_act() != ui_screen_weather) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT)
         _ui_screen_change(next_from(6, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
     else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(6, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+}
+
+/* ─── auto-navigate to sensors at boot ─────────────────────── */
+static void auto_nav_sensors_cb(lv_timer_t *t)
+{
+    (void)t;
+    if (g_scr_defsens_enabled && lv_scr_act() == ui_screen_time)
+        _ui_screen_change(ui_screen_sensor, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
 }
 
 void ui_manager_init(void)
@@ -223,7 +250,10 @@ void ui_manager_init(void)
     screen_hue_init();
     screen_sibilla_init();
     screen_launcher_init();
-    screen_ai_init();
+    screen_weather_init();
+
+    /* Avvia il modello meteo (registra handler IP_EVENT_STA_GOT_IP). */
+    indicator_weather_init();
 
     /* Popola la tabella degli indici schermata per next_from(). */
     s_scr[0] = ui_screen_time;
@@ -232,7 +262,7 @@ void ui_manager_init(void)
     s_scr[3] = ui_screen_hue;
     s_scr[4] = ui_screen_sibilla;
     s_scr[5] = ui_screen_launcher;
-    s_scr[6] = ui_screen_ai;
+    s_scr[6] = ui_screen_weather;
 
     /* Sostituisce l'handler Seeed ui_event_screen_time con gesture_clock,
      * che usa next_from() su RIGHT invece del target hardcoded ui_screen_ai. */
@@ -247,5 +277,9 @@ void ui_manager_init(void)
     lv_obj_add_event_cb(ui_screen_hue,             gesture_hue,                  LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_screen_sibilla,         gesture_sibilla,              LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_screen_launcher,        gesture_launcher,             LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_screen_ai,              gesture_ai,                   LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_weather,         gesture_weather,              LV_EVENT_ALL, NULL);
+
+    /* Auto-navigate to sensors 3 s after boot if flag enabled (one-shot). */
+    lv_timer_t *t = lv_timer_create(auto_nav_sensors_cb, 3000, NULL);
+    lv_timer_set_repeat_count(t, 1);
 }

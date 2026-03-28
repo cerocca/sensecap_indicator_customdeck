@@ -9,6 +9,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <string.h>
+#include <stdio.h>
 
 static const char *TAG = "settings_custom";
 
@@ -31,27 +32,30 @@ static lv_obj_t *ta_hue_l1, *ta_hue_l2, *ta_hue_l3, *ta_hue_l4;
 static lv_obj_t *ta_srv_ip;
 static lv_obj_t *ta_srv_port;
 static lv_obj_t *ta_srv_name;
+static lv_obj_t *ta_beszel_port;
+static lv_obj_t *ta_uk_port;
 
-/* ─── Proxy tab textareas + feedback label ───────────────────── */
+/* ─── Proxy tab textareas + feedback labels ──────────────────── */
 static lv_obj_t *ta_proxy_ip;
 static lv_obj_t *ta_proxy_port;
 static lv_obj_t *lbl_cfg_status;
+static lv_obj_t *lbl_proxy_url;  /* Config UI URL (dinamico) */
 
-/* ─── AI tab textareas ──────────────────────────────────────── */
-static lv_obj_t *ta_ai_key;
-static lv_obj_t *ta_ai_endpoint;
+/* ─── Weather tab ───────────────────────────────────────────── */
+static lv_obj_t *lbl_meteo_url;   /* URL proxy Web UI (dinamico) */
 
-/* ─── Schermate tab switches ─────────────────────────────────── */
+/* ─── Screens tab switches ───────────────────────────────────── */
+static lv_obj_t *sw_defsens;
 static lv_obj_t *sw_hue;
 static lv_obj_t *sw_srv;
 static lv_obj_t *sw_lnch;
-static lv_obj_t *sw_ai;
+static lv_obj_t *sw_wthr;
 
 /***********************************************************
  * helpers
  ***********************************************************/
 
-/* Read string from NVS; on failure, use fallback. */
+/* Read string from NVS into textarea; on failure, use fallback. */
 static void nvs_read_str(const char *key, lv_obj_t *ta, const char *fallback)
 {
     char buf[128];
@@ -60,6 +64,19 @@ static void nvs_read_str(const char *key, lv_obj_t *ta, const char *fallback)
         lv_textarea_set_text(ta, buf);
     } else {
         lv_textarea_set_text(ta, fallback);
+    }
+}
+
+/* Read string from NVS into a char buffer. */
+static void nvs_read_str_buf(const char *key, char *buf, size_t len,
+                              const char *fallback)
+{
+    size_t sz = len;
+    if (indicator_storage_read((char *)key, buf, &sz) == 0 && sz > 1) {
+        buf[len - 1] = '\0';
+    } else {
+        strncpy(buf, fallback, len - 1);
+        buf[len - 1] = '\0';
     }
 }
 
@@ -253,6 +270,8 @@ static void on_save_server(lv_event_t *e)
     nvs_write_ta(NVS_KEY_SERVER_IP,   ta_srv_ip);
     nvs_write_ta(NVS_KEY_SERVER_PORT, ta_srv_port);
     nvs_write_ta(NVS_KEY_SERVER_NAME, ta_srv_name);
+    nvs_write_ta(NVS_KEY_BESZEL_PORT, ta_beszel_port);
+    nvs_write_ta(NVS_KEY_UK_PORT,     ta_uk_port);
     ESP_LOGI(TAG, "Server config saved");
 }
 
@@ -262,13 +281,17 @@ static lv_obj_t *build_tab_server(lv_obj_t *tabview)
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     int y = 20;
-    make_label(tab, y, "IP Local Server"); y += 18;
+    make_label(tab, y, "Server IP");      y += 18;
     ta_srv_ip   = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_srv_ip,   ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_label(tab, y, "Glances Port");   y += 18;
-    ta_srv_port = make_ta(tab, y, "61208");        lv_obj_add_event_cb(ta_srv_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_label(tab, y, "Server Name");    y += 18;
     ta_srv_name = make_ta(tab, y, "LocalServer");  lv_obj_add_event_cb(ta_srv_name, ta_focused_cb, LV_EVENT_CLICKED, NULL);
     lv_textarea_set_max_length(ta_srv_name, 15);   y += 54;
+    make_label(tab, y, "Glances Port");   y += 18;
+    ta_srv_port = make_ta(tab, y, "61208");        lv_obj_add_event_cb(ta_srv_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
+    make_label(tab, y, "Beszel Port");    y += 18;
+    ta_beszel_port = make_ta(tab, y, DEFAULT_BESZEL_PORT); lv_obj_add_event_cb(ta_beszel_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
+    make_label(tab, y, "Uptime Kuma Port"); y += 18;
+    ta_uk_port  = make_ta(tab, y, DEFAULT_UK_PORT); lv_obj_add_event_cb(ta_uk_port,  ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_save_btn(tab, y, on_save_server);
 
     return tab;
@@ -360,38 +383,27 @@ static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
     lv_obj_set_pos(lbl_cfg_status, 40, y);
     lv_obj_set_style_text_font(lbl_cfg_status, &lv_font_montserrat_14,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    y += 28;
+
+    /* URL Config UI — recolor: "Config UI:" bianco + URL in #7ec8e0, centrata */
+    lbl_proxy_url = lv_label_create(tab);
+    lv_label_set_recolor(lbl_proxy_url, true);
+    lv_label_set_text(lbl_proxy_url, "Config UI: #7ec8e0 http://--/config/ui#");
+    lv_obj_set_width(lbl_proxy_url, 440);
+    lv_label_set_long_mode(lbl_proxy_url, LV_LABEL_LONG_CLIP);
+    lv_obj_set_style_text_align(lbl_proxy_url, LV_TEXT_ALIGN_CENTER,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_proxy_url, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_proxy_url, lv_color_white(),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_proxy_url, LV_ALIGN_TOP_MID, 0, y);
 
     return tab;
 }
 
 /***********************************************************
- * AI tab
- ***********************************************************/
-
-static void on_save_ai(lv_event_t *e)
-{
-    nvs_write_ta(NVS_KEY_AI_API_KEY,  ta_ai_key);
-    nvs_write_ta(NVS_KEY_AI_ENDPOINT, ta_ai_endpoint);
-    ESP_LOGI(TAG, "AI config saved");
-}
-
-static lv_obj_t *build_tab_ai(lv_obj_t *tabview)
-{
-    lv_obj_t *tab = lv_tabview_add_tab(tabview, "AI");
-    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
-
-    int y = 20;
-    make_label(tab, y, "Claude API Key");  y += 18;
-    ta_ai_key      = make_ta(tab, y, "sk-ant-...");  lv_obj_add_event_cb(ta_ai_key,      ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_label(tab, y, "Endpoint");         y += 18;
-    ta_ai_endpoint = make_ta(tab, y, "https://api.anthropic.com"); lv_obj_add_event_cb(ta_ai_endpoint, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
-    make_save_btn(tab, y, on_save_ai);
-
-    return tab;
-}
-
-/***********************************************************
- * Schermate tab
+ * Meteo tab (sostituisce AI tab)
  ***********************************************************/
 
 /* Write bool flag to NVS as "1" or "0". */
@@ -400,6 +412,59 @@ static void nvs_write_flag(const char *key, bool value)
     const char *v = value ? "1" : "0";
     indicator_storage_write((char *)key, (void *)v, 2); /* "1\0" or "0\0" */
 }
+
+static void on_sw_wthr(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_wthr_enabled = lv_obj_has_state(sw_wthr, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_WTHR, g_scr_wthr_enabled);
+    ESP_LOGI(TAG, "scr_wthr_enabled = %d", g_scr_wthr_enabled);
+}
+
+static lv_obj_t *build_tab_weather(lv_obj_t *tabview)
+{
+    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Weather");
+    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* Info: configurazione via proxy */
+    lv_obj_t *lbl_info = lv_label_create(tab);
+    lv_label_set_text(lbl_info, "Configure via proxy Web UI:");
+    lv_obj_set_pos(lbl_info, 40, 20);
+    lv_obj_set_style_text_font(lbl_info, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_info, lv_color_hex(0xcccccc),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    /* URL proxy dinamica (aggiornata in on_screen_load_start) */
+    lbl_meteo_url = lv_label_create(tab);
+    lv_label_set_text(lbl_meteo_url, "http://--/config/ui");
+    lv_obj_set_pos(lbl_meteo_url, 40, 46);
+    lv_obj_set_width(lbl_meteo_url, 400);
+    lv_label_set_long_mode(lbl_meteo_url, LV_LABEL_LONG_DOT);
+    lv_obj_set_style_text_font(lbl_meteo_url, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_meteo_url, lv_color_hex(0x7ec8e0),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t *lbl_hint = lv_label_create(tab);
+    lv_label_set_text(lbl_hint,
+                      "Set OWM API key, lat/lon, units\n"
+                      "and city name from the proxy Web\n"
+                      "UI. Synced to device on \"Reload\".");
+    lv_obj_set_pos(lbl_hint, 40, 76);
+    lv_obj_set_width(lbl_hint, 400);
+    lv_label_set_long_mode(lbl_hint, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_font(lbl_hint, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_hint, lv_color_hex(0x666666),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    return tab;
+}
+
+/***********************************************************
+ * Schermate tab
+ ***********************************************************/
 
 /* Row: label on left, switch on right. Returns the switch object. */
 static lv_obj_t *make_switch_row(lv_obj_t *parent, int y, const char *label_text)
@@ -415,6 +480,14 @@ static lv_obj_t *make_switch_row(lv_obj_t *parent, int y, const char *label_text
     lv_obj_set_pos(sw, 360, y);
     lv_obj_set_style_bg_color(sw, lv_color_hex(0x529d53), LV_PART_INDICATOR | LV_STATE_CHECKED);
     return sw;
+}
+
+static void on_sw_defsens(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_defsens_enabled = lv_obj_has_state(sw_defsens, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_DEFSENS, g_scr_defsens_enabled);
+    ESP_LOGI(TAG, "scr_defsens_enabled = %d", g_scr_defsens_enabled);
 }
 
 static void on_sw_hue(lv_event_t *e)
@@ -441,14 +514,6 @@ static void on_sw_lnch(lv_event_t *e)
     ESP_LOGI(TAG, "scr_lnch_enabled = %d", g_scr_lnch_enabled);
 }
 
-static void on_sw_ai(lv_event_t *e)
-{
-    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
-    g_scr_ai_enabled = lv_obj_has_state(sw_ai, LV_STATE_CHECKED);
-    nvs_write_flag(NVS_KEY_SCR_AI_EN, g_scr_ai_enabled);
-    ESP_LOGI(TAG, "scr_ai_enabled = %d", g_scr_ai_enabled);
-}
-
 static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
 {
     lv_obj_t *tab = lv_tabview_add_tab(tabview, "Screens");
@@ -461,6 +526,9 @@ static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
     lv_obj_set_style_text_color(hdr, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
 
     int y = 50;
+    sw_defsens = make_switch_row(tab, y, "Default sensor screen");
+    lv_obj_add_event_cb(sw_defsens, on_sw_defsens, LV_EVENT_VALUE_CHANGED, NULL);
+    y += 60;
     sw_hue  = make_switch_row(tab, y, "Hue Control");
     lv_obj_add_event_cb(sw_hue,  on_sw_hue,  LV_EVENT_VALUE_CHANGED, NULL);
     y += 60;
@@ -470,8 +538,8 @@ static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
     sw_lnch = make_switch_row(tab, y, "Launcher");
     lv_obj_add_event_cb(sw_lnch, on_sw_lnch, LV_EVENT_VALUE_CHANGED, NULL);
     y += 60;
-    sw_ai   = make_switch_row(tab, y, "AI");
-    lv_obj_add_event_cb(sw_ai,   on_sw_ai,   LV_EVENT_VALUE_CHANGED, NULL);
+    sw_wthr = make_switch_row(tab, y, "Weather");
+    lv_obj_add_event_cb(sw_wthr, on_sw_wthr, LV_EVENT_VALUE_CHANGED, NULL);
 
     return tab;
 }
@@ -491,25 +559,39 @@ static void on_screen_load_start(lv_event_t *e)
     nvs_read_str(NVS_KEY_HUE_LIGHT_3, ta_hue_l3,       APP_CFG_HUE_LIGHT_3);
     nvs_read_str(NVS_KEY_HUE_LIGHT_4, ta_hue_l4,       APP_CFG_HUE_LIGHT_4);
 
-    nvs_read_str(NVS_KEY_SERVER_IP,   ta_srv_ip,        APP_CFG_SERVER_IP);
+    nvs_read_str(NVS_KEY_SERVER_IP,   ta_srv_ip,         APP_CFG_SERVER_IP);
     nvs_read_str(NVS_KEY_SERVER_PORT, ta_srv_port,      APP_CFG_SERVER_PORT);
     nvs_read_str(NVS_KEY_SERVER_NAME, ta_srv_name,      APP_CFG_SERVER_NAME);
+    nvs_read_str(NVS_KEY_BESZEL_PORT, ta_beszel_port,   DEFAULT_BESZEL_PORT);
+    nvs_read_str(NVS_KEY_UK_PORT,     ta_uk_port,       DEFAULT_UK_PORT);
 
     nvs_read_str(NVS_KEY_PROXY_IP,    ta_proxy_ip,      APP_CFG_PROXY_IP);
     nvs_read_str(NVS_KEY_PROXY_PORT,  ta_proxy_port,    APP_CFG_PROXY_PORT);
 
-    nvs_read_str(NVS_KEY_AI_API_KEY,  ta_ai_key,        APP_CFG_AI_API_KEY);
-    nvs_read_str(NVS_KEY_AI_ENDPOINT, ta_ai_endpoint,   APP_CFG_AI_ENDPOINT);
+    /* Aggiorna URL proxy nel tab Proxy e nel tab Weather */
+    {
+        char proxy_ip[64], proxy_port[8], url_text[128];
+        nvs_read_str_buf(NVS_KEY_PROXY_IP,   proxy_ip,   sizeof(proxy_ip),   APP_CFG_PROXY_IP);
+        nvs_read_str_buf(NVS_KEY_PROXY_PORT, proxy_port, sizeof(proxy_port), APP_CFG_PROXY_PORT);
+        snprintf(url_text, sizeof(url_text),
+                 "http://%s:%s/config/ui", proxy_ip, proxy_port);
+        lv_label_set_text(lbl_meteo_url, url_text);
+        snprintf(url_text, sizeof(url_text),
+                 "Config UI: #7ec8e0 http://%s:%s/config/ui#", proxy_ip, proxy_port);
+        lv_label_set_text(lbl_proxy_url, url_text);
+    }
 
     /* Schermate switches: riflette i flag globali (già caricati da NVS al boot). */
+    if (g_scr_defsens_enabled) lv_obj_add_state(sw_defsens, LV_STATE_CHECKED);
+    else                        lv_obj_clear_state(sw_defsens, LV_STATE_CHECKED);
     if (g_scr_hue_enabled)  lv_obj_add_state(sw_hue,  LV_STATE_CHECKED);
     else                     lv_obj_clear_state(sw_hue,  LV_STATE_CHECKED);
     if (g_scr_srv_enabled)  lv_obj_add_state(sw_srv,  LV_STATE_CHECKED);
     else                     lv_obj_clear_state(sw_srv,  LV_STATE_CHECKED);
     if (g_scr_lnch_enabled) lv_obj_add_state(sw_lnch, LV_STATE_CHECKED);
     else                     lv_obj_clear_state(sw_lnch, LV_STATE_CHECKED);
-    if (g_scr_ai_enabled)   lv_obj_add_state(sw_ai,   LV_STATE_CHECKED);
-    else                     lv_obj_clear_state(sw_ai,   LV_STATE_CHECKED);
+    if (g_scr_wthr_enabled) lv_obj_add_state(sw_wthr, LV_STATE_CHECKED);
+    else                     lv_obj_clear_state(sw_wthr, LV_STATE_CHECKED);
 }
 
 /***********************************************************
@@ -556,7 +638,7 @@ void screen_settings_custom_populate(void)
     build_tab_hue(tv);
     build_tab_server(tv);
     build_tab_proxy(tv);
-    build_tab_ai(tv);
+    build_tab_weather(tv);
     build_tab_screens(tv);
 
     /* populate fields on screen load */

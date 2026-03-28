@@ -4,7 +4,7 @@
 #include "screen_hue.h"
 #include "screen_sibilla.h"
 #include "screen_launcher.h"
-#include "screen_ai.h"
+#include "screen_weather.h"
 #include <stdbool.h>
 
 /*
@@ -20,7 +20,8 @@ void ui_manager_init(void);
  * Aggiornati da screen_settings_custom quando l'utente cambia uno switch.
  * Default: true (abilitata).
  */
+extern bool g_scr_defsens_enabled;
 extern bool g_scr_hue_enabled;
 extern bool g_scr_srv_enabled;
 extern bool g_scr_lnch_enabled;
-extern bool g_scr_ai_enabled;
+extern bool g_scr_wthr_enabled;

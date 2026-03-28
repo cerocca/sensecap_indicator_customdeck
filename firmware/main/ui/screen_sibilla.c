@@ -325,11 +325,11 @@ void screen_sibilla_init(void)
     /* Header: nome server — centrato verticalmente nei 55px superiori */
     s_header_lbl = lv_label_create(ui_screen_sibilla);
     lv_label_set_text(s_header_lbl, APP_CFG_SERVER_NAME);
-    lv_obj_set_style_text_color(s_header_lbl, lv_color_hex(0x7ec8a0),
+    lv_obj_set_style_text_color(s_header_lbl, lv_color_white(),
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(s_header_lbl, &lv_font_montserrat_20,
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(s_header_lbl, LV_ALIGN_TOP_MID, 0, 17);
+    lv_obj_align(s_header_lbl, LV_ALIGN_TOP_MID, 0, 10);
 
     /* Lazy populate + refresh header nome al caricamento schermata */
     lv_obj_add_event_cb(ui_screen_sibilla, on_screen_load_start,
