@@ -14,7 +14,8 @@
 10. [ ] **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
 
 
-## Release 0.1
+## Various
+- [ ] fix weather: abbassare linea sotto titolo e aggiungere next 3 days
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
