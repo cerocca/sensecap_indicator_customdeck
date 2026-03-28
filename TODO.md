@@ -8,6 +8,9 @@
       UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
 2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
       fix layout: abbassare linea sotto titolo e aggiungere next 3 days
+      ⚠️ **Attenzione al prompt per next 3 days**: la sessione precedente ha applicato le modifiche
+      correttamente (build OK) ma il monitor seriale non era verificabile da Claude Code — fare
+      flash+monitor da terminale esterno per verificare assenza crash prima di committare
 3. [ ] **Schermata Clock**: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
       convertire con LVGL image converter in C array, includere come `.c` nel progetto.
       **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
