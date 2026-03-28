@@ -1,157 +1,162 @@
-# SenseCAP Indicator Deck — Setup Guide
-
-Guida per configurare e compilare il firmware da zero.
+# SenseDeck — Setup Guide
 
 ---
 
-## Prerequisiti
+## Requirements
 
 - **Hardware:** SenseCAP Indicator D1S
-- **Toolchain:** ESP-IDF v5.3.2
-- **OS:** macOS (testato) o Linux
+- **Host:** macOS (the proxy script requires Mac; firmware build works on macOS and Linux)
+- **ESP-IDF:** v5.3.2 — Seeed fork recommended for full compatibility
+- **Python 3** — required to run the SenseDeck Proxy
 
-### Installazione ESP-IDF
+---
+
+## 1. Clone & Build
 
 ```bash
+# Install ESP-IDF (Seeed fork or upstream v5.3.2)
 git clone --recursive https://github.com/espressif/esp-idf.git ~/esp/esp-idf
 cd ~/esp/esp-idf && git checkout v5.3.2
 ./install.sh esp32s3
 source ~/esp/esp-idf/export.sh
-```
 
----
-
-## Clone del repo
-
-```bash
+# Clone the repo
 git clone https://github.com/cerocca/sensecap_indicator_customdeck.git
 cd sensecap_indicator_customdeck
-```
 
----
-
-## Configurazione
-
-La configurazione avviene principalmente tramite la **Web UI del proxy** (`http://localhost:8765/config/ui`) — non è necessario modificare `app_config.h` per l'uso normale.
-
-`app_config.h` contiene i valori di fallback usati solo se NVS è vuoto e il proxy non è raggiungibile.
-
-### Primo avvio: flusso consigliato
-
-1. Avvia `sensedeck_proxy.py` sul Mac
-2. Apri `http://localhost:8765/config/ui` e inserisci tutti i valori
-3. Clicca **Salva** — la config viene scritta in `config.json`
-4. Accendi il device e connettilo al Wi-Fi (Settings → tab Wi-Fi)
-5. Il device scarica automaticamente la config dal proxy al boot
-
-### Come ottenere l'API key Hue
-
-1. Vai su `https://<HUE_BRIDGE_IP>/debug/clip.html`
-2. POST su `/api` con body `{"devicetype":"sensecap_indicator"}`
-3. Premi il pulsante fisico sul Bridge entro 30 secondi
-4. Copia il token dalla risposta
-
-### Come ottenere gli ID UUID delle luci Hue
-
-```
-GET https://<HUE_BRIDGE_IP>/clip/v2/resource/light
-Header: hue-application-key: <API_KEY>
-```
-
----
-
-## Build e Flash
-
-```bash
-source ~/esp/esp-idf/export.sh
+# Build and flash
+source ~/esp/esp-idf/export.sh   # required in every new terminal
 cd firmware
 idf.py build
 idf.py -p /dev/cu.usbserial-1110 flash monitor
 ```
 
-> Porta seriale usata su questo setup: `/dev/cu.usbserial-1110`
+> Find your serial port:
+> ```bash
+> # macOS
+> ls /dev/cu.usb*
+> # Linux
+> ls /dev/ttyUSB* /dev/ttyACM*
+> ```
 
-> Sostituisci `/dev/cu.usbserial-1110` con la porta seriale del tuo dispositivo.  
-> Su Linux: tipicamente `/dev/ttyUSB0` o `/dev/ttyACM0`.
-
-Per trovare la porta:
-```bash
-# macOS
-ls /dev/cu.usb*
-# Linux
-ls /dev/ttyUSB* /dev/ttyACM*
-```
+> If you add new `.c` files, run `idf.py reconfigure` before `idf.py build`.
 
 ---
 
-## Configurazione runtime
+## 2. SenseDeck Proxy (Mac)
 
-I valori possono essere aggiornati in tre modi, senza ricompilare:
-
-1. **Web UI proxy** (`http://localhost:8765/config/ui`) → Salva → il device li scarica al prossimo boot o con "Ricarica config"
-2. **Direttamente sul device** — schermata Settings (terza schermata, swipe). I valori vengono salvati in NVS e persistono al reboot.
-3. **"Ricarica config"** — Settings → tab Proxy → pulsante per aggiornare da proxy senza riavviare.
-
----
-
-## Proxy Python (Mac)
-
-Il proxy è necessario per la schermata LocalServer Dashboard (Uptime Kuma) e la schermata Launcher.
-Gestisce anche la configurazione centralizzata del device tramite Web UI.
-
-### Avvio
+The SenseDeck Proxy is a lightweight Python script that runs on your Mac and acts as a bridge between the firmware and services that cannot be reached directly from the device (Uptime Kuma, Beszel, Google Maps, URL launching). It also hosts the configuration Web UI.
 
 ```bash
 python3 sensedeck_proxy.py
 ```
 
-### Configurazione via Web UI
+The proxy listens on port **8765**. Web UI available at:
+```
+http://localhost:8765/config/ui
+```
 
-Apri nel browser: `http://localhost:8765/config/ui`
+---
 
-Dalla Web UI puoi configurare:
-- **Hue Bridge:** IP, API key, nome e ID UUID di ogni luce
-- **LocalServer:** IP e porta Glances
-- **Proxy:** IP e porta del Mac
-- **Launcher:** URL 1–4
+## 3. Configure via Web UI
 
-La configurazione viene salvata in `config.json` nella stessa directory del proxy.
+Open `http://localhost:8765/config/ui` in your browser to configure all integrations. Click **Save** — the config is written to `config.json`. The device will fetch it automatically on the next Wi-Fi connection (or immediately via Settings → Proxy → "Ricarica config").
 
-**Come ottenere gli ID UUID delle luci Hue:**
+**Hue**
+- Hue Bridge IP and API key
+- Name for each of the 4 configured lights
+- Light UUIDs are stored as hidden fields (set them via API or leave if already saved)
+
+To get your Hue API key:
+1. Go to `https://<HUE_BRIDGE_IP>/debug/clip.html`
+2. POST to `/api` with body `{"devicetype":"sensecap_indicator"}`
+3. Press the physical button on the Bridge within 30 seconds
+4. Copy the token from the response
+
+To list light UUIDs:
 ```
 GET https://<HUE_BRIDGE_IP>/clip/v2/resource/light
 Header: hue-application-key: <API_KEY>
 ```
 
-### Sincronizzazione con il device
+**LocalServer**
+- Server IP, Glances port, Beszel port / user / password, server display name
 
-- **Al boot:** il device scarica automaticamente la config dal proxy dopo la connessione Wi-Fi
-- **Senza riavvio:** Settings → tab Proxy → pulsante **"Ricarica config"**
+**Launcher**
+- 4 URLs + display names for the Launcher screen buttons
 
-### Endpoint disponibili
+**Weather**
+- OpenWeatherMap API key, latitude, longitude, units (`metric` / `imperial`), location display name
 
-| Endpoint | Metodo | Descrizione |
-|---|---|---|
-| `/uptime` | GET | stato servizi Uptime Kuma (JSON compatto) |
-| `/open/<n>` | GET | apre URL n nel browser del Mac (n=1..4) |
-| `/ping` | GET | health check |
-| `/config` | GET | restituisce configurazione corrente (JSON) |
-| `/config` | POST | salva nuova configurazione in `config.json` |
-| `/config/ui` | GET | Web UI configurazione (dark theme) |
+**Traffic**
+- Google Maps API key, origin address, destination address
+
+---
+
+## 4. On-device Configuration
+
+Swipe **UP** from the Clock screen to open the Settings screen. Tabs:
+
+| Tab | Content |
+|-----|---------|
+| **Hue** | Hue Bridge IP, API key, light names — saved to NVS |
+| **Server** | Server IP, server name, Glances port, Beszel port, Uptime Kuma port — saved to NVS |
+| **Proxy** | Proxy Mac IP and port — saved to NVS · "Ricarica config" button fetches full config from proxy without reboot |
+| **Weather** | Info + ON/OFF switch for the Weather screen |
+| **Screens** | Individual ON/OFF switches for: Default sensor screen, Hue, LocalServer, Launcher |
+
+**First-time setup flow:**
+1. Start `sensedeck_proxy.py` on your Mac
+2. Open `http://localhost:8765/config/ui` and fill in all fields, then Save
+3. Power on the device and connect it to Wi-Fi (swipe DOWN from Clock → Wi-Fi settings)
+4. The device fetches the config from the proxy automatically after connecting
+5. Alternatively: swipe UP → Settings → Proxy → enter proxy IP:port → tap "Ricarica config"
+
+---
+
+## 5. Tech Stack
+
+| Component | Details |
+|-----------|---------|
+| ESP-IDF | v5.3.2 (Seeed fork) |
+| LVGL | v8.x |
+| FreeRTOS | included in ESP-IDF |
+| cJSON | included in ESP-IDF |
+| esp-http-client | included in ESP-IDF |
+| mbedTLS | dynamic buffer enabled via sdkconfig.defaults |
+| OpenWeatherMap API | current weather + forecast |
+| Philips Hue Bridge Local API v2 | HTTPS, self-signed cert |
+| Glances REST API | HTTP, LAN |
+| Uptime Kuma | via SenseDeck Proxy |
+| Beszel | via SenseDeck Proxy |
+| Google Maps Distance Matrix API | via SenseDeck Proxy |
+
+---
+
+## 6. External Services
+
+| Service | Where it runs | Requires Proxy |
+|---------|--------------|----------------|
+| Hue Bridge | LAN | No — firmware connects directly |
+| Glances | LAN | No — firmware connects directly |
+| OpenWeatherMap | Internet | No — firmware connects directly |
+| Uptime Kuma | LAN | Yes |
+| Beszel | LAN | Yes |
+| Google Maps | Internet | Yes |
 
 ---
 
 ## Troubleshooting
 
-**Device in boot loop dopo flash:**
+**Device in boot loop after flash:**
 ```bash
 cd firmware && rm sdkconfig && idf.py build && idf.py -p /dev/cu.usbserial-1110 flash
 ```
 
-**Flash incompleto ("invalid segment length 0xffffffff"):**
-Non interrompere mai `idf.py flash`. Ri-flashare completamente.
+**Flash incomplete ("invalid segment length 0xffffffff"):**
+Never interrupt `idf.py flash`. Re-flash completely.
 
-**Nuovi file `.c` non rilevati dalla build:**
+**New `.c` files not picked up by the build:**
 ```bash
 idf.py reconfigure && idf.py build
 ```
