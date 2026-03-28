@@ -31,8 +31,8 @@
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
-- [ ] Rimuovere vecchio progetto: eliminare repo locale `/Users/ciru/SenseCAP_Indicator_ESP32`
-      e archiviare/eliminare repo GitHub `cerocca/mySenseCAP_Indicator_ESP32`
+- [x] Rimuovere vecchio progetto: eliminare repo locale `/Users/ciru/SenseCAP_Indicator_ESP32`
+      e archiviare/eliminare repo GitHub `cerocca/mySenseCAP_Indicator_ESP32` (locale eliminato; GitHub da fare manualmente)
 - [x] Restart firmware da base pulita (indicator_basis)
 - [x] Navigazione circolare bidirezionale (tutte le schermate vuote)
 - [x] Screen Settings — tab Wi-Fi + Hue + Server + Proxy + AI con NVS
