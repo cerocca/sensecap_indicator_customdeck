@@ -6,7 +6,8 @@
       (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
       Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
       UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
-2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
+2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
+      fix layout: abbassare linea sotto titolo e aggiungere next 3 days
 3. [ ] **Schermata Clock**: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
       convertire con LVGL image converter in C array, includere come `.c` nel progetto.
       **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
@@ -24,7 +25,6 @@
 
 
 ## Various
-- [ ] fix weather: abbassare linea sotto titolo e aggiungere next 3 days
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
