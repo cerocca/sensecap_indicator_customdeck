@@ -37,7 +37,9 @@
 - [x] Uniformare documentazione: README.md e SETUP.md riscritti completamente in inglese
       (CLAUDE.md e TODO.md restano in italiano)
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
-      a .gitignore (consigliato) o pulirlo da riferimenti personali
+      a .gitignore (consigliato) o pulirlo da riferimenti personali;
+      anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
+      (rimuovere path assoluti o riferimenti personali)
 - [x] Eliminare le sottodirectory `components/` non utilizzate dal progetto
       (liblorahub, radio_drivers, smtc_ral aggiunti a EXCLUDE_COMPONENTS — LoRaWAN già escluso; bsp/bus/i2c_devices/iot_button/lora/lvgl necessari)
 - [x] ~~Valutare sostituzione schermata AI con schermata Weather~~ → implementato
