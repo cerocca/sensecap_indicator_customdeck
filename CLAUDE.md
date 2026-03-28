@@ -30,19 +30,30 @@ cd firmware && idf.py build flash monitor
 
 ## Architettura
 
-### Navigazione circolare bidirezionale
-Swipe LEFT = avanti, swipe RIGHT = indietro.
+### Navigazione
 
+**Orizzontale** (swipe LEFT = avanti, swipe RIGHT = indietro):
 ```
-clock ↔ sensors ↔ settings_custom ↔ [hue] ↔ [sibilla] ↔ [launcher] ↔ [weather] ↔ (torna a clock)
+clock(0) ↔ [sensors(1)] ↔ [traffic(2,riservato)] ↔ [hue(3)] ↔ [sibilla(4)] ↔ [launcher(5)] ↔ [weather(6)] ↔ (clock)
 ```
+
+**Verticale dal clock:**
+```
+swipe UP   → screen_settings_custom  (MOVE_TOP)
+swipe DOWN → ui_screen_setting Seeed (MOVE_BOTTOM)
+```
+
+`screen_settings_custom` è **fuori dalla rotazione orizzontale** — raggiungibile solo via swipe UP dal clock.
+Swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM).
+Swipe UP da ui_screen_setting torna al clock (MOVE_TOP).
 
 Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
-Clock e settings_custom sono sempre visibili. Sensors (idx 1) può essere disabilitata dalla navigazione tramite switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe).
+Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Slot 2 riservato a screen_traffic (non ancora implementato, `scr_enabled(2) = false`).
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=settings, 3=hue, 4=sibilla, 5=launcher, 6=weather
+// Indici: 0=clock, 1=sensors, 2=traffic(disab.), 3=hue, 4=sibilla, 5=launcher, 6=weather
+// settings_custom è fuori dalla tabella s_scr[]
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
         int idx = ((cur + dir * i) % N_SCREENS + N_SCREENS) % N_SCREENS;
@@ -51,36 +62,36 @@ static lv_obj_t *next_from(int cur, int dir) {
     return s_scr[cur];
 }
 ```
-`scr_enabled(1)` ritorna `g_scr_defsens_enabled` (non più hardcoded `true`).
-Tutti i gesture handler usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` dopo gli `screen_xxx_init()`.
+`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(2)` ritorna sempre `false` (traffic placeholder).
+Tutti i gesture handler orizzontali usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[2] = NULL).
 
 **Flag di abilitazione schermate:**
 - `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
 - Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
 - Aggiornati live da `screen_settings_custom.c` (tab "Schermate") al toggle switch
 - Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
+- `scr_enabled(2)` hardcoded `false` (traffic placeholder, nessun flag NVS)
 
-**Auto-navigate a sensors al boot:**
-One-shot `lv_timer` (3000 ms) in `ui_manager_init()` — se `g_scr_defsens_enabled` e schermata attiva è clock, naviga automaticamente a sensors:
-```c
-static void auto_nav_sensors_cb(lv_timer_t *t) {
-    if (g_scr_defsens_enabled && lv_scr_act() == ui_screen_time)
-        _ui_screen_change(ui_screen_sensor, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
-}
-lv_timer_t *t = lv_timer_create(auto_nav_sensors_cb, 3000, NULL);
-lv_timer_set_repeat_count(t, 1);
-```
+**Schermata iniziale al boot:** sempre `ui_screen_time` (clock). Nessuna navigazione automatica.
+
+**Sostituzioni handler Seeed (pattern `lv_obj_remove_event_cb` + `lv_obj_add_event_cb`):**
+- `ui_event_screen_time` → `gesture_clock` (clock): aveva RIGHT hardcoded su `ui_screen_ai`
+- `ui_event_screen_sensor` → `gesture_sensor` (sensors): aveva LEFT hardcoded su `ui_screen_settings_custom` (ora fuori rotazione)
+- `ui_event_screen_setting` → `gesture_seeed_setting` (Seeed settings): evita doppia chiamata su `LV_DIR_TOP`
+Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick e per correggere target hardcoded obsoleti.
 
 ### Schermate
-| # | Nome | Tipo | Note |
-|---|---|---|---|
-| 1 | `screen_clock` | Originale Seeed — NON toccare | — |
-| 2 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità |
-| 3 | `screen_settings_custom` | Custom (sostituisce originale Seeed) | Tab: Wi-Fi · Hue · Server · Proxy · Meteo · Screens |
-| 4 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
-| 5 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
-| 6 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
-| 7 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
+| idx | Nome | Tipo | Note |
+|-----|------|------|------|
+| 0 | `screen_clock` | Originale Seeed — NON toccare | — |
+| 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
+| 2 | *(riservato traffic)* | Placeholder | `scr_enabled(2)=false`, s_scr[2]=NULL |
+| 3 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
+| 4 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
+| 5 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
+| 6 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
+| — | `screen_settings_custom` | Custom — fuori rotazione | Accessibile solo via swipe UP dal clock |
+| — | `ui_screen_setting` | Originale Seeed — NON toccare | Accessibile via swipe DOWN dal clock |
 
 ### Struttura file
 ```
@@ -119,21 +130,32 @@ lv_timer_set_repeat_count(t, 1);
 
 ## Schermata 3 — Settings (custom)
 
-Layout: tabview LVGL (44px header), 6 tab orizzontali.
+Accessibile via **swipe UP dal clock** (fuori dalla rotazione orizzontale).
+Layout: tabview LVGL (44px header), 5 tab orizzontali.
 
 | Tab | Contenuto |
 |---|---|
-| **Wi-Fi** | Bottone "Configura Wi-Fi" → naviga a `ui_screen_wifi` Seeed (ritorna via `ui_screen_last`) |
 | **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
 | **Server** | Server IP, Server Name, Glances Port, Beszel Port, Uptime Kuma Port → NVS (5 campi) |
 | **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot · label "Config UI: http://..." con recolor LVGL (bianco + #7ec8e0), aggiornata dinamicamente da NVS |
 | **Meteo** | Info URL proxy Web UI (dinamico) + switch ON/OFF schermata Weather → `g_scr_wthr_enabled` + NVS |
 | **Screens** | 4 switch: Default sensor screen (`g_scr_defsens_enabled`), Hue, LocalServer, Launcher → aggiornano flag + NVS |
 
+**Nota**: Tab Wi-Fi rimosso — la configurazione Wi-Fi è accessibile via swipe DOWN dal clock → `ui_screen_setting` Seeed.
+
 - Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
 - Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
-- `ui_screen_last` in `ui.c` è **non-static** (necessario per return da `ui_screen_wifi`).
 - Chiavi NVS max 15 char — centralizzate in `app_config.h`.
+
+**`ui_screen_sensor` (Seeed) — personalizzazione dall'esterno in `ui_manager_init()`:**
+- `ui_wifi__st_button_2` (bottone status Wi-Fi top-right + icona figlia) → `LV_OBJ_FLAG_HIDDEN`
+- `ui_scrolldots2` (container 3 puntini navigazione) → `LV_OBJ_FLAG_HIDDEN`
+
+**`ui_screen_setting` (Seeed) — personalizzazione dall'esterno:**
+- Handler sostituito con `gesture_seeed_setting` (UP → clock)
+- Elementi nascosti via `lv_obj_add_flag(..., LV_OBJ_FLAG_HIDDEN)` in `ui_manager_init()`:
+  `ui_setting_title` (label "Setting"), `ui_setting_icon` (ingranaggio), `ui_scrolldots3` (3 puntini)
+- Wi-Fi button e icona restano visibili e funzionanti
 
 ---
 

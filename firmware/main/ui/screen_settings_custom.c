@@ -13,10 +13,6 @@
 
 static const char *TAG = "settings_custom";
 
-/* ─── navigation externs ────────────────────────────────────── */
-extern lv_obj_t *ui_screen_wifi;   /* Seeed Wi-Fi screen          */
-extern lv_obj_t *ui_screen_last;   /* back-target for wifi screen  */
-
 /* ─── screen root ───────────────────────────────────────────── */
 lv_obj_t *ui_screen_settings_custom = NULL;
 
@@ -185,42 +181,6 @@ static void ta_focused_cb(lv_event_t *e)
     s_kb_tab_scrollable = lv_obj_has_flag(s_kb_tab_panel, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_add_flag(s_kb_tab_panel, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_scroll_to_view_recursive(ta, LV_ANIM_ON);
-}
-
-/***********************************************************
- * Wi-Fi tab
- ***********************************************************/
-
-static void on_wifi_btn(lv_event_t *e)
-{
-    if (lv_event_get_code(e) != LV_EVENT_CLICKED) return;
-    ui_screen_last = ui_screen_settings_custom;
-    _ui_screen_change(ui_screen_wifi, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 200, 0);
-}
-
-static lv_obj_t *build_tab_wifi(lv_obj_t *tabview)
-{
-    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Wi-Fi");
-    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
-
-    lv_obj_t *lbl = lv_label_create(tab);
-    lv_label_set_text(lbl, "Manage Wi-Fi connection");
-    lv_obj_set_style_text_font(lbl, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_color(lbl, lv_color_hex(0xcccccc), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_pos(lbl, 40, 20);
-
-    lv_obj_t *btn = lv_btn_create(tab);
-    lv_obj_set_size(btn, 280, 60);
-    lv_obj_set_pos(btn, 100, 80);
-    lv_obj_set_style_bg_color(btn, lv_color_hex(0x2c5aa0), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_add_event_cb(btn, on_wifi_btn, LV_EVENT_CLICKED, NULL);
-
-    lv_obj_t *btn_lbl = lv_label_create(btn);
-    lv_label_set_text(btn_lbl, "Configure Wi-Fi");
-    lv_obj_center(btn_lbl);
-    lv_obj_set_style_text_font(btn_lbl, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    return tab;
 }
 
 /***********************************************************
@@ -633,8 +593,7 @@ void screen_settings_custom_populate(void)
     lv_obj_set_style_border_color(tab_bar, lv_color_hex(0x529d53),
                                   LV_PART_ITEMS | LV_STATE_CHECKED);
 
-    /* build tabs (order matters: tab index 0..5) */
-    build_tab_wifi(tv);
+    /* build tabs (order matters: tab index 0..4) */
     build_tab_hue(tv);
     build_tab_server(tv);
     build_tab_proxy(tv);

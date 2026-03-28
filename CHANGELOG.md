@@ -2,7 +2,22 @@
 
 ## [Unreleased]
 
+### Changed
+- Navigazione: `screen_settings_custom` spostata fuori dalla rotazione orizzontale — raggiungibile solo via swipe UP dal clock (MOVE_TOP); swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM)
+- Navigazione: swipe DOWN dal clock ora apre `ui_screen_setting` Seeed (MOVE_BOTTOM); swipe UP da lì torna al clock (MOVE_TOP)
+- `ui_manager.c`: slot 2 ora riservato a screen_traffic (placeholder, `scr_enabled(2)=false`, `s_scr[2]=NULL`); settings_custom rimossa da `s_scr[]`
+- `ui_manager.c`: `gesture_clock` — aggiunto `LV_DIR_TOP` → settings_custom; `LV_DIR_BOTTOM` → `ui_screen_setting`; rimosso vecchio BOTTOM verso `ui_screen_wifi`
+- `ui_manager.c`: `gesture_settings_custom` — rimossi handler LEFT/RIGHT, aggiunto solo DOWN → clock
+- `ui_manager.c`: `gesture_seeed_setting` — `lv_obj_remove_event_cb(ui_screen_setting, ui_event_screen_setting)` prima di aggiungere il nuovo handler (fix doppia chiamata `_ui_screen_change`); solo UP → clock
+- `ui_manager.c`: aggiunto `gesture_sensor` — `lv_obj_remove_event_cb(ui_screen_sensor, ui_event_screen_sensor)` perché Seeed aveva LEFT hardcoded su `ui_screen_settings_custom` (causa: settings_custom ora fuori rotazione); LEFT ora usa `next_from(1, +1)` con `ensure_hue_populated()`; RIGHT e TOP replicano comportamento Seeed
+- `ui_manager.c`: rimossa `gesture_sensor_lazy_settings` (settings non più in rotazione orizzontale)
+- `ui_manager.c`: `gesture_hue` RIGHT — rimosso `ensure_settings_populated()` difensivo (non più necessario)
+- `ui_manager.c`: rimosso one-shot `lv_timer` auto-navigate a sensors al boot — device parte sempre dal clock
+- `screen_settings_custom.c`: rimosso tab Wi-Fi — configurazione Wi-Fi ora accessibile via swipe DOWN dal clock → `ui_screen_setting` Seeed; rimossi `build_tab_wifi`, `on_wifi_btn`, externs `ui_screen_wifi`/`ui_screen_last`; tab count scende da 6 a 5 (Hue · Server · Proxy · Meteo · Screens)
+
 ### Added
+- `ui_manager.c`: nascoste su `ui_screen_sensor` le variabili `ui_wifi__st_button_2` e `ui_scrolldots2` via `lv_obj_add_flag(..., LV_OBJ_FLAG_HIDDEN)` — file Seeed intatti
+- `ui_manager.c`: nascoste su `ui_screen_setting` le variabili `ui_setting_title`, `ui_setting_icon`, `ui_scrolldots3` via `lv_obj_add_flag(..., LV_OBJ_FLAG_HIDDEN)` — Wi-Fi button resta visibile; file Seeed intatti
 - `app_config.h`: `NVS_KEY_WTH_CITY`, `NVS_KEY_WTH_LOCATION`, `NVS_KEY_BESZEL_PORT` + `DEFAULT_BESZEL_PORT "8090"`, `NVS_KEY_UK_PORT "uk_port"` + `DEFAULT_UK_PORT "3001"`, `NVS_KEY_SCR_DEFSENS "scr_defsens"` + `DEFAULT_SCR_DEFSENS "1"`
 - Settings tab Server: campi Beszel Port e Uptime Kuma Port; ora 5 campi totali (Server IP, Server Name, Glances Port, Beszel Port, UK Port)
 - Settings tab Proxy: label dinamica "Config UI: http://…/config/ui" con recolor LVGL — "Config UI:" bianco, URL in #7ec8e0; aggiornata da NVS al SCREEN_LOAD_START

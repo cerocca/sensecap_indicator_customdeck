@@ -10,7 +10,8 @@
 6. [x] **Screen Sibilla** — Glances ✓ · Uptime Kuma via proxy ✓
 7. [x] **Screen Launcher** — 4 pulsanti proxy Mac
 8. [x] **Screen Weather** — meteo OWM diretto: temp, icona, umidità, vento, 4 slot forecast (sostituisce AI placeholder)
-9. [ ] **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
+9. [x] **Restyle navigazione** — settings_custom su swipe UP dal clock (fuori rotazione orizzontale); swipe DOWN dal clock → ui_screen_setting Seeed; rimosso auto-navigate al boot; rimosso tab Wi-Fi da settings_custom; nascosti elementi ridondanti in sensor e setting screen
+10. [ ] **Test completo** — verificare che clock, sensors e Wi-Fi originali funzionino ancora
 
 
 ## Release 0.1
@@ -45,7 +46,7 @@
 - [ ] Screen Weather: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
 - [ ] Test switch "Default sensor screen" — verifica skip sensors nella navigazione e auto-navigate al boot
 - [ ] Valutare rimozione `screen_ai.c/.h` (file presente ma non usato dopo sostituzione con Weather)
-- [ ] Valutare schermata Traffico: Google Maps Distance Matrix API
+- [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
       (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
       Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
       UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.

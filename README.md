@@ -46,28 +46,40 @@ The **SenseCAP Indicator D1S** is a 4-inch touch screen device powered by an **E
 
 ## Screens
 
-All original Seeed screens are preserved. Custom screens are added to the circular navigation via horizontal swipe (LEFT = forward, RIGHT = back):
+All original Seeed screens are preserved. Custom screens extend the navigation without modifying any Seeed files.
+
+**Horizontal swipe** (LEFT = forward, RIGHT = back):
+```
+Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔ (back to Clock)
+```
+Screens in `[]` are optional and can be disabled individually. Slot 2 is reserved for a future Traffic screen.
+
+**Vertical swipe from Clock:**
+- Swipe UP → **Settings** (custom config screen)
+- Swipe DOWN → **Wi-Fi / Device settings** (original Seeed screen)
 
 | # | Screen | Type | Description |
 |---|--------|------|-------------|
 | 1 | **Clock** | Original | Date & time display with NTP sync and CET/CEST timezone |
 | 2 | **Sensors** | Original | Live CO2, tVOC, temperature, humidity readings |
-| 3 | **Settings** | Custom | Wi-Fi + all integrations config (tabs), values saved to NVS |
-| 4 | **Hue Control** | Custom | Toggle + brightness slider for 4 Philips Hue lights |
-| 5 | **LocalServer Dashboard** | Custom | LAN server monitoring via Glances API + Uptime Kuma |
-| 6 | **Launcher** | Custom | 4 buttons to open URLs on Mac via local Python proxy |
-| 7 | **Weather** | Custom | Current conditions + 4-slot forecast via OpenWeatherMap |
+| — | **Settings** | Custom | All integrations config (tabs), values saved to NVS — swipe UP from Clock |
+| 3 | **Hue Control** | Custom | Toggle + brightness slider for 4 Philips Hue lights |
+| 4 | **LocalServer Dashboard** | Custom | LAN server monitoring via Glances API + Uptime Kuma |
+| 5 | **Launcher** | Custom | 4 buttons to open URLs on Mac via local Python proxy |
+| 6 | **Weather** | Custom | Current conditions + 4-slot forecast via OpenWeatherMap |
 
 ---
 
 ## Features
 
 ### Settings
-- Unified settings screen with tabs: Wi-Fi · Hue · Server · Proxy · Meteo · Screens
+- Accessible via swipe UP from Clock (outside horizontal rotation)
+- Unified settings screen with tabs: Hue · Server · Proxy · Meteo · Screens
 - All values editable on-device and persisted to NVS
 - Fallback to hardcoded defaults if NVS is empty
 - Configuration can also be managed via the Mac proxy Web UI (`http://localhost:8765/config/ui`)
 - On Wi-Fi connect, device automatically fetches latest config from the proxy (no reboot needed)
+- Wi-Fi configuration accessible via swipe DOWN from Clock (original Seeed screen)
 
 ### Hue Control
 - Toggle ON/OFF and adjust brightness (0–100%) for 4 configurable Philips Hue lights
