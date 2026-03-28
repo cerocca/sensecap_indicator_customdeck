@@ -6,7 +6,7 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
 set(EXTRA_COMPONENT_DIRS  ../components)
 
-set(EXCLUDE_COMPONENTS LoRaWAN)
+set(EXCLUDE_COMPONENTS LoRaWAN liblorahub radio_drivers smtc_ral)
 
 add_compile_options(-fdiagnostics-color=always -w)
 

@@ -40,8 +40,8 @@
       (CLAUDE.md e TODO.md restano in italiano)
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali
-- [ ] Eliminare le sottodirectory `components/` non utilizzate dal progetto
-      (verificare quali componenti Seeed non sono referenziati da `CMakeLists.txt` e rimuoverli)
+- [x] Eliminare le sottodirectory `components/` non utilizzate dal progetto
+      (liblorahub, radio_drivers, smtc_ral aggiunti a EXCLUDE_COMPONENTS — LoRaWAN già escluso; bsp/bus/i2c_devices/iot_button/lora/lvgl necessari)
 - [x] ~~Valutare sostituzione schermata AI con schermata Weather~~ → implementato
 - [ ] Screen Weather: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
 - [ ] Test switch "Default sensor screen" — verifica skip sensors nella navigazione e auto-navigate al boot
