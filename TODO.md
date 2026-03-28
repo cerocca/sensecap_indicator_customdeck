@@ -27,17 +27,17 @@
 - [x] Screen Weather — meteo OWM diretto (temp, icona ASCII, umidità, vento, 4 slot forecast 3h)
 
 ## Post release 0.1
-- [ ] aggiornare README e SETUP su localServer Dashboard per mettere  LAN server monitoring via Glances API + Uptime Kuma + Beszel e loro uso
+- [x] aggiornare README e SETUP su localServer Dashboard per mettere  LAN server monitoring via Glances API + Uptime Kuma + Beszel e loro uso
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
-- [ ] aggiornare SETUP.md con istruzioni uso proxy e setup varie schermate
+- [x] aggiornare SETUP.md con istruzioni uso proxy e setup varie schermate
 - [x] aggiungere in UI (es. tab Proxy in Settings) la riga con l'indirizzo web del config proxy: `http://localhost:8765/config/ui`
 - [ ] rendere proxy mac cliccabile
  Crediti cirutech + versione in UI
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
 - [x] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
 - [x] Layout Web UI proxy `/config/ui` a 3 colonne: Hue / LocalServer+Proxy / Launcher+Weather
-- [ ] Uniformare documentazione: scegliere tutto italiano o tutto inglese
-      (attualmente CLAUDE.md e TODO.md in italiano, README.md e SETUP.md in inglese)
+- [x] Uniformare documentazione: README.md e SETUP.md riscritti completamente in inglese
+      (CLAUDE.md e TODO.md restano in italiano)
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali
 - [ ] Eliminare le sottodirectory `components/` non utilizzate dal progetto
