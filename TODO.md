@@ -44,7 +44,7 @@
       (liblorahub, radio_drivers, smtc_ral aggiunti a EXCLUDE_COMPONENTS — LoRaWAN già escluso; bsp/bus/i2c_devices/iot_button/lora/lvgl necessari)
 - [x] ~~Valutare sostituzione schermata AI con schermata Weather~~ → implementato
 - [ ] Screen Weather: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
-- [ ] Test switch "Default sensor screen" — verifica skip sensors nella navigazione e auto-navigate al boot
+- [x] Test switch "Default sensor screen" — verifica skip sensors nella navigazione e auto-navigate al boot
 - [ ] Valutare rimozione `screen_ai.c/.h` (file presente ma non usato dopo sostituzione con Weather)
 - [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
       (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
