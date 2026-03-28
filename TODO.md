@@ -45,7 +45,8 @@
 - [x] ~~Valutare sostituzione schermata AI con schermata Weather~~ → implementato
 - [ ] Screen Weather: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
 - [x] Test switch "Default sensor screen" — verifica skip sensors nella navigazione e auto-navigate al boot
-- [ ] Valutare rimozione `screen_ai.c/.h` (file presente ma non usato dopo sostituzione con Weather)
+- [x] Valutare rimozione `screen_ai.c/.h` — NON rimosso: ui.c (Seeed) ha ancora extern + riferimento
+      in ui_event_screen_time (dead code, handler già sostituito da gesture_clock). Footprint: 4 byte BSS, costo zero.
 - [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
       (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
       Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
