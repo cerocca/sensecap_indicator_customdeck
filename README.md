@@ -65,6 +65,14 @@ Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔
 
 Toggle ON/OFF and adjust brightness (0–100%) for 4 configurable Philips Hue lights. Polling every 5 seconds via local Hue Bridge (HTTPS, self-signed cert accepted).
 
+### Weather
+*Does not require SenseDeck Proxy on Mac*
+
+Current conditions (temperature, feels-like, description, humidity, wind speed) and 4-slot hourly forecast via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS. Refresh every 30 seconds; polling every 10 minutes.
+
+### Custom Settings
+Tabbed configuration screen accessible via swipe UP from Clock (outside the horizontal rotation). Tabs: **Hue**, **Server**, **Proxy**, **Weather**, **Screens**. All values editable on-device and persisted to NVS. Full configuration also available via the proxy Web UI at `http://<mac-ip>:8765/config/ui`.
+
 ### LocalServer Dashboard
 *Requires SenseDeck Proxy on Mac*
 
@@ -75,18 +83,10 @@ Real-time CPU, RAM, disk usage, load average and uptime via [Glances](https://ni
 
 4 configurable buttons (2×2 grid) that open URLs on a Mac via a local Python proxy. Labels and URLs fully customizable.
 
-### Weather
-*Does not require SenseDeck Proxy on Mac*
-
-Current conditions (temperature, feels-like, description, humidity, wind speed) and 4-slot hourly forecast via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS. Refresh every 30 seconds; polling every 10 minutes.
-
 ### Traffic
 *Requires SenseDeck Proxy on Mac*
 
 Estimated travel time from a configured origin to destination, delta vs baseline (normal traffic), and a green/yellow/red indicator via Google Maps Distance Matrix API.
-
-### Custom Settings
-Tabbed configuration screen accessible via swipe UP from Clock (outside the horizontal rotation). Tabs: **Hue**, **Server**, **Proxy**, **Weather**, **Screens**. All values editable on-device and persisted to NVS. Full configuration also available via the proxy Web UI at `http://<mac-ip>:8765/config/ui`.
 
 ---
 
