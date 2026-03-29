@@ -24,7 +24,7 @@ extern void ui_event_screen_setting(lv_event_t *e);
  * Navigazione:
  *
  * Orizzontale (swipe LEFT = avanti, swipe RIGHT = indietro):
- *  clock(0) ↔ sensors(1) ↔ [traffic(2,disab.)] ↔ [hue(3)] ↔ [sibilla(4)] ↔ [launcher(5)] ↔ [weather(6)] ↔ (clock)
+ *  clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [sibilla(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
  *
  * Verticale dal clock:
  *  swipe UP   → screen_settings_custom  (MOVE_TOP)
@@ -47,7 +47,7 @@ bool g_scr_wthr_enabled     = true;
 bool g_scr_traffic_enabled  = true;
 
 /* ─── screen order for skip logic ─────────────────────────────
- * Indici: 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather
+ * Indici: 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic
  * settings_custom è fuori dalla rotazione orizzontale.
  * ─────────────────────────────────────────────────────────────*/
 #define N_SCREENS 7
@@ -58,11 +58,11 @@ static bool scr_enabled(int i)
 {
     switch (i) {
         case 1: return g_scr_defsens_enabled;
-        case 2: return g_scr_traffic_enabled;
-        case 3: return g_scr_hue_enabled;
-        case 4: return g_scr_srv_enabled;
-        case 5: return g_scr_lnch_enabled;
-        case 6: return g_scr_wthr_enabled;
+        case 2: return g_scr_hue_enabled;
+        case 3: return g_scr_srv_enabled;
+        case 4: return g_scr_lnch_enabled;
+        case 5: return g_scr_wthr_enabled;
+        case 6: return g_scr_traffic_enabled;
         default: return true; /* clock (0) sempre abilitato */
     }
 }
@@ -153,6 +153,18 @@ static void ensure_traffic_populated(void)
     }
 }
 
+/* ─── ensure_populated helper ───────────────────────────────── *
+ * Chiama la lazy-populate corretta in base al puntatore schermata.
+ * clock(0), sensors(1), sibilla(3): nessuna populate esplicita.
+ * ─────────────────────────────────────────────────────────────*/
+static void ensure_populated(lv_obj_t *scr)
+{
+    if      (scr == ui_screen_hue)      ensure_hue_populated();
+    else if (scr == ui_screen_launcher) ensure_launcher_populated();
+    else if (scr == ui_screen_weather)  ensure_weather_populated();
+    else if (scr == ui_screen_traffic)  ensure_traffic_populated();
+}
+
 /* ─── gesture handlers ─────────────────────────────────────── */
 
 /*
@@ -181,7 +193,7 @@ static void gesture_clock(lv_event_t *e)
 /*
  * Sostituzione dell'handler Seeed ui_event_screen_sensor.
  * Il Seeed aveva LEFT hardcoded su ui_screen_settings_custom (ora fuori rotazione).
- * LEFT ora usa next_from(1, +1) saltando il placeholder traffic (slot 2).
+ * LEFT usa next_from(1, +1) con ensure_populated() sul target.
  * RIGHT e TOP replicano il comportamento Seeed (→ clock).
  */
 static void gesture_sensor(lv_event_t *e)
@@ -191,8 +203,7 @@ static void gesture_sensor(lv_event_t *e)
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT) {
         lv_obj_t *next = next_from(1, +1);
-        if (next == ui_screen_traffic) ensure_traffic_populated();
-        else ensure_hue_populated(); /* traffic disabilitato: si va direttamente a hue */
+        ensure_populated(next);
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
     } else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(1, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
@@ -205,11 +216,13 @@ static void gesture_traffic(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_traffic) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT) {
-        ensure_hue_populated();
-        _ui_screen_change(next_from(2, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    } else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(2, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    if (dir == LV_DIR_LEFT)
+        _ui_screen_change(next_from(6, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+    else if (dir == LV_DIR_RIGHT) {
+        lv_obj_t *next = next_from(6, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    }
 }
 
 /*
@@ -243,10 +256,12 @@ static void gesture_hue(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_hue) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
-        _ui_screen_change(next_from(3, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(3, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    if (dir == LV_DIR_LEFT) {
+        lv_obj_t *next = next_from(2, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+    } else if (dir == LV_DIR_RIGHT)
+        _ui_screen_change(next_from(2, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
 static void gesture_sibilla(lv_event_t *e)
@@ -255,11 +270,13 @@ static void gesture_sibilla(lv_event_t *e)
     if (lv_scr_act() != ui_screen_sibilla) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT) {
-        ensure_launcher_populated(); /* lazy populate prima dell'animazione */
-        _ui_screen_change(next_from(4, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+        lv_obj_t *next = next_from(3, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
     } else if (dir == LV_DIR_RIGHT) {
-        ensure_hue_populated(); /* lazy populate prima dell'animazione */
-        _ui_screen_change(next_from(4, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+        lv_obj_t *next = next_from(3, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
     }
 }
 
@@ -269,10 +286,11 @@ static void gesture_launcher(lv_event_t *e)
     if (lv_scr_act() != ui_screen_launcher) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT) {
-        ensure_weather_populated(); /* lazy populate prima dell'animazione */
-        _ui_screen_change(next_from(5, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+        lv_obj_t *next = next_from(4, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
     } else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(5, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+        _ui_screen_change(next_from(4, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
 static void gesture_weather(lv_event_t *e)
@@ -280,10 +298,12 @@ static void gesture_weather(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_weather) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
-        _ui_screen_change(next_from(6, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(6, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    if (dir == LV_DIR_LEFT) {
+        lv_obj_t *next = next_from(5, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+    } else if (dir == LV_DIR_RIGHT)
+        _ui_screen_change(next_from(5, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
 
@@ -303,17 +323,20 @@ void ui_manager_init(void)
 
     /* Avvia i modelli dati (registrano handler IP_EVENT_STA_GOT_IP). */
     indicator_weather_init();
-    indicator_traffic_init();
+    /* indicator_traffic_init() NON va qui: ui_manager_init() è chiamata prima
+     * di indicator_model_init() (che crea il default event loop), quindi
+     * esp_event_handler_register fallirebbe silenziosamente.
+     * È chiamata da main.c dopo indicator_model_init(). */
 
     /* Popola la tabella degli indici schermata per next_from().
-     * 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather */
+     * 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic */
     s_scr[0] = ui_screen_time;
     s_scr[1] = ui_screen_sensor;
-    s_scr[2] = screen_traffic_get_screen();
-    s_scr[3] = ui_screen_hue;
-    s_scr[4] = ui_screen_sibilla;
-    s_scr[5] = ui_screen_launcher;
-    s_scr[6] = ui_screen_weather;
+    s_scr[2] = ui_screen_hue;
+    s_scr[3] = ui_screen_sibilla;
+    s_scr[4] = ui_screen_launcher;
+    s_scr[5] = ui_screen_weather;
+    s_scr[6] = screen_traffic_get_screen();
 
     /* Sostituisce l'handler Seeed ui_event_screen_time con gesture_clock
      * che usa next_from() e gestisce UP/DOWN per navigazione verticale. */

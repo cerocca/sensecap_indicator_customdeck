@@ -34,7 +34,7 @@ cd firmware && idf.py build flash monitor
 
 **Orizzontale** (swipe LEFT = avanti, swipe RIGHT = indietro):
 ```
-clock(0) ↔ [sensors(1)] ↔ [traffic(2)] ↔ [hue(3)] ↔ [sibilla(4)] ↔ [launcher(5)] ↔ [weather(6)] ↔ (clock)
+clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [sibilla(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
 ```
 
 **Verticale dal clock:**
@@ -48,11 +48,11 @@ Swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM).
 Swipe UP da ui_screen_setting torna al clock (MOVE_TOP).
 
 Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
-Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Traffic (idx 2) abilitabile/disabilitabile via tab Traffic in Settings.
+Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Traffic (idx 6) abilitabile/disabilitabile via switch "Traffic" nel tab Screens.
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather
+// Indici: 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic
 // settings_custom è fuori dalla tabella s_scr[]
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
@@ -62,13 +62,14 @@ static lv_obj_t *next_from(int cur, int dir) {
     return s_scr[cur];
 }
 ```
-`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(2)` ritorna `g_scr_traffic_enabled`.
-Tutti i gesture handler orizzontali usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[2] = screen_traffic_get_screen()).
+`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(6)` ritorna `g_scr_traffic_enabled`.
+Tutti i gesture handler usano `ensure_populated(next)` prima di navigare (helper in `ui_manager.c`).
+La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[6] = screen_traffic_get_screen()).
 
 **Flag di abilitazione schermate:**
 - `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled`, `g_scr_traffic_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
 - Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
-- Aggiornati live da `screen_settings_custom.c` (tab "Screens"/"Traffic") al toggle switch
+- Aggiornati live da `screen_settings_custom.c` (tab "Screens") al toggle switch
 - Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
 
 **Schermata iniziale al boot:** sempre `ui_screen_time` (clock). Nessuna navigazione automatica.
@@ -84,11 +85,11 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 |-----|------|------|------|
 | 0 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
-| 2 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
-| 3 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
-| 4 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
-| 5 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
-| 6 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
+| 2 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
+| 3 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
+| 4 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
+| 5 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
+| 6 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
 | — | `screen_settings_custom` | Custom — fuori rotazione | Accessibile solo via swipe UP dal clock |
 | — | `ui_screen_setting` | Originale Seeed — NON toccare | Accessibile via swipe DOWN dal clock |
 
@@ -130,7 +131,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 
 ---
 
-## Schermata 2 — Traffic
+## Schermata 6 — Traffic
 
 ### Sorgente dati
 Proxy Mac `GET /traffic` → chiama Google Maps Distance Matrix API con `departure_time=now&traffic_model=best_guess`.
@@ -157,23 +158,24 @@ Se `gmaps_api_key` o origin/destination vuoti → `{"error":"not_configured"}`.
 - `LV_ALIGN_BOTTOM_MID` Label errore — font12, #e07070
 
 ### Settings tab "Traffic"
-Switch ON/OFF → `g_scr_traffic_enabled` + NVS `scr_traffic_en`.
-URL proxy Web UI dinamico (stesso pattern tab Weather).
+Solo info label: "Configure origin/destination at: http://\<proxy\>/config/ui" (URL dinamico da NVS).
+Nessuno switch ON/OFF — lo switch Traffic è nel tab Screens.
 
 ---
 
 ## Schermata 3 — Settings (custom)
 
 Accessibile via **swipe UP dal clock** (fuori dalla rotazione orizzontale).
-Layout: tabview LVGL (44px header), 5 tab orizzontali.
+Layout: tabview LVGL (44px header), 6 tab orizzontali.
 
 | Tab | Contenuto |
 |---|---|
 | **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
 | **Server** | Server IP, Server Name, Glances Port, Beszel Port, Uptime Kuma Port → NVS (5 campi) |
 | **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot · label "Config UI: http://..." con recolor LVGL (bianco + #7ec8e0), aggiornata dinamicamente da NVS |
-| **Meteo** | Info URL proxy Web UI (dinamico) + switch ON/OFF schermata Weather → `g_scr_wthr_enabled` + NVS |
-| **Screens** | 4 switch: Default sensor screen (`g_scr_defsens_enabled`), Hue, LocalServer, Launcher → aggiornano flag + NVS |
+| **Weather** | Info URL proxy Web UI (dinamico, no switch — lo switch è in Screens) |
+| **Traffic** | Info URL proxy Web UI (dinamico, no switch — lo switch è in Screens) |
+| **Screens** | 6 switch: Default sensor screen, Hue, LocalServer, Launcher, Weather, Traffic → aggiornano flag + NVS |
 
 **Nota**: Tab Wi-Fi rimosso — la configurazione Wi-Fi è accessibile via swipe DOWN dal clock → `ui_screen_setting` Seeed.
 
@@ -459,6 +461,27 @@ if (!s_cont_buf) {
 }
 ```
 **Attenzione**: quando si passa da `static char buf[N]` a `static char *buf`, `sizeof(buf)` diventa `sizeof(char*) = 4` invece di `N`. Passare sempre la costante esplicita alla funzione HTTP: `glances_http_get(url, buf, BUFFER_SIZE)` — mai `sizeof(buf)`.
+
+### Ordine init — indicator_xxx_init() deve seguire indicator_model_init()
+
+Tutti gli `indicator_xxx_init()` che registrano handler su `IP_EVENT_STA_GOT_IP` devono essere
+chiamati in `main.c` **dopo** `indicator_model_init()`. `indicator_model_init()` inizializza il
+Wi-Fi, che crea internamente il default event loop. Se `esp_event_handler_register` viene chiamato
+prima (es. durante `ui_manager_init()` a ~1697ms), il loop non esiste ancora e l'handler non
+viene mai attivato — nessun errore, nessun log, silenzio totale.
+
+**Ordine corretto in `main.c`:**
+```c
+indicator_model_init();    // 1. crea il default event loop (Wi-Fi init)
+ui_manager_init();         // 2. init schermate (NON mettere indicator_xxx_init qui)
+indicator_glances_init();  // 3. poi tutti gli indicator_xxx_init()
+indicator_uptime_kuma_init();
+indicator_traffic_init();
+```
+
+**Sintomo**: `ESP_LOGI("init called")` appare nel log, ma `ESP_LOGI("got IP")` nell'handler
+non appare mai, nonostante il Wi-Fi si connetta e altri handler IP_EVENT funzionino.
+Debuggato su `indicator_traffic_init()` (sessione 2026-03-29).
 
 ### CONFIG_UART_ISR_IN_IRAM — incompatibile con SPIRAM_XIP_FROM_PSRAM
 **NON aggiungere** — causa boot loop immediato. NON aggiungere mai a `sdkconfig.defaults`.

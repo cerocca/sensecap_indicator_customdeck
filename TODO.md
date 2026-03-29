@@ -2,9 +2,11 @@
 
 ## Implementation order
 
-1. [x] **Screen Traffic** (slot 2): Google Maps Distance Matrix API via proxy Mac.
+1. [ ] **Screen Traffic** (slot 6): Google Maps Distance Matrix API via proxy Mac.
       Polling ogni 10 min, indicatore ●OK/SLOW/HEAVY, tempo stimato, delta vs normale.
       Configurazione origin/destination nella Web UI proxy → `/config/ui`.
+      ⚠️ **Verifica pendente**: fare flash+monitor da terminale esterno con route configurata
+      per confermare assenza crash e corretta visualizzazione dati reali prima di marcare done.
 2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
       fix layout: abbassare linea sotto titolo e aggiungere next 3 days
       ⚠️ **Attenzione al prompt per next 3 days**: la sessione precedente ha applicato le modifiche
@@ -31,6 +33,7 @@
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
+- [ ] **Code review sistematica pre-pubblicazione**: ui_manager.c (gesture/guard), model/ (task HTTP, buffer, stack), ui/ (lazy init, lv_port_sem), proxy (endpoints, error handling) — vedere note sessione per dettagli
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command

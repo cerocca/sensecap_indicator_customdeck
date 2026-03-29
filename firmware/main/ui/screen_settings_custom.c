@@ -41,7 +41,6 @@ static lv_obj_t *lbl_proxy_url;  /* Config UI URL (dinamico) */
 static lv_obj_t *lbl_meteo_url;   /* URL proxy Web UI (dinamico) */
 
 /* ─── Traffic tab ────────────────────────────────────────────── */
-static lv_obj_t *sw_traffic;
 static lv_obj_t *lbl_traffic_url;  /* URL proxy Web UI (dinamico) */
 
 /* ─── Screens tab switches ───────────────────────────────────── */
@@ -50,6 +49,7 @@ static lv_obj_t *sw_hue;
 static lv_obj_t *sw_srv;
 static lv_obj_t *sw_lnch;
 static lv_obj_t *sw_wthr;
+static lv_obj_t *sw_traffic;
 
 /***********************************************************
  * helpers
@@ -478,6 +478,14 @@ static void on_sw_lnch(lv_event_t *e)
     ESP_LOGI(TAG, "scr_lnch_enabled = %d", g_scr_lnch_enabled);
 }
 
+static void on_sw_traffic(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_traffic_enabled = lv_obj_has_state(sw_traffic, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_TRAFFIC_EN, g_scr_traffic_enabled);
+    ESP_LOGI(TAG, "scr_traffic_enabled = %d", g_scr_traffic_enabled);
+}
+
 static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
 {
     lv_obj_t *tab = lv_tabview_add_tab(tabview, "Screens");
@@ -504,6 +512,9 @@ static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
     y += 60;
     sw_wthr = make_switch_row(tab, y, "Weather");
     lv_obj_add_event_cb(sw_wthr, on_sw_wthr, LV_EVENT_VALUE_CHANGED, NULL);
+    y += 60;
+    sw_traffic = make_switch_row(tab, y, "Traffic");
+    lv_obj_add_event_cb(sw_traffic, on_sw_traffic, LV_EVENT_VALUE_CHANGED, NULL);
 
     return tab;
 }
@@ -512,26 +523,13 @@ static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
  * Traffic tab
  ***********************************************************/
 
-static void on_sw_traffic(lv_event_t *e)
-{
-    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
-    g_scr_traffic_enabled = lv_obj_has_state(sw_traffic, LV_STATE_CHECKED);
-    nvs_write_flag(NVS_KEY_SCR_TRAFFIC_EN, g_scr_traffic_enabled);
-    ESP_LOGI(TAG, "scr_traffic_enabled = %d", g_scr_traffic_enabled);
-}
-
 static lv_obj_t *build_tab_traffic(lv_obj_t *tabview)
 {
     lv_obj_t *tab = lv_tabview_add_tab(tabview, "Traffic");
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
-    /* Switch ON/OFF schermata */
-    int y = 20;
-    sw_traffic = make_switch_row(tab, y, "Traffic screen");
-    lv_obj_add_event_cb(sw_traffic, on_sw_traffic, LV_EVENT_VALUE_CHANGED, NULL);
-    y += 70;
-
     /* Info label */
+    int y = 20;
     lv_obj_t *lbl_info = lv_label_create(tab);
     lv_label_set_text(lbl_info, "Configure origin/destination at:");
     lv_obj_set_pos(lbl_info, 40, y);
@@ -667,8 +665,8 @@ void screen_settings_custom_populate(void)
     build_tab_server(tv);
     build_tab_proxy(tv);
     build_tab_weather(tv);
-    build_tab_screens(tv);
     build_tab_traffic(tv);
+    build_tab_screens(tv);
 
     /* populate fields on screen load */
     lv_obj_add_event_cb(ui_screen_settings_custom, on_screen_load_start,

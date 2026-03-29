@@ -87,6 +87,8 @@ static int traffic_http_get(const char *url, char *buf, int buf_size)
 
 static void traffic_poll_task(void *arg)
 {
+    ESP_LOGI(TAG, "task started");
+
     /* static: evita pressione sullo stack del task — CLAUDE.md regola 6 */
     static char s_proxy_ip[64];
     static char s_proxy_port[8];
@@ -103,6 +105,8 @@ static void traffic_poll_task(void *arg)
 
         snprintf(s_url, sizeof(s_url), "http://%s:%s/traffic",
                  s_proxy_ip, s_proxy_port);
+
+        ESP_LOGI(TAG, "polling %s", s_url);
 
         /* Passare costante esplicita, mai sizeof(ptr) — CLAUDE.md regola buffer */
         int len = traffic_http_get(s_url, s_buf, TRAFFIC_BUF_SIZE);
@@ -166,6 +170,7 @@ static void traffic_poll_task(void *arg)
 static void on_got_ip(void *arg, esp_event_base_t base,
                       int32_t id, void *data)
 {
+    ESP_LOGI(TAG, "got IP, starting task");
     if (s_started) return;
     s_started = true;
     xTaskCreate(traffic_poll_task, "traffic_poll", 4096, NULL, 5, NULL);
@@ -176,5 +181,6 @@ static void on_got_ip(void *arg, esp_event_base_t base,
 
 void indicator_traffic_init(void)
 {
+    ESP_LOGI(TAG, "init called");
     esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, on_got_ip, NULL);
 }
