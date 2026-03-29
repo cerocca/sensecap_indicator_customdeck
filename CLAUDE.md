@@ -34,7 +34,7 @@ cd firmware && idf.py build flash monitor
 
 **Orizzontale** (swipe LEFT = avanti, swipe RIGHT = indietro):
 ```
-clock(0) ↔ [sensors(1)] ↔ [traffic(2,riservato)] ↔ [hue(3)] ↔ [sibilla(4)] ↔ [launcher(5)] ↔ [weather(6)] ↔ (clock)
+clock(0) ↔ [sensors(1)] ↔ [traffic(2)] ↔ [hue(3)] ↔ [sibilla(4)] ↔ [launcher(5)] ↔ [weather(6)] ↔ (clock)
 ```
 
 **Verticale dal clock:**
@@ -48,11 +48,11 @@ Swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM).
 Swipe UP da ui_screen_setting torna al clock (MOVE_TOP).
 
 Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
-Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Slot 2 riservato a screen_traffic (non ancora implementato, `scr_enabled(2) = false`).
+Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Traffic (idx 2) abilitabile/disabilitabile via tab Traffic in Settings.
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=traffic(disab.), 3=hue, 4=sibilla, 5=launcher, 6=weather
+// Indici: 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather
 // settings_custom è fuori dalla tabella s_scr[]
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
@@ -62,15 +62,14 @@ static lv_obj_t *next_from(int cur, int dir) {
     return s_scr[cur];
 }
 ```
-`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(2)` ritorna sempre `false` (traffic placeholder).
-Tutti i gesture handler orizzontali usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[2] = NULL).
+`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(2)` ritorna `g_scr_traffic_enabled`.
+Tutti i gesture handler orizzontali usano `next_from()`. La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[2] = screen_traffic_get_screen()).
 
 **Flag di abilitazione schermate:**
-- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
+- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled`, `g_scr_traffic_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
 - Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
-- Aggiornati live da `screen_settings_custom.c` (tab "Schermate") al toggle switch
+- Aggiornati live da `screen_settings_custom.c` (tab "Screens"/"Traffic") al toggle switch
 - Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
-- `scr_enabled(2)` hardcoded `false` (traffic placeholder, nessun flag NVS)
 
 **Schermata iniziale al boot:** sempre `ui_screen_time` (clock). Nessuna navigazione automatica.
 
@@ -85,7 +84,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 |-----|------|------|------|
 | 0 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
-| 2 | *(riservato traffic)* | Placeholder | `scr_enabled(2)=false`, s_scr[2]=NULL |
+| 2 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
 | 3 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
 | 4 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
 | 5 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
@@ -101,9 +100,10 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 ├── README.md
 ├── SETUP.md
 ├── CHANGELOG.md
-├── sensedeck_proxy.py                     # proxy Mac — /uptime, /open/<n>, /config, /config/ui
+├── sensedeck_proxy.py                     # proxy Mac — /uptime, /traffic, /open/<n>, /config, /config/ui
 ├── config.json                            # generato dal proxy — non in git (in .gitignore)
 ├── sdkconfig.defaults                     # fix PSRAM XIP + mbedTLS dynamic — NON toccare
+├── docs/screenshots/                      # screenshot schermate (aggiungere manualmente)
 └── firmware/                              ← codice firmware
     ├── CMakeLists.txt                     # EXTRA_COMPONENT_DIRS = ../components
     ├── partitions.csv
@@ -116,15 +116,49 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
         │   ├── screen_hue.c/.h
         │   ├── screen_sibilla.c/.h
         │   ├── screen_launcher.c/.h
-        │   └── screen_weather.c/.h
+        │   ├── screen_weather.c/.h
+        │   └── screen_traffic.c/.h
         └── model/
             ├── indicator_config.c/.h      # fetch config dal proxy al boot (IP_EVENT_STA_GOT_IP)
             ├── indicator_glances.c/.h
             ├── indicator_uptime_kuma.c/.h
             ├── indicator_weather.c/.h
             ├── indicator_system.c/.h      # fetch hostname Glances al boot (5s delay)
-            └── indicator_hue.c/.h
+            ├── indicator_hue.c/.h
+            └── indicator_traffic.c/.h     # polling /traffic proxy ogni 10 min
 ```
+
+---
+
+## Schermata 2 — Traffic
+
+### Sorgente dati
+Proxy Mac `GET /traffic` → chiama Google Maps Distance Matrix API con `departure_time=now&traffic_model=best_guess`.
+Risposta compatta: `{"duration_sec", "duration_normal_sec", "delta_sec", "distance_m", "status"}`.
+`status`: `"ok"` (delta ≤120s), `"slow"` (120-600s), `"bad"` (>600s).
+Se `gmaps_api_key` o origin/destination vuoti → `{"error":"not_configured"}`.
+
+### Polling
+- Ogni **10 minuti** (TRAFFIC_POLL_MS = 600000 ms)
+- Primo poll: 8s dopo boot (TRAFFIC_FIRST_DELAY_MS)
+- Buffer response: 256 byte (payload compatto)
+- Pattern task: vedi `indicator_glances.c`
+
+### Layout UI (480×480)
+- `y=0-44` Header "Traffic" — font20, bianco
+- `y=55` Separatore
+- `y=90` Indicatore ● — font20, colore dinamico (`#4caf50`/`#ff9800`/`#f44336`)
+- `y=130` Tempo stimato — font20, bianco (es. "28 min")
+- `y=170` Delta — font16, colore dinamico (es. "+8 min vs normal" / "On time" verde)
+- `y=215` Distanza — font14, #aaaaaa
+- `y=255` Separatore
+- `y=275` "Configure route via proxy Web UI" — font14, #aaaaaa, LV_LABEL_LONG_DOT
+- `LV_ALIGN_BOTTOM_MID` "Updated X min ago" — font12, #555555
+- `LV_ALIGN_BOTTOM_MID` Label errore — font12, #e07070
+
+### Settings tab "Traffic"
+Switch ON/OFF → `g_scr_traffic_enabled` + NVS `scr_traffic_en`.
+URL proxy Web UI dinamico (stesso pattern tab Weather).
 
 ---
 
@@ -232,6 +266,7 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | Endpoint | Metodo | Descrizione |
 |---|---|---|
 | `/uptime` | GET | stato servizi Uptime Kuma (JSON compatto) |
+| `/traffic` | GET | tempo percorrenza Google Maps Distance Matrix API |
 | `/docker` | GET | top 3 container per RAM da Beszel → `[{"name":..., "mem_mb":...}]` |
 | `/open/<n>` | GET | apre URL n in Firefox (n=1..4) |
 | `/ping` | GET | health check |

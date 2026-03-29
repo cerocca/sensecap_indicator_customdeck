@@ -2,10 +2,9 @@
 
 ## Implementation order
 
-1. [ ] **Screen Traffic** (slot 2, riservato): Google Maps Distance Matrix API
-      (gratuita con crediti mensili Google Cloud, ~0.02$/mese per uso personale).
-      Itinerario fisso in app_config.h, polling ogni 10 min via proxy Mac,
-      UI con tempo stimato + delta vs normale + indicatore verde/giallo/rosso.
+1. [x] **Screen Traffic** (slot 2): Google Maps Distance Matrix API via proxy Mac.
+      Polling ogni 10 min, indicatore ●OK/SLOW/HEAVY, tempo stimato, delta vs normale.
+      Configurazione origin/destination nella Web UI proxy → `/config/ui`.
 2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
       fix layout: abbassare linea sotto titolo e aggiungere next 3 days
       ⚠️ **Attenzione al prompt per next 3 days**: la sessione precedente ha applicato le modifiche
@@ -28,6 +27,8 @@
 
 
 ## Various
+- [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
+      (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md

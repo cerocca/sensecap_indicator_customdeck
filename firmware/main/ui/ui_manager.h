@@ -5,6 +5,7 @@
 #include "screen_sibilla.h"
 #include "screen_launcher.h"
 #include "screen_weather.h"
+#include "screen_traffic.h"
 #include <stdbool.h>
 
 /*
@@ -25,3 +26,4 @@ extern bool g_scr_hue_enabled;
 extern bool g_scr_srv_enabled;
 extern bool g_scr_lnch_enabled;
 extern bool g_scr_wthr_enabled;
+extern bool g_scr_traffic_enabled;

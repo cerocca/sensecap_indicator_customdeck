@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### Added
+- `ui/screen_traffic.c/.h`: schermata Traffic completa — indicatore ●OK/SLOW/HEAVY (verde/arancione/rosso), tempo stimato, delta vs normale, distanza; lazy populate; gesture handler anti-reentrant con `next_from(2, ±1)`; timer refresh 30s; label errore se proxy non configurato
+- `model/indicator_traffic.c/.h`: polling `GET /traffic` dal proxy Mac ogni 10 minuti (TRAFFIC_FIRST_DELAY_MS=8s); parse JSON compatto (`duration_sec`, `duration_normal_sec`, `delta_sec`, `distance_m`, `status`); callback `screen_traffic_update()` con `lv_port_sem_take/give`; avviato su `IP_EVENT_STA_GOT_IP` (guard `s_started`)
+- `sensedeck_proxy.py`: endpoint `GET /traffic` — chiama Google Maps Distance Matrix API, estrae `duration_in_traffic.value`, `duration.value`, `distance.value`; calcola `delta_sec`; classifica `ok/slow/bad` (soglie 120s/600s); risposta JSON compatta; `{"error":"not_configured"}` se chiave API o route vuote
+- `sensedeck_proxy.py`: campi `gmaps_api_key`, `traffic_origin`, `traffic_destination`, `traffic_mode` in `DEFAULT_CONFIG`
+- `sensedeck_proxy.py`: sezione "Traffic (Google Maps)" nella Web UI `/config/ui` (colonna 3, dopo Weather) — API key, origin, destination, mode select
+- `app_config.h`: `NVS_KEY_SCR_TRAFFIC_EN "scr_traffic_en"`, `DEFAULT_SCR_TRAFFIC_EN "1"`, `TRAFFIC_POLL_MS 600000`, `TRAFFIC_FIRST_DELAY_MS 8000`
+- `ui_manager.c/.h`: flag `g_scr_traffic_enabled`; `scr_enabled(2)` usa il flag; `s_scr[2] = screen_traffic_get_screen()`; `ensure_traffic_populated()`; `gesture_traffic` handler; `indicator_traffic_init()` in `ui_manager_init()`; `gesture_sensor` LEFT aggiornato per popolare traffic o hue a seconda del next screen
+- Settings tab "Traffic" (nuovo, dopo "Screens"): switch ON/OFF schermata + URL proxy Web UI dinamico
+- `docs/screenshots/`: cartella placeholder per screenshot schermate (immagini da aggiungere manualmente)
+
+### Changed
+- Navigazione: slot 2 ora `screen_traffic` (abilitato); ordine: clock↔sensors↔[traffic]↔[hue]↔[sibilla]↔[launcher]↔[weather]
+
 ### Changed
 - Navigazione: `screen_settings_custom` spostata fuori dalla rotazione orizzontale — raggiungibile solo via swipe UP dal clock (MOVE_TOP); swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM)
 - Navigazione: swipe DOWN dal clock ora apre `ui_screen_setting` Seeed (MOVE_BOTTOM); swipe UP da lì torna al clock (MOVE_TOP)

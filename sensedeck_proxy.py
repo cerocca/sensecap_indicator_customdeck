@@ -19,6 +19,7 @@ import os
 import subprocess
 import urllib.request
 import urllib.error
+import urllib.parse
 
 # ── Percorso config.json (stesso dir dello script) ─────────────────────────────
 
@@ -54,12 +55,16 @@ DEFAULT_CONFIG = {
     "beszel_user":    "",
     "beszel_password": "",
     "uk_port":        "3001",
-    "owm_api_key":    "",
-    "owm_lat":        "",
-    "owm_lon":        "",
-    "owm_units":      "metric",
-    "owm_city_name":  "",
-    "owm_location":   "",   # es. "Firenze, IT" — sovrascrive lat/lon display
+    "owm_api_key":          "",
+    "owm_lat":              "",
+    "owm_lon":              "",
+    "owm_units":            "metric",
+    "owm_city_name":        "",
+    "owm_location":         "",   # es. "Firenze, IT" — sovrascrive lat/lon display
+    "gmaps_api_key":        "",
+    "traffic_origin":       "",
+    "traffic_destination":  "",
+    "traffic_mode":         "driving",
 }
 
 LISTEN_PORT     = 8765
@@ -166,6 +171,71 @@ def get_beszel_docker():
         return []
 
 
+def get_traffic_data():
+    """
+    Chiama Google Maps Distance Matrix API e ritorna un dict compatto.
+    Risposta: {"duration_sec": N, "duration_normal_sec": N, "delta_sec": N,
+               "distance_m": N, "status": "ok"|"slow"|"bad"}
+    o {"error": "not_configured"} / {"error": "api_error"}
+    """
+    cfg  = load_config()
+    key  = cfg.get("gmaps_api_key", "").strip()
+    orig = cfg.get("traffic_origin", "").strip()
+    dest = cfg.get("traffic_destination", "").strip()
+    mode = cfg.get("traffic_mode", "driving").strip() or "driving"
+
+    if not key or not orig or not dest:
+        return {"error": "not_configured"}
+
+    params = urllib.parse.urlencode({
+        "origins":        orig,
+        "destinations":   dest,
+        "mode":           mode,
+        "departure_time": "now",
+        "traffic_model":  "best_guess",
+        "key":            key,
+    })
+    url = f"https://maps.googleapis.com/maps/api/distancematrix/json?{params}"
+
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            data = json.loads(resp.read())
+    except Exception as e:
+        print(f"[traffic] API error: {e}")
+        return {"error": "api_error"}
+
+    try:
+        row     = data["rows"][0]["elements"][0]
+        status  = row.get("status", "")
+        if status != "OK":
+            print(f"[traffic] element status: {status}")
+            return {"error": "api_error"}
+
+        dur_sec     = row["duration_in_traffic"]["value"]
+        dur_nor_sec = row["duration"]["value"]
+        dist_m      = row["distance"]["value"]
+        delta_sec   = dur_sec - dur_nor_sec
+
+        if delta_sec <= 120:
+            traffic_status = "ok"
+        elif delta_sec <= 600:
+            traffic_status = "slow"
+        else:
+            traffic_status = "bad"
+
+        return {
+            "duration_sec":        dur_sec,
+            "duration_normal_sec": dur_nor_sec,
+            "delta_sec":           delta_sec,
+            "distance_m":          dist_m,
+            "status":              traffic_status,
+        }
+    except (KeyError, IndexError, TypeError) as e:
+        print(f"[traffic] parse error: {e}")
+        return {"error": "api_error"}
+
+
 def launcher_urls():
     cfg = load_config()
     return {
@@ -260,6 +330,14 @@ def build_config_ui(cfg):
         + field("Longitude",   "owm_lon",      cfg.get("owm_lon",""),      "es. 11.2486")
         + select_field("Units", "owm_units", cfg.get("owm_units","metric"),
                        [("metric","metric (°C, km/h)"), ("imperial","imperial (°F, mph)")])
+        + sep()
+        + "<h2>Traffic (Google Maps)</h2>"
+        + field("Google Maps API Key", "gmaps_api_key",       cfg.get("gmaps_api_key",""))
+        + field("Origin",              "traffic_origin",      cfg.get("traffic_origin",""),      "es. Via Roma 1, Firenze")
+        + field("Destination",         "traffic_destination", cfg.get("traffic_destination",""), "es. Piazza Duomo, Firenze")
+        + select_field("Mode", "traffic_mode", cfg.get("traffic_mode","driving"),
+                       [("driving","driving"), ("walking","walking"),
+                        ("bicycling","bicycling"), ("transit","transit")])
     )
 
     return f"""<!DOCTYPE html>
@@ -460,6 +538,10 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             else:
                 self.send_text(f"Unknown key: {key}", status=404)
 
+        # ── /traffic ───────────────────────────────────────────────────────────
+        elif path == "/traffic":
+            self.send_json(get_traffic_data())
+
         # ── /docker ────────────────────────────────────────────────────────────
         elif path == "/docker":
             try:
@@ -518,6 +600,7 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", LISTEN_PORT), ProxyHandler)
     print(f"sensedeck_proxy listening on port {LISTEN_PORT}")
     print(f"  /uptime     → Uptime Kuma {cfg.get('server_ip','?')}:{cfg.get('uk_port','?')}")
+    print(f"  /traffic    → Google Maps Distance Matrix API")
     for k in ["1", "2", "3", "4"]:
         print(f"  /open/{k}     → {cfg.get(f'launcher_url_{k}', '?')}")
     print(f"  /config     → GET config / POST save")

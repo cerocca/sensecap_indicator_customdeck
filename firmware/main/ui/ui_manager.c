@@ -2,6 +2,7 @@
 #include "ui_helpers.h"   /* _ui_screen_change, include ui.h → ui_screen_time, ui_screen_setting */
 #include "indicator_storage.h"
 #include "indicator_weather.h"
+#include "../model/indicator_traffic.h"
 #include "app_config.h"
 
 /* ui_screen_last è non-static in ui.c (necessario per il ritorno da ui_screen_wifi). */
@@ -38,14 +39,15 @@ extern void ui_event_screen_setting(lv_event_t *e);
  * Caricati da NVS in ui_manager_init().
  * Aggiornati live da screen_settings_custom (tab Meteo / Schermate).
  * ─────────────────────────────────────────────────────────────*/
-bool g_scr_defsens_enabled = true;
-bool g_scr_hue_enabled  = true;
-bool g_scr_srv_enabled  = true;
-bool g_scr_lnch_enabled = true;
-bool g_scr_wthr_enabled = true;
+bool g_scr_defsens_enabled  = true;
+bool g_scr_hue_enabled      = true;
+bool g_scr_srv_enabled      = true;
+bool g_scr_lnch_enabled     = true;
+bool g_scr_wthr_enabled     = true;
+bool g_scr_traffic_enabled  = true;
 
 /* ─── screen order for skip logic ─────────────────────────────
- * Indici: 0=clock, 1=sensors, 2=traffic(riservato/disab.), 3=hue, 4=sibilla, 5=launcher, 6=weather
+ * Indici: 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather
  * settings_custom è fuori dalla rotazione orizzontale.
  * ─────────────────────────────────────────────────────────────*/
 #define N_SCREENS 7
@@ -55,8 +57,8 @@ static lv_obj_t *s_scr[N_SCREENS]; /* popolato in ui_manager_init */
 static bool scr_enabled(int i)
 {
     switch (i) {
-        case 1: return g_scr_defsens_enabled; /* sensors: skippa se switch OFF */
-        case 2: return false;                 /* traffic: placeholder, non ancora implementato */
+        case 1: return g_scr_defsens_enabled;
+        case 2: return g_scr_traffic_enabled;
         case 3: return g_scr_hue_enabled;
         case 4: return g_scr_srv_enabled;
         case 5: return g_scr_lnch_enabled;
@@ -93,6 +95,7 @@ static void load_screen_flags(void)
     g_scr_srv_enabled     = nvs_read_flag(NVS_KEY_SCR_SRV_EN);
     g_scr_lnch_enabled    = nvs_read_flag(NVS_KEY_SCR_LNCH_EN);
     g_scr_wthr_enabled    = nvs_read_flag(NVS_KEY_SCR_WTHR);
+    g_scr_traffic_enabled = nvs_read_flag(NVS_KEY_SCR_TRAFFIC_EN);
 }
 
 /* ─── lazy init settings_custom ────────────────────────────── */
@@ -139,6 +142,17 @@ static void ensure_weather_populated(void)
     }
 }
 
+/* ─── lazy init screen_traffic ──────────────────────────────── */
+static bool s_traffic_populated = false;
+
+static void ensure_traffic_populated(void)
+{
+    if (!s_traffic_populated) {
+        screen_traffic_populate();
+        s_traffic_populated = true;
+    }
+}
+
 /* ─── gesture handlers ─────────────────────────────────────── */
 
 /*
@@ -176,12 +190,26 @@ static void gesture_sensor(lv_event_t *e)
     if (lv_scr_act() != ui_screen_sensor) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT) {
-        ensure_hue_populated();
-        _ui_screen_change(next_from(1, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+        lv_obj_t *next = next_from(1, +1);
+        if (next == ui_screen_traffic) ensure_traffic_populated();
+        else ensure_hue_populated(); /* traffic disabilitato: si va direttamente a hue */
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
     } else if (dir == LV_DIR_RIGHT)
         _ui_screen_change(next_from(1, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
     else if (dir == LV_DIR_TOP)
         _ui_screen_change(ui_screen_time, LV_SCR_LOAD_ANIM_MOVE_TOP, 200, 0);
+}
+
+static void gesture_traffic(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
+    if (lv_scr_act() != ui_screen_traffic) return;
+    lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+    if (dir == LV_DIR_LEFT) {
+        ensure_hue_populated();
+        _ui_screen_change(next_from(2, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
+    } else if (dir == LV_DIR_RIGHT)
+        _ui_screen_change(next_from(2, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
 }
 
 /*
@@ -271,15 +299,17 @@ void ui_manager_init(void)
     screen_sibilla_init();
     screen_launcher_init();
     screen_weather_init();
+    screen_traffic_init();
 
-    /* Avvia il modello meteo (registra handler IP_EVENT_STA_GOT_IP). */
+    /* Avvia i modelli dati (registrano handler IP_EVENT_STA_GOT_IP). */
     indicator_weather_init();
+    indicator_traffic_init();
 
     /* Popola la tabella degli indici schermata per next_from().
-     * Slot 2 riservato a screen_traffic (non ancora implementato, disabled). */
+     * 0=clock, 1=sensors, 2=traffic, 3=hue, 4=sibilla, 5=launcher, 6=weather */
     s_scr[0] = ui_screen_time;
     s_scr[1] = ui_screen_sensor;
-    s_scr[2] = NULL;              /* traffic placeholder */
+    s_scr[2] = screen_traffic_get_screen();
     s_scr[3] = ui_screen_hue;
     s_scr[4] = ui_screen_sibilla;
     s_scr[5] = ui_screen_launcher;
@@ -314,6 +344,7 @@ void ui_manager_init(void)
     lv_obj_add_flag(ui_setting_icon,  LV_OBJ_FLAG_HIDDEN); /* icona ingranaggio */
     lv_obj_add_flag(ui_scrolldots3,   LV_OBJ_FLAG_HIDDEN); /* container 3 puntini navigazione */
 
+    lv_obj_add_event_cb(ui_screen_traffic,  gesture_traffic,  LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_screen_hue,      gesture_hue,      LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_screen_sibilla,  gesture_sibilla,  LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_screen_launcher, gesture_launcher, LV_EVENT_ALL, NULL);

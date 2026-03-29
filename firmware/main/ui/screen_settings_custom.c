@@ -40,6 +40,10 @@ static lv_obj_t *lbl_proxy_url;  /* Config UI URL (dinamico) */
 /* ─── Weather tab ───────────────────────────────────────────── */
 static lv_obj_t *lbl_meteo_url;   /* URL proxy Web UI (dinamico) */
 
+/* ─── Traffic tab ────────────────────────────────────────────── */
+static lv_obj_t *sw_traffic;
+static lv_obj_t *lbl_traffic_url;  /* URL proxy Web UI (dinamico) */
+
 /* ─── Screens tab switches ───────────────────────────────────── */
 static lv_obj_t *sw_defsens;
 static lv_obj_t *sw_hue;
@@ -505,6 +509,68 @@ static lv_obj_t *build_tab_screens(lv_obj_t *tabview)
 }
 
 /***********************************************************
+ * Traffic tab
+ ***********************************************************/
+
+static void on_sw_traffic(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_VALUE_CHANGED) return;
+    g_scr_traffic_enabled = lv_obj_has_state(sw_traffic, LV_STATE_CHECKED);
+    nvs_write_flag(NVS_KEY_SCR_TRAFFIC_EN, g_scr_traffic_enabled);
+    ESP_LOGI(TAG, "scr_traffic_enabled = %d", g_scr_traffic_enabled);
+}
+
+static lv_obj_t *build_tab_traffic(lv_obj_t *tabview)
+{
+    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Traffic");
+    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* Switch ON/OFF schermata */
+    int y = 20;
+    sw_traffic = make_switch_row(tab, y, "Traffic screen");
+    lv_obj_add_event_cb(sw_traffic, on_sw_traffic, LV_EVENT_VALUE_CHANGED, NULL);
+    y += 70;
+
+    /* Info label */
+    lv_obj_t *lbl_info = lv_label_create(tab);
+    lv_label_set_text(lbl_info, "Configure origin/destination at:");
+    lv_obj_set_pos(lbl_info, 40, y);
+    lv_obj_set_style_text_font(lbl_info, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_info, lv_color_hex(0xcccccc),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    y += 26;
+
+    /* URL proxy dinamica (aggiornata in on_screen_load_start) */
+    lbl_traffic_url = lv_label_create(tab);
+    lv_label_set_text(lbl_traffic_url, "http://--/config/ui");
+    lv_obj_set_pos(lbl_traffic_url, 40, y);
+    lv_obj_set_width(lbl_traffic_url, 400);
+    lv_label_set_long_mode(lbl_traffic_url, LV_LABEL_LONG_DOT);
+    lv_obj_set_style_text_font(lbl_traffic_url, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_traffic_url, lv_color_hex(0x7ec8e0),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    y += 30;
+
+    lv_obj_t *lbl_hint = lv_label_create(tab);
+    lv_label_set_text(lbl_hint,
+                      "Set Google Maps API key, origin,\n"
+                      "destination and mode from the\n"
+                      "proxy Web UI. Refresh via \"Reload\"\n"
+                      "in the Proxy tab.");
+    lv_obj_set_pos(lbl_hint, 40, y);
+    lv_obj_set_width(lbl_hint, 400);
+    lv_label_set_long_mode(lbl_hint, LV_LABEL_LONG_WRAP);
+    lv_obj_set_style_text_font(lbl_hint, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(lbl_hint, lv_color_hex(0x666666),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    return tab;
+}
+
+/***********************************************************
  * SCREEN_LOAD_START → populate fields from NVS
  ***********************************************************/
 
@@ -528,30 +594,33 @@ static void on_screen_load_start(lv_event_t *e)
     nvs_read_str(NVS_KEY_PROXY_IP,    ta_proxy_ip,      APP_CFG_PROXY_IP);
     nvs_read_str(NVS_KEY_PROXY_PORT,  ta_proxy_port,    APP_CFG_PROXY_PORT);
 
-    /* Aggiorna URL proxy nel tab Proxy e nel tab Weather */
+    /* Aggiorna URL proxy nel tab Proxy, Weather e Traffic */
     {
         char proxy_ip[64], proxy_port[8], url_text[128];
         nvs_read_str_buf(NVS_KEY_PROXY_IP,   proxy_ip,   sizeof(proxy_ip),   APP_CFG_PROXY_IP);
         nvs_read_str_buf(NVS_KEY_PROXY_PORT, proxy_port, sizeof(proxy_port), APP_CFG_PROXY_PORT);
         snprintf(url_text, sizeof(url_text),
                  "http://%s:%s/config/ui", proxy_ip, proxy_port);
-        lv_label_set_text(lbl_meteo_url, url_text);
+        lv_label_set_text(lbl_meteo_url,    url_text);
+        lv_label_set_text(lbl_traffic_url,  url_text);
         snprintf(url_text, sizeof(url_text),
                  "Config UI: #7ec8e0 http://%s:%s/config/ui#", proxy_ip, proxy_port);
         lv_label_set_text(lbl_proxy_url, url_text);
     }
 
     /* Schermate switches: riflette i flag globali (già caricati da NVS al boot). */
-    if (g_scr_defsens_enabled) lv_obj_add_state(sw_defsens, LV_STATE_CHECKED);
-    else                        lv_obj_clear_state(sw_defsens, LV_STATE_CHECKED);
-    if (g_scr_hue_enabled)  lv_obj_add_state(sw_hue,  LV_STATE_CHECKED);
-    else                     lv_obj_clear_state(sw_hue,  LV_STATE_CHECKED);
-    if (g_scr_srv_enabled)  lv_obj_add_state(sw_srv,  LV_STATE_CHECKED);
-    else                     lv_obj_clear_state(sw_srv,  LV_STATE_CHECKED);
-    if (g_scr_lnch_enabled) lv_obj_add_state(sw_lnch, LV_STATE_CHECKED);
-    else                     lv_obj_clear_state(sw_lnch, LV_STATE_CHECKED);
-    if (g_scr_wthr_enabled) lv_obj_add_state(sw_wthr, LV_STATE_CHECKED);
-    else                     lv_obj_clear_state(sw_wthr, LV_STATE_CHECKED);
+    if (g_scr_defsens_enabled)  lv_obj_add_state(sw_defsens,  LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_defsens,  LV_STATE_CHECKED);
+    if (g_scr_hue_enabled)      lv_obj_add_state(sw_hue,       LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_hue,       LV_STATE_CHECKED);
+    if (g_scr_srv_enabled)      lv_obj_add_state(sw_srv,       LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_srv,       LV_STATE_CHECKED);
+    if (g_scr_lnch_enabled)     lv_obj_add_state(sw_lnch,      LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_lnch,      LV_STATE_CHECKED);
+    if (g_scr_wthr_enabled)     lv_obj_add_state(sw_wthr,      LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_wthr,      LV_STATE_CHECKED);
+    if (g_scr_traffic_enabled)  lv_obj_add_state(sw_traffic,   LV_STATE_CHECKED);
+    else                         lv_obj_clear_state(sw_traffic,   LV_STATE_CHECKED);
 }
 
 /***********************************************************
@@ -593,12 +662,13 @@ void screen_settings_custom_populate(void)
     lv_obj_set_style_border_color(tab_bar, lv_color_hex(0x529d53),
                                   LV_PART_ITEMS | LV_STATE_CHECKED);
 
-    /* build tabs (order matters: tab index 0..4) */
+    /* build tabs (order matters: tab index 0..5) */
     build_tab_hue(tv);
     build_tab_server(tv);
     build_tab_proxy(tv);
     build_tab_weather(tv);
     build_tab_screens(tv);
+    build_tab_traffic(tv);
 
     /* populate fields on screen load */
     lv_obj_add_event_cb(ui_screen_settings_custom, on_screen_load_start,

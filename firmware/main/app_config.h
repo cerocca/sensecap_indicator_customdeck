@@ -101,3 +101,9 @@
 #define DEFAULT_SCR_WTHR        "1"
 #define NVS_KEY_SCR_DEFSENS     "scr_defsens"   /* auto-naviga a sensors al boot */
 #define DEFAULT_SCR_DEFSENS     "1"
+#define NVS_KEY_SCR_TRAFFIC_EN  "scr_traffic_en"
+#define DEFAULT_SCR_TRAFFIC_EN  "1"
+
+/* ── Traffic (Google Maps Distance Matrix via proxy) ────────── */
+#define TRAFFIC_POLL_MS         600000   /* 10 minuti */
+#define TRAFFIC_FIRST_DELAY_MS  8000     /* 8s dopo boot */

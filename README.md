@@ -41,7 +41,7 @@ The **[SenseCAP Indicator D1S](https://www.seeedstudio.com/SenseCAP-Indicator-D1
 Screens in `[]` are optional and can be individually disabled from the Custom Settings → Screens tab.
 
 ```
-Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔ [Traffic] ↔ (back to Clock)
+Clock ↔ [Sensors] ↔ [Traffic] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔ (back to Clock)
 ```
 
 | Screen | Type | Description |
@@ -86,7 +86,7 @@ Real-time CPU, RAM, disk usage, load average and uptime via [Glances](https://ni
 Estimated travel time from a configured origin to destination, delta vs baseline (normal traffic), and a green/yellow/red indicator via Google Maps Distance Matrix API.
 
 ### Custom Settings
-Tabbed configuration screen accessible via swipe UP from Clock (outside the horizontal rotation). Tabs: **Hue**, **Server**, **Proxy**, **Weather**, **Screens**. All values editable on-device and persisted to NVS. Full configuration also available via the proxy Web UI at `http://<mac-ip>:8765/config/ui`.
+Tabbed configuration screen accessible via swipe UP from Clock (outside the horizontal rotation). Tabs: **Hue**, **Server**, **Proxy**, **Weather**, **Screens**, **Traffic**. All values editable on-device and persisted to NVS. Full configuration also available via the proxy Web UI at `http://<mac-ip>:8765/config/ui`.
 
 ---
 
