@@ -2,11 +2,9 @@
 
 ## Implementation order
 
-1. [ ] **Screen Traffic** (slot 6): Google Maps Distance Matrix API via proxy Mac.
-      Polling ogni 10 min, indicatore ●OK/SLOW/HEAVY, tempo stimato, delta vs normale.
-      Configurazione origin/destination nella Web UI proxy → `/config/ui`.
-      ⚠️ **Verifica pendente**: fare flash+monitor da terminale esterno con route configurata
-      per confermare assenza crash e corretta visualizzazione dati reali prima di marcare done.
+1. [x] **Screen Traffic** (slot 6): Google Maps Distance Matrix API via proxy Mac.
+      Polling ogni 10 min, indicatore OK/SLOW/HEAVY, tempo stimato, delta vs normale.
+      Layout adattivo single/dual route. force_poll via "Reload config".
 2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
       fix layout: abbassare linea sotto titolo e aggiungere next 3 days
       ⚠️ **Attenzione al prompt per next 3 days**: la sessione precedente ha applicato le modifiche
@@ -29,6 +27,11 @@
 
 
 ## Various
+- [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — `traffic_wait_data_cb` (1000ms ricorrente) parzialmente risolve ma da investigare ulteriormente; verificare con flash+monitor e route configurata
+- [ ] **Screen Weather**: ricontrollare layout e funzionamento completo (flash+monitor)
+- [ ] **Uniformità font schermate custom** — HUE come riferimento, verificare tutte le schermate
+- [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
+- [ ] **Code review sistematica pre-pubblicazione**: `ui_manager.c` (gesture/guard), `model/` (task HTTP, buffer, stack), `ui/` (lazy init, lv_port_sem), proxy (endpoints, error handling)
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
@@ -54,7 +57,7 @@
 - [x] aggiornare SETUP.md con istruzioni uso proxy e setup varie schermate
 - [x] aggiungere in UI (es. tab Proxy in Settings) la riga con l'indirizzo web del config proxy: `http://localhost:8765/config/ui`
 - [x] Web UI proxy Python per configurazione (`http://localhost:8765/config`)
-- [x] Layout Web UI proxy `/config/ui` a 3 colonne: Hue / LocalServer+Proxy / Launcher+Weather
+- [x] Layout Web UI proxy `/config/ui` a 6 tab: Hue | LocalServer | Proxy | Launcher | Weather | Traffic
 - [x] Uniformare documentazione: README.md e SETUP.md riscritti completamente in inglese
       (CLAUDE.md e TODO.md restano in italiano)
 - [x] Eliminare le sottodirectory `components/` non utilizzate dal progetto

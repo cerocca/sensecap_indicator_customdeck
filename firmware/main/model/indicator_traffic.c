@@ -18,7 +18,7 @@
 
 static const char *TAG = "TRAFFIC";
 
-#define TRAFFIC_BUF_SIZE 256
+#define TRAFFIC_BUF_SIZE 512
 
 /* ─── Global state ────────────────────────────────────────────────────────── */
 
@@ -83,86 +83,138 @@ static int traffic_http_get(const char *url, char *buf, int buf_size)
     return total;
 }
 
+/* ─── Parse un singolo elemento JSON route ────────────────────────────────── */
+
+static bool parse_route(cJSON *elem, traffic_route_t *out)
+{
+    cJSON *name    = cJSON_GetObjectItem(elem, "name");
+    cJSON *dur     = cJSON_GetObjectItem(elem, "duration_sec");
+    cJSON *dur_nor = cJSON_GetObjectItem(elem, "duration_normal_sec");
+    cJSON *delta   = cJSON_GetObjectItem(elem, "delta_sec");
+    cJSON *dist    = cJSON_GetObjectItem(elem, "distance_m");
+    cJSON *sts     = cJSON_GetObjectItem(elem, "status");
+
+    if (!cJSON_IsNumber(dur) || !cJSON_IsNumber(dur_nor) ||
+        !cJSON_IsNumber(delta) || !cJSON_IsNumber(dist) ||
+        !cJSON_IsString(sts)) {
+        return false;
+    }
+
+    if (cJSON_IsString(name) && name->valuestring) {
+        strncpy(out->name, name->valuestring, sizeof(out->name) - 1);
+        out->name[sizeof(out->name) - 1] = '\0';
+    } else {
+        out->name[0] = '\0';
+    }
+    out->duration_sec        = (int)dur->valuedouble;
+    out->duration_normal_sec = (int)dur_nor->valuedouble;
+    out->delta_sec           = (int)delta->valuedouble;
+    out->distance_m          = (int)dist->valuedouble;
+    strncpy(out->status, sts->valuestring, sizeof(out->status) - 1);
+    out->status[sizeof(out->status) - 1] = '\0';
+    return true;
+}
+
+/* ─── Shared poll logic ──────────────────────────────────────────────────── */
+
+/* static: evita pressione sullo stack — CLAUDE.md regola 6.
+ * traffic_poll_task (loop) e force_poll_task (one-shot) non sono mai
+ * concorrenti: force_poll è avviato solo su richiesta manuale. */
+static char s_proxy_ip[64];
+static char s_proxy_port[8];
+static char s_buf[TRAFFIC_BUF_SIZE];
+static char s_url[128];
+
+static void do_traffic_poll(void)
+{
+    nvs_read_str(NVS_KEY_PROXY_IP,   s_proxy_ip,   sizeof(s_proxy_ip),
+                 APP_CFG_PROXY_IP);
+    nvs_read_str(NVS_KEY_PROXY_PORT, s_proxy_port, sizeof(s_proxy_port),
+                 APP_CFG_PROXY_PORT);
+
+    snprintf(s_url, sizeof(s_url), "http://%s:%s/traffic",
+             s_proxy_ip, s_proxy_port);
+    ESP_LOGI(TAG, "polling %s", s_url);
+
+    /* Passare costante esplicita, mai sizeof(ptr) — CLAUDE.md regola buffer */
+    int len = traffic_http_get(s_url, s_buf, TRAFFIC_BUF_SIZE);
+    if (len <= 0) {
+        ESP_LOGW(TAG, "traffic: HTTP GET failed");
+        return;
+    }
+
+    if (strstr(s_buf, "\"error\"")) {
+        g_traffic.valid       = false;
+        g_traffic.route_count = 0;
+        ESP_LOGW(TAG, "traffic error response: %s", s_buf);
+    } else {
+        cJSON *root = cJSON_Parse(s_buf);
+        if (root) {
+            if (cJSON_IsArray(root)) {
+                int count = 0;
+                cJSON *elem;
+                cJSON_ArrayForEach(elem, root) {
+                    if (count >= 2) break;
+                    if (parse_route(elem, &g_traffic.routes[count])) {
+                        ESP_LOGI(TAG,
+                                 "route[%d] \"%s\": %ds (normal %ds, delta %ds, %dm, %s)",
+                                 count,
+                                 g_traffic.routes[count].name,
+                                 g_traffic.routes[count].duration_sec,
+                                 g_traffic.routes[count].duration_normal_sec,
+                                 g_traffic.routes[count].delta_sec,
+                                 g_traffic.routes[count].distance_m,
+                                 g_traffic.routes[count].status);
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    g_traffic.route_count    = count;
+                    g_traffic.valid          = true;
+                    g_traffic.last_update_ms = esp_timer_get_time() / 1000LL;
+                } else {
+                    g_traffic.valid       = false;
+                    g_traffic.route_count = 0;
+                    ESP_LOGW(TAG, "traffic: array vuoto o parse failed");
+                }
+            } else {
+                g_traffic.valid       = false;
+                g_traffic.route_count = 0;
+                ESP_LOGW(TAG, "traffic: risposta non e' un array");
+            }
+            cJSON_Delete(root);
+        } else {
+            g_traffic.valid       = false;
+            g_traffic.route_count = 0;
+            ESP_LOGW(TAG, "traffic: JSON parse error");
+        }
+    }
+
+    /* Aggiornamento UI — sempre con lv_port_sem_take/give — CLAUDE.md regola 4 */
+    lv_port_sem_take();
+    screen_traffic_update();
+    lv_port_sem_give();
+}
+
 /* ─── Poll task (loop permanente ogni TRAFFIC_POLL_MS) ───────────────────── */
 
 static void traffic_poll_task(void *arg)
 {
     ESP_LOGI(TAG, "task started");
-
-    /* static: evita pressione sullo stack del task — CLAUDE.md regola 6 */
-    static char s_proxy_ip[64];
-    static char s_proxy_port[8];
-    static char s_buf[TRAFFIC_BUF_SIZE];
-    static char s_url[128];
-
     vTaskDelay(pdMS_TO_TICKS(TRAFFIC_FIRST_DELAY_MS));
-
     while (1) {
-        nvs_read_str(NVS_KEY_PROXY_IP,   s_proxy_ip,   sizeof(s_proxy_ip),
-                     APP_CFG_PROXY_IP);
-        nvs_read_str(NVS_KEY_PROXY_PORT, s_proxy_port, sizeof(s_proxy_port),
-                     APP_CFG_PROXY_PORT);
-
-        snprintf(s_url, sizeof(s_url), "http://%s:%s/traffic",
-                 s_proxy_ip, s_proxy_port);
-
-        ESP_LOGI(TAG, "polling %s", s_url);
-
-        /* Passare costante esplicita, mai sizeof(ptr) — CLAUDE.md regola buffer */
-        int len = traffic_http_get(s_url, s_buf, TRAFFIC_BUF_SIZE);
-        if (len > 0) {
-            if (strstr(s_buf, "\"error\"")) {
-                g_traffic.valid = false;
-                ESP_LOGW(TAG, "traffic error response: %s", s_buf);
-            } else {
-                cJSON *root = cJSON_Parse(s_buf);
-                if (root) {
-                    cJSON *dur     = cJSON_GetObjectItem(root, "duration_sec");
-                    cJSON *dur_nor = cJSON_GetObjectItem(root, "duration_normal_sec");
-                    cJSON *delta   = cJSON_GetObjectItem(root, "delta_sec");
-                    cJSON *dist    = cJSON_GetObjectItem(root, "distance_m");
-                    cJSON *sts     = cJSON_GetObjectItem(root, "status");
-
-                    if (cJSON_IsNumber(dur)     && cJSON_IsNumber(dur_nor) &&
-                        cJSON_IsNumber(delta)   && cJSON_IsNumber(dist)    &&
-                        cJSON_IsString(sts)) {
-                        g_traffic.duration_sec        = (int)dur->valuedouble;
-                        g_traffic.duration_normal_sec = (int)dur_nor->valuedouble;
-                        g_traffic.delta_sec           = (int)delta->valuedouble;
-                        g_traffic.distance_m          = (int)dist->valuedouble;
-                        strncpy(g_traffic.status, sts->valuestring,
-                                sizeof(g_traffic.status) - 1);
-                        g_traffic.status[sizeof(g_traffic.status) - 1] = '\0';
-                        g_traffic.valid          = true;
-                        g_traffic.last_update_ms = esp_timer_get_time() / 1000LL;
-                        ESP_LOGI(TAG,
-                                 "traffic: %ds (normal %ds, delta %ds, dist %dm, %s)",
-                                 g_traffic.duration_sec,
-                                 g_traffic.duration_normal_sec,
-                                 g_traffic.delta_sec,
-                                 g_traffic.distance_m,
-                                 g_traffic.status);
-                    } else {
-                        g_traffic.valid = false;
-                        ESP_LOGW(TAG, "traffic: incomplete JSON fields");
-                    }
-                    cJSON_Delete(root);
-                } else {
-                    g_traffic.valid = false;
-                    ESP_LOGW(TAG, "traffic: JSON parse error");
-                }
-            }
-
-            /* Aggiornamento UI — sempre con lv_port_sem_take/give — CLAUDE.md regola 4 */
-            lv_port_sem_take();
-            screen_traffic_update();
-            lv_port_sem_give();
-        } else {
-            ESP_LOGW(TAG, "traffic: HTTP GET failed");
-        }
-
+        do_traffic_poll();
         vTaskDelay(pdMS_TO_TICKS(TRAFFIC_POLL_MS));
     }
+}
+
+/* ─── Force poll task (one-shot, si auto-cancella) ──────────────────────── */
+
+static void force_poll_task(void *arg)
+{
+    ESP_LOGI(TAG, "force poll avviato");
+    do_traffic_poll();
+    vTaskDelete(NULL);
 }
 
 /* ─── IP event → avvio task (una sola volta) ─────────────────────────────── */
@@ -183,4 +235,10 @@ void indicator_traffic_init(void)
 {
     ESP_LOGI(TAG, "init called");
     esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, on_got_ip, NULL);
+}
+
+void indicator_traffic_force_poll(void)
+{
+    ESP_LOGI(TAG, "force_poll richiesto");
+    xTaskCreate(force_poll_task, "traffic_fp", 4096, NULL, 5, NULL);
 }

@@ -62,9 +62,10 @@ DEFAULT_CONFIG = {
     "owm_city_name":        "",
     "owm_location":         "",   # es. "Firenze, IT" — sovrascrive lat/lon display
     "gmaps_api_key":        "",
-    "traffic_origin":       "",
-    "traffic_destination":  "",
-    "traffic_mode":         "driving",
+    "traffic_routes": [
+        {"name": "Route 1", "origin": "", "destination": "", "mode": "driving", "enabled": True},
+        {"name": "Route 2", "origin": "", "destination": "", "mode": "driving", "enabled": False},
+    ],
 }
 
 LISTEN_PORT     = 8765
@@ -75,14 +76,58 @@ _beszel_token = None
 
 # ── Config helpers ──────────────────────────────────────────────────────────────
 
+def _merge_config(defaults, saved):
+    """
+    Merge ricorsivo config: usa 'saved' se presente, defaults come fallback.
+    - dict annidati: merge ricorsivo
+    - lista di dict (es. traffic_routes): per ogni elemento, merge con il
+      corrispondente elemento di defaults — preserva campi salvati, aggiunge
+      campi nuovi da defaults
+    - scalari: usa saved se presente, altrimenti default
+    Chiavi extra in saved (non in defaults) vengono preservate.
+    """
+    result = {}
+    for key, default_val in defaults.items():
+        if key not in saved:
+            # Chiave mancante in saved → usa default (copia profonda per liste/dict)
+            if isinstance(default_val, list):
+                result[key] = [dict(e) if isinstance(e, dict) else e
+                               for e in default_val]
+            elif isinstance(default_val, dict):
+                result[key] = dict(default_val)
+            else:
+                result[key] = default_val
+        elif isinstance(default_val, dict) and isinstance(saved[key], dict):
+            result[key] = _merge_config(default_val, saved[key])
+        elif (isinstance(default_val, list) and default_val and
+              isinstance(default_val[0], dict)):
+            # Lista di dict: merge elemento per elemento
+            saved_list = saved[key] if isinstance(saved[key], list) else []
+            merged_list = []
+            for i, default_item in enumerate(default_val):
+                if i < len(saved_list) and isinstance(saved_list[i], dict):
+                    # Saved ha priorità, ma campi mancanti vengono aggiunti dal default
+                    merged_list.append({**default_item, **saved_list[i]})
+                else:
+                    merged_list.append(dict(default_item))
+            result[key] = merged_list
+        else:
+            result[key] = saved[key]
+    # Chiavi extra in saved non presenti in defaults (forward compat)
+    for key in saved:
+        if key not in result:
+            result[key] = saved[key]
+    return result
+
+
 def load_config():
     """Carica config.json; se non esiste o è corrotto, ritorna i defaults."""
     try:
         with open(CONFIG_PATH, "r") as f:
             data = json.load(f)
-        # Merge con defaults per campi mancanti
-        merged = dict(DEFAULT_CONFIG)
-        merged.update(data)
+        merged = _merge_config(DEFAULT_CONFIG, data)
+        print(f"[config] loaded {len(data)} keys from config.json")
+        print(f"[config] traffic routes: {[r['name'] for r in merged.get('traffic_routes', [])]}")
         return merged
     except (FileNotFoundError, json.JSONDecodeError):
         return dict(DEFAULT_CONFIG)
@@ -171,32 +216,20 @@ def get_beszel_docker():
         return []
 
 
-def get_traffic_data():
+def _call_distance_matrix(key, origin, destination, mode):
     """
-    Chiama Google Maps Distance Matrix API e ritorna un dict compatto.
-    Risposta: {"duration_sec": N, "duration_normal_sec": N, "delta_sec": N,
-               "distance_m": N, "status": "ok"|"slow"|"bad"}
-    o {"error": "not_configured"} / {"error": "api_error"}
+    Chiama Google Maps Distance Matrix per una singola coppia origine/destinazione.
+    Ritorna un dict con i campi route oppure {"error": "..."}.
     """
-    cfg  = load_config()
-    key  = cfg.get("gmaps_api_key", "").strip()
-    orig = cfg.get("traffic_origin", "").strip()
-    dest = cfg.get("traffic_destination", "").strip()
-    mode = cfg.get("traffic_mode", "driving").strip() or "driving"
-
-    if not key or not orig or not dest:
-        return {"error": "not_configured"}
-
     params = urllib.parse.urlencode({
-        "origins":        orig,
-        "destinations":   dest,
+        "origins":        origin,
+        "destinations":   destination,
         "mode":           mode,
         "departure_time": "now",
         "traffic_model":  "best_guess",
         "key":            key,
     })
     url = f"https://maps.googleapis.com/maps/api/distancematrix/json?{params}"
-
     try:
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req, timeout=8) as resp:
@@ -206,24 +239,20 @@ def get_traffic_data():
         return {"error": "api_error"}
 
     try:
-        row     = data["rows"][0]["elements"][0]
-        status  = row.get("status", "")
-        if status != "OK":
-            print(f"[traffic] element status: {status}")
+        row = data["rows"][0]["elements"][0]
+        if row.get("status", "") != "OK":
+            print(f"[traffic] element status: {row.get('status')}")
             return {"error": "api_error"}
-
         dur_sec     = row["duration_in_traffic"]["value"]
         dur_nor_sec = row["duration"]["value"]
         dist_m      = row["distance"]["value"]
         delta_sec   = dur_sec - dur_nor_sec
-
         if delta_sec <= 120:
             traffic_status = "ok"
         elif delta_sec <= 600:
             traffic_status = "slow"
         else:
             traffic_status = "bad"
-
         return {
             "duration_sec":        dur_sec,
             "duration_normal_sec": dur_nor_sec,
@@ -236,6 +265,41 @@ def get_traffic_data():
         return {"error": "api_error"}
 
 
+def get_traffic_data():
+    """
+    Itera sulle traffic_routes abilitate e chiama Distance Matrix per ognuna.
+    Risposta: array JSON di route oppure {"error": "not_configured"}.
+    """
+    cfg    = load_config()
+    key    = cfg.get("gmaps_api_key", "").strip()
+    routes = cfg.get("traffic_routes", DEFAULT_CONFIG["traffic_routes"])
+
+    if not key:
+        return {"error": "not_configured"}
+
+    results = []
+    for route in routes:
+        if not route.get("enabled", False):
+            continue
+        orig = route.get("origin", "").strip()
+        dest = route.get("destination", "").strip()
+        mode = route.get("mode", "driving").strip() or "driving"
+        name = route.get("name", "Route")
+        if not orig or not dest:
+            continue
+        r = _call_distance_matrix(key, orig, dest, mode)
+        if "error" in r:
+            print(f"[traffic] route '{name}' error: {r['error']}")
+            continue
+        r["name"] = name
+        results.append(r)
+
+    if not results:
+        return {"error": "not_configured"}
+
+    return results
+
+
 def launcher_urls():
     cfg = load_config()
     return {
@@ -246,6 +310,59 @@ def launcher_urls():
     }
 
 # ── Web UI HTML ─────────────────────────────────────────────────────────────────
+
+def _build_route_fields(routes):
+    """Genera HTML per i campi di 2 route traffic."""
+    modes = [("driving","driving"), ("walking","walking"),
+             ("bicycling","bicycling"), ("transit","transit")]
+    out = ""
+    for i in range(2):
+        route = routes[i] if i < len(routes) else {}
+        checked = " checked" if route.get("enabled", False) else ""
+        out += f'<h3 class="route-hdr">Route {i+1}</h3>'
+        # Enabled subito sotto il titolo
+        out += (
+            f'<div class="field field-check">'
+            f'<label><input type="checkbox" id="tr_{i}_enabled"'
+            f' name="tr_{i}_enabled" value="true"{checked}>'
+            f' Enabled</label>'
+            f'</div>'
+        )
+        out += (
+            f'<div class="field">'
+            f'<label for="tr_{i}_name">Name</label>'
+            f'<input type="text" id="tr_{i}_name" name="tr_{i}_name"'
+            f' value="{route.get("name", f"Route {i+1}")}">'
+            f'</div>'
+        )
+        out += (
+            f'<div class="field">'
+            f'<label for="tr_{i}_origin">Origin</label>'
+            f'<input type="text" id="tr_{i}_origin" name="tr_{i}_origin"'
+            f' value="{route.get("origin","")}"'
+            f' placeholder="es. Via Roma 1, Firenze">'
+            f'</div>'
+        )
+        out += (
+            f'<div class="field">'
+            f'<label for="tr_{i}_destination">Destination</label>'
+            f'<input type="text" id="tr_{i}_destination" name="tr_{i}_destination"'
+            f' value="{route.get("destination","")}"'
+            f' placeholder="es. Piazza Duomo, Firenze">'
+            f'</div>'
+        )
+        opts = "".join(
+            f'<option value="{v}"{" selected" if v == route.get("mode","driving") else ""}>{l}</option>'
+            for v, l in modes
+        )
+        out += (
+            f'<div class="field">'
+            f'<label for="tr_{i}_mode">Mode</label>'
+            f'<select id="tr_{i}_mode" name="tr_{i}_mode">{opts}</select>'
+            f'</div>'
+        )
+    return out
+
 
 def build_config_ui(cfg):
     def field(label, name, value, placeholder=""):
@@ -276,10 +393,7 @@ def build_config_ui(cfg):
             f'</div>'
         )
 
-    def sep():
-        return '<hr class="sep">'
-
-    # Hue light IDs: not shown in columns but preserved as hidden inputs
+    # Hue light IDs: not shown in tabs but preserved as hidden inputs
     hidden = "".join(
         f'<input type="hidden" name="hue_light_{i}_id" value="{cfg.get(f"hue_light_{i}_id","")}">'
         for i in range(1, 5)
@@ -287,57 +401,71 @@ def build_config_ui(cfg):
     # owm_city_name preserved as hidden (superseded by owm_location in UI)
     hidden += f'<input type="hidden" name="owm_city_name" value="{cfg.get("owm_city_name","")}">'
 
-    col1 = (
-        "<h2>Hue Bridge</h2>"
-        + field("IP Bridge",  "hue_bridge_ip", cfg.get("hue_bridge_ip",""), "192.168.1.x")
-        + field("API Key",    "hue_api_key",   cfg.get("hue_api_key",""))
-        + field("Light 1",    "hue_light_1",   cfg.get("hue_light_1",""),   "Light 1")
-        + field("Light 2",    "hue_light_2",   cfg.get("hue_light_2",""),   "Light 2")
-        + field("Light 3",    "hue_light_3",   cfg.get("hue_light_3",""),   "Light 3")
-        + field("Light 4",    "hue_light_4",   cfg.get("hue_light_4",""),   "Light 4")
+    tab_hue = (
+        field("IP Bridge", "hue_bridge_ip", cfg.get("hue_bridge_ip",""), "192.168.1.x")
+        + field("API Key",  "hue_api_key",  cfg.get("hue_api_key",""))
+        + field("Light 1",  "hue_light_1",  cfg.get("hue_light_1",""), "Light 1")
+        + field("Light 2",  "hue_light_2",  cfg.get("hue_light_2",""), "Light 2")
+        + field("Light 3",  "hue_light_3",  cfg.get("hue_light_3",""), "Light 3")
+        + field("Light 4",  "hue_light_4",  cfg.get("hue_light_4",""), "Light 4")
     )
 
-    col2 = (
-        "<h2>LocalServer</h2>"
-        + field("Server Name",      "srv_name",    cfg.get("srv_name",""),    "LocalServer")
-        + field("Server IP",        "server_ip",   cfg.get("server_ip",""),   "192.168.1.x")
-        + field("Glances Port",     "server_port", cfg.get("server_port",""), "61208")
-        + field("Uptime Kuma Port", "uk_port",     cfg.get("uk_port",""),     "3001")
-        + field("Beszel Port",      "beszel_port", cfg.get("beszel_port",""), "8090")
-        + field("Beszel User",      "beszel_user", cfg.get("beszel_user",""))
+    tab_localserver = (
+        field("Server Name",      "srv_name",    cfg.get("srv_name",""),    "LocalServer")
+        + field("Server IP",      "server_ip",   cfg.get("server_ip",""),   "192.168.1.x")
+        + field("Glances Port",   "server_port", cfg.get("server_port",""), "61208")
+        + field("Uptime Kuma Port","uk_port",    cfg.get("uk_port",""),     "3001")
+        + field("Beszel Port",    "beszel_port", cfg.get("beszel_port",""), "8090")
+        + field("Beszel User",    "beszel_user", cfg.get("beszel_user",""))
         + pwd_field("Beszel Password", "beszel_password", cfg.get("beszel_password",""))
-        + sep()
-        + "<h2>Proxy Mac</h2>"
-        + field("Proxy IP",   "proxy_ip",   cfg.get("proxy_ip",""),   "192.168.1.x")
+    )
+
+    tab_proxy = (
+        field("Proxy IP",   "proxy_ip",   cfg.get("proxy_ip",""),   "192.168.1.x")
         + field("Proxy Port", "proxy_port", cfg.get("proxy_port",""), "8765")
     )
 
-    col3 = (
-        "<h2>Launcher</h2>"
-        + field("Nome 1", "lnch_name_1",   cfg.get("lnch_name_1",""),   "GitHub")
-        + field("URL 1",  "launcher_url_1", cfg.get("launcher_url_1",""))
+    tab_launcher = (
+        field("Nome 1", "lnch_name_1",    cfg.get("lnch_name_1",""),    "GitHub")
+        + field("URL 1", "launcher_url_1", cfg.get("launcher_url_1",""))
         + field("Nome 2", "lnch_name_2",   cfg.get("lnch_name_2",""),   "Strava")
-        + field("URL 2",  "launcher_url_2", cfg.get("launcher_url_2",""))
+        + field("URL 2", "launcher_url_2", cfg.get("launcher_url_2",""))
         + field("Nome 3", "lnch_name_3",   cfg.get("lnch_name_3",""),   "Garmin")
-        + field("URL 3",  "launcher_url_3", cfg.get("launcher_url_3",""))
+        + field("URL 3", "launcher_url_3", cfg.get("launcher_url_3",""))
         + field("Nome 4", "lnch_name_4",   cfg.get("lnch_name_4",""),   "Intervals")
-        + field("URL 4",  "launcher_url_4", cfg.get("launcher_url_4",""))
-        + sep()
-        + "<h2>Weather (OpenWeatherMap)</h2>"
-        + field("OWM API Key", "owm_api_key",  cfg.get("owm_api_key",""),  "32 caratteri")
-        + field("Location",    "owm_location", cfg.get("owm_location",""), "es. Firenze, IT")
-        + field("Latitude",    "owm_lat",      cfg.get("owm_lat",""),      "es. 43.7711")
-        + field("Longitude",   "owm_lon",      cfg.get("owm_lon",""),      "es. 11.2486")
+        + field("URL 4", "launcher_url_4", cfg.get("launcher_url_4",""))
+    )
+
+    tab_weather = (
+        field("OWM API Key", "owm_api_key",  cfg.get("owm_api_key",""),  "32 caratteri")
+        + field("Location",  "owm_location", cfg.get("owm_location",""), "es. Firenze, IT")
+        + field("Latitude",  "owm_lat",      cfg.get("owm_lat",""),      "es. 43.7711")
+        + field("Longitude", "owm_lon",      cfg.get("owm_lon",""),      "es. 11.2486")
         + select_field("Units", "owm_units", cfg.get("owm_units","metric"),
                        [("metric","metric (°C, km/h)"), ("imperial","imperial (°F, mph)")])
-        + sep()
-        + "<h2>Traffic (Google Maps)</h2>"
-        + field("Google Maps API Key", "gmaps_api_key",       cfg.get("gmaps_api_key",""))
-        + field("Origin",              "traffic_origin",      cfg.get("traffic_origin",""),      "es. Via Roma 1, Firenze")
-        + field("Destination",         "traffic_destination", cfg.get("traffic_destination",""), "es. Piazza Duomo, Firenze")
-        + select_field("Mode", "traffic_mode", cfg.get("traffic_mode","driving"),
-                       [("driving","driving"), ("walking","walking"),
-                        ("bicycling","bicycling"), ("transit","transit")])
+    )
+
+    tab_traffic = (
+        field("Google Maps API Key", "gmaps_api_key", cfg.get("gmaps_api_key",""))
+        + _build_route_fields(cfg.get("traffic_routes", DEFAULT_CONFIG["traffic_routes"]))
+    )
+
+    tabs = [
+        ("hue",         "Hue",         tab_hue),
+        ("localserver", "LocalServer", tab_localserver),
+        ("proxy",       "Proxy",       tab_proxy),
+        ("launcher",    "Launcher",    tab_launcher),
+        ("weather",     "Weather",     tab_weather),
+        ("traffic",     "Traffic",     tab_traffic),
+    ]
+
+    tab_buttons = "".join(
+        f'<button type="button" class="tab-btn{" active" if i == 0 else ""}" data-tab="{tid}">{tlabel}</button>'
+        for i, (tid, tlabel, _) in enumerate(tabs)
+    )
+    tab_panels = "".join(
+        f'<div class="tab-panel{" active" if i == 0 else ""}" id="tab-{tid}">{tcontent}</div>'
+        for i, (tid, _, tcontent) in enumerate(tabs)
     )
 
     return f"""<!DOCTYPE html>
@@ -352,22 +480,41 @@ def build_config_ui(cfg):
       font-family: 'Segoe UI', system-ui, sans-serif;
       background: #0f1117;
       color: #e0e0e0;
-      padding: 32px 16px;
+      padding: 24px 16px;
     }}
     h1 {{ font-size: 1.4rem; color: #7ec8a0; margin-bottom: 4px; }}
-    .subtitle {{ font-size: 0.8rem; color: #666; margin-bottom: 28px; }}
-    h2 {{
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #7ec8a0;
-      margin: 20px 0 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #2a2a3a;
+    .subtitle {{ font-size: 0.8rem; color: #666; margin-bottom: 24px; }}
+    h3.route-hdr {{
+      font-size: 1rem;
+      color: #7ec8e0;
+      margin: 16px 0 8px;
+      font-weight: bold;
     }}
-    h2:first-child {{ margin-top: 0; }}
-    .cols {{ display: flex; gap: 24px; align-items: flex-start; }}
-    .col {{ flex: 1; min-width: 0; }}
+    .field-check label {{ display: inline-flex; align-items: center; gap: 8px; color: #ccc; font-size: 0.85rem; }}
+    .field-check input[type="checkbox"] {{ width: auto; }}
+    .tab-bar {{
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid #2a2a3a;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }}
+    .tab-btn {{
+      padding: 8px 18px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      color: #888;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color .15s, border-color .15s;
+    }}
+    .tab-btn:hover {{ color: #ccc; }}
+    .tab-btn.active {{ color: #7ec8e0; border-bottom-color: #7ec8e0; }}
+    .tab-panel {{ display: none; max-width: 480px; }}
+    .tab-panel.active {{ display: block; }}
     .field {{ margin-bottom: 14px; }}
     label {{
       display: block;
@@ -386,54 +533,59 @@ def build_config_ui(cfg):
       outline: none;
       transition: border-color .15s;
     }}
-    input[type="text"]:focus, input[type="password"]:focus, select:focus {{ border-color: #7ec8a0; }}
+    input[type="text"]:focus, input[type="password"]:focus, select:focus {{ border-color: #7ec8e0; }}
     select option {{ background: #1e1e2e; }}
-    .sep {{ border: none; border-top: 1px solid #2a2a3a; margin: 20px 0; }}
-    .actions {{ margin-top: 32px; display: flex; justify-content: center; }}
-    button {{
+    .actions {{ margin-top: 28px; display: flex; align-items: center; gap: 16px; }}
+    button#btn-save {{
       padding: 10px 32px;
       border: none;
       border-radius: 6px;
       font-size: 0.9rem;
       cursor: pointer;
       font-weight: 600;
+      background: #529d53;
+      color: #fff;
       transition: opacity .15s;
     }}
-    button:hover {{ opacity: 0.85; }}
-    #btn-save {{ background: #529d53; color: #fff; }}
+    button#btn-save:hover {{ opacity: 0.85; }}
     #status-msg {{
-      margin-top: 16px;
       font-size: 0.85rem;
       min-height: 1.2em;
       color: #7ec8a0;
-      text-align: center;
     }}
-    @media (max-width: 900px) {{ .cols {{ flex-direction: column; }} }}
   </style>
 </head>
 <body>
   <h1>SenseDeck Config</h1>
-  <div class="subtitle">Configurazione dispositivo — sensecap_indicator_customdeck/config.json</div>
+  <div class="subtitle">sensecap_indicator_customdeck/config.json</div>
 
   <form id="cfg-form">
     {hidden}
-    <div class="cols">
-      <div class="col">{col1}</div>
-      <div class="col">{col2}</div>
-      <div class="col">{col3}</div>
-    </div>
+    <div class="tab-bar">{tab_buttons}</div>
+    {tab_panels}
     <div class="actions">
       <button type="button" id="btn-save">Salva tutto</button>
+      <span id="status-msg"></span>
     </div>
-    <div id="status-msg"></div>
   </form>
 
   <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {{
+      btn.addEventListener('click', () => {{
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      }});
+    }});
+
     document.getElementById('btn-save').addEventListener('click', async () => {{
       const form = document.getElementById('cfg-form');
       const data = {{}};
       form.querySelectorAll('input, select').forEach(el => {{
-        if (el.name) data[el.name] = el.value;
+        if (el.name) {{
+          data[el.name] = el.type === 'checkbox' ? (el.checked ? 'true' : 'false') : el.value;
+        }}
       }});
       const msg = document.getElementById('status-msg');
       msg.style.color = '#7ec8a0';
@@ -579,9 +731,25 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                 self.send_json({"error": f"Invalid JSON: {e}"}, status=400)
                 return
 
-            # Merge con defaults per campi mancanti
-            merged = dict(DEFAULT_CONFIG)
-            merged.update(data)
+            # Ricostruisce traffic_routes da campi flat del form
+            if any(f"tr_{i}_origin" in data for i in range(2)):
+                routes = []
+                for i in range(2):
+                    enabled_raw = data.pop(f"tr_{i}_enabled", "false")
+                    routes.append({
+                        "name":        data.pop(f"tr_{i}_name",        f"Route {i+1}"),
+                        "origin":      data.pop(f"tr_{i}_origin",      ""),
+                        "destination": data.pop(f"tr_{i}_destination", ""),
+                        "mode":        data.pop(f"tr_{i}_mode",        "driving"),
+                        "enabled":     enabled_raw in ("true", "1", "on"),
+                    })
+                data["traffic_routes"] = routes
+            # Rimuove eventuali campi legacy flat-traffic
+            for _k in ("traffic_origin", "traffic_destination", "traffic_mode"):
+                data.pop(_k, None)
+
+            # Merge ricorsivo con defaults per campi mancanti
+            merged = _merge_config(DEFAULT_CONFIG, data)
 
             if save_config(merged):
                 print(f"[config] saved to {CONFIG_PATH}")

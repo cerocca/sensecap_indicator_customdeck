@@ -1,16 +1,30 @@
 # SenseCAP Indicator Deck — CLAUDE.md
 
 ## Progetto
-Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).  
-Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).  
+Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).
+Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).
 Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)
 Build:
 ```bash
 source ~/esp/esp-idf/export.sh   # ogni nuovo terminale
-cd firmware && idf.py build flash monitor
+cd firmware && idf.py build
 ```
 
 > **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build`.
+
+---
+
+## Workflow
+
+**Flash e monitor: li esegue sempre Niwla manualmente, non Claude Code.**
+Salvo diverse indicazioni esplicite, Claude Code si ferma al `idf.py build`.
+
+Comandi di riferimento (solo per documentazione):
+```bash
+source ~/esp/esp-idf/export.sh
+cd firmware && idf.py build flash
+idf.py -p /dev/cu.usbserial-1110 monitor
+```
 
 ---
 
@@ -134,28 +148,68 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 ## Schermata 6 — Traffic
 
 ### Sorgente dati
-Proxy Mac `GET /traffic` → chiama Google Maps Distance Matrix API con `departure_time=now&traffic_model=best_guess`.
-Risposta compatta: `{"duration_sec", "duration_normal_sec", "delta_sec", "distance_m", "status"}`.
-`status`: `"ok"` (delta ≤120s), `"slow"` (120-600s), `"bad"` (>600s).
-Se `gmaps_api_key` o origin/destination vuoti → `{"error":"not_configured"}`.
+Proxy Mac `GET /traffic` → itera `traffic_routes` abilitate, chiama Google Maps Distance Matrix API per ognuna.
+Risposta: **array JSON** di route:
+```json
+[{"name":"Route 1","duration_sec":877,"duration_normal_sec":912,"delta_sec":-35,"distance_m":14721,"status":"ok"}, ...]
+```
+`status` per route: `"ok"` (delta ≤120s), `"slow"` (120-600s), `"bad"` (>600s).
+Se `gmaps_api_key` vuota o nessuna route abilitata/configurata → `{"error":"not_configured"}`.
 
 ### Polling
 - Ogni **10 minuti** (TRAFFIC_POLL_MS = 600000 ms)
 - Primo poll: 8s dopo boot (TRAFFIC_FIRST_DELAY_MS)
-- Buffer response: 256 byte (payload compatto)
+- Buffer response: 512 byte
 - Pattern task: vedi `indicator_glances.c`
+- `indicator_traffic_force_poll()`: lancia task one-shot (`force_poll_task`) che esegue `do_traffic_poll()` immediatamente e poi si auto-cancella; chiamato da "Reload config" in Settings tab Proxy
 
-### Layout UI (480×480)
-- `y=0-44` Header "Traffic" — font20, bianco
+### Primo update UI — `traffic_wait_data_cb`
+Al termine di `screen_traffic_populate()` viene avviato un timer LVGL ricorrente ogni 1000ms.
+Il callback controlla `g_traffic.valid && !s_first_update_done`: alla prima occorrenza chiama
+`screen_traffic_update()`, setta `s_first_update_done = true`, si auto-cancella con `lv_timer_del(t)`.
+**Motivazione**: `populate()` è chiamata nel gesture handler prima che `_ui_screen_change()` avvii
+l'animazione (200ms) — qualsiasi update del widget in quel momento non produce rendering visibile
+(schermata nera). Il timer attende che `g_traffic.valid` sia `true` (dati arrivati dal proxy).
+
+### Struct dati
+```c
+typedef struct {
+    char name[32];
+    int  duration_sec, duration_normal_sec, delta_sec, distance_m;
+    char status[8];
+} traffic_route_t;
+
+typedef struct {
+    traffic_route_t routes[2];
+    int     route_count;   /* 0, 1 o 2 */
+    bool    valid;
+    int64_t last_update_ms;
+} traffic_data_t;
+```
+
+### Layout UI (480×480) — adattivo
+**1 route (route_count == 1):**
+- Header "Traffic" — font20, bianco, TOP_MID
 - `y=55` Separatore
-- `y=90` Indicatore ● — font20, colore dinamico (`#4caf50`/`#ff9800`/`#f44336`)
-- `y=130` Tempo stimato — font20, bianco (es. "28 min")
-- `y=170` Delta — font16, colore dinamico (es. "+8 min vs normal" / "On time" verde)
-- `y=215` Distanza — font14, #aaaaaa
-- `y=255` Separatore
-- `y=275` "Configure route via proxy Web UI" — font14, #aaaaaa, LV_LABEL_LONG_DOT
-- `LV_ALIGN_BOTTOM_MID` "Updated X min ago" — font12, #555555
-- `LV_ALIGN_BOTTOM_MID` Label errore — font12, #e07070
+- `y=110` Nome route — **font20**, #aaaaaa, center, **sottolineato** (più grande dello stato)
+- `y=155` Stato "OK"/"SLOW"/"HEAVY" — font16, colore dinamico (no ●)
+- `y=200` Tempo stimato — font20, bianco
+- `y=245` Delta — font16, colore dinamico
+- `y=285` Distanza — font14, #aaaaaa
+- `y=320` Separatore
+- `y=345` "Configure route via proxy Web UI" — solo se `!valid`, font14, #aaaaaa
+- `BOTTOM_MID -50` "Updated X min ago" — font12, #555555
+- `BOTTOM_MID -25` Label errore — font12, #e07070
+
+**2 route (route_count == 2), schermo diviso:**
+- Header "Traffic" — font20, bianco
+- `y=55` Separatore header
+- Route 0: name(72,**font20**,underline) · status(104,font16) · duration(132,**font18**) · delta(162,font14) · distance(186,font12)
+- `y=212` Separatore metà schermo
+- Route 1: name(224,**font20**,underline) · status(256,font16) · duration(284,**font18**) · delta(314,font14) · distance(338,font12)
+- `BOTTOM_MID` Updated / errore
+
+**Se `!valid`:** layout singolo con "NO DATA" + label configure visibile.
 
 ### Settings tab "Traffic"
 Solo info label: "Configure origin/destination at: http://\<proxy\>/config/ui" (URL dinamico da NVS).
@@ -277,17 +331,29 @@ Script Python sul Mac, porta 8765. Gestisce config centralizzata e integrazione 
 | `/config/ui` | GET | Web UI configurazione (dark theme) |
 
 `config.json` è nella stessa directory dello script; è in `.gitignore` (non versionato).
-DEFAULT_CONFIG nel proxy: campi hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs + nomi (`lnch_name_1..4`), Beszel (`beszel_port`, `beszel_user`, `beszel_password`), OWM (`owm_api_key`, `owm_lat`, `owm_lon`, `owm_units`, `owm_city_name`, `owm_location`), Uptime Kuma port (`uk_port`). Merge con defaults su POST per backward compat.
+DEFAULT_CONFIG nel proxy: campi hue bridge/api/luci/ID, server + `srv_name`, proxy, launcher URLs + nomi (`lnch_name_1..4`), Beszel (`beszel_port`, `beszel_user`, `beszel_password`), OWM (`owm_api_key`, `owm_lat`, `owm_lon`, `owm_units`, `owm_city_name`, `owm_location`), Uptime Kuma port (`uk_port`), `gmaps_api_key`, `traffic_routes` (array 2 route: `name/origin/destination/mode/enabled`). Merge con defaults su POST per backward compat.
 
 ### Web UI — `/config/ui`
 
-Layout a **3 colonne flex** (dark theme):
-- Colonna 1: **Hue** (bridge IP, API key, nomi 4 luci; ID UUID come hidden inputs)
-- Colonna 2: **LocalServer** (IP, Glances port, Beszel port/user/password, server name) + **Proxy** (IP, port)
-- Colonna 3: **Launcher** (4 URL + nome) + **Weather** (OWM API key, lat, lon, units select, city name, location)
+Layout a **6 tab** (dark theme): **Hue** | **LocalServer** | **Proxy** | **Launcher** | **Weather** | **Traffic**
+- **Hue**: bridge IP, API key, nomi 4 luci (ID UUID come hidden inputs)
+- **LocalServer**: server name, IP, Glances port, UK port, Beszel port/user/password
+- **Proxy**: proxy IP, proxy port
+- **Launcher**: 4 nomi + URL
+- **Weather**: OWM API key, location, lat, lon, units select (`owm_city_name` hidden)
+- **Traffic**: gmaps_api_key + 2 route (checkbox Enabled subito sotto titolo, poi name, origin, destination, mode select)
 
-`owm_city_name` è hidden input (sovrascritta da hostname Glances); `owm_location` è campo visibile.
-JS raccoglie tutti `input, select` e fa POST `/config`. Checkmark/cross Unicode per feedback.
+Tab bar con bordo inferiore attivo (#7ec8e0); pannelli show/hide via JS click; Save + status sempre in basso; `max-width: 480px` per tab panel.
+JS raccoglie tutti `input, select` (inclusi hidden) e fa POST `/config`. Checkmark/cross Unicode per feedback.
+
+### Merge config — `_merge_config(defaults, saved)`
+
+Sostituisce il merge superficiale `dict.update`. Usato in `load_config()` e `POST /config`.
+- **Scalari**: usa `saved[key]` se presente, altrimenti `defaults[key]`
+- **Dict annidati**: ricorsione
+- **Liste di dict** (es. `traffic_routes`): per ogni elemento `i`, merge `{**default_item, **saved_item}` — saved ha priorità, campi nuovi da default vengono aggiunti automaticamente
+- Chiavi extra in saved (non in defaults) vengono preservate (forward compat)
+- DEFAULT_CONFIG non viene mutato (copia profonda per liste/dict)
 
 ### Beszel Docker integration — `/docker`
 
@@ -323,7 +389,8 @@ L'handler lancia `config_boot_fetch_task` (FreeRTOS, stack 4096, una sola volta 
 Bottone lancia `config_reload_task` async:
 1. Salva PROXY_IP/PORT in NVS
 2. Chiama `config_fetch_from_proxy()`
-3. Aggiorna `lbl_cfg_status`: "OK" (#7ec8a0) o "Errore" (#e07070)
+3. Chiama `indicator_traffic_force_poll()` — task one-shot che esegue immediatamente un poll `/traffic` e aggiorna la schermata Traffic con le nuove route
+4. Aggiorna `lbl_cfg_status`: "OK" (#7ec8a0) o "Errore" (#e07070)
 
 Aggiornamento UI dal task: obbligatorio `lv_port_sem_take()` / `lv_port_sem_give()`.
 

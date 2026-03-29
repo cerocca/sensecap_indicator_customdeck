@@ -3,6 +3,7 @@
 #include "ui_manager.h"           /* g_scr_xxx_enabled */
 #include "indicator_storage.h"
 #include "indicator_config.h"     /* config_fetch_from_proxy */
+#include "indicator_traffic.h"   /* indicator_traffic_force_poll */
 #include "app_config.h"
 #include "lv_port.h"              /* lv_port_sem_take/give */
 #include "esp_log.h"
@@ -276,6 +277,9 @@ static void on_save_proxy(lv_event_t *e)
 static void config_reload_task(void *arg)
 {
     int ret = config_fetch_from_proxy();
+
+    /* Aggiorna traffic con la nuova config (one-shot, non blocca) */
+    indicator_traffic_force_poll();
 
     /* Aggiorna il label di stato con il lock LVGL */
     lv_port_sem_take();

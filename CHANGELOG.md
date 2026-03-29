@@ -3,21 +3,19 @@
 ## [Unreleased]
 
 ### Added
-- `ui/screen_traffic.c/.h`: schermata Traffic completa — indicatore ●OK/SLOW/HEAVY (verde/arancione/rosso), tempo stimato, delta vs normale, distanza; lazy populate; gesture handler anti-reentrant con `next_from(6, ±1)`; timer refresh 30s; label errore se proxy non configurato
-- `model/indicator_traffic.c/.h`: polling `GET /traffic` dal proxy Mac ogni 10 minuti (TRAFFIC_FIRST_DELAY_MS=8s); parse JSON compatto (`duration_sec`, `duration_normal_sec`, `delta_sec`, `distance_m`, `status`); callback `screen_traffic_update()` con `lv_port_sem_take/give`; avviato su `IP_EVENT_STA_GOT_IP` (guard `s_started`)
-- `sensedeck_proxy.py`: endpoint `GET /traffic` — chiama Google Maps Distance Matrix API, estrae `duration_in_traffic.value`, `duration.value`, `distance.value`; calcola `delta_sec`; classifica `ok/slow/bad` (soglie 120s/600s); risposta JSON compatta; `{"error":"not_configured"}` se chiave API o route vuote
-- `sensedeck_proxy.py`: campi `gmaps_api_key`, `traffic_origin`, `traffic_destination`, `traffic_mode` in `DEFAULT_CONFIG`
-- `sensedeck_proxy.py`: sezione "Traffic (Google Maps)" nella Web UI `/config/ui` (colonna 3, dopo Weather) — API key, origin, destination, mode select
-- `app_config.h`: `NVS_KEY_SCR_TRAFFIC_EN "scr_traffic_en"`, `DEFAULT_SCR_TRAFFIC_EN "1"`, `TRAFFIC_POLL_MS 600000`, `TRAFFIC_FIRST_DELAY_MS 8000`
-- `ui_manager.c/.h`: flag `g_scr_traffic_enabled`; `scr_enabled(6)` usa il flag; `s_scr[6] = screen_traffic_get_screen()`; `ensure_traffic_populated()`; `gesture_traffic` handler; `indicator_traffic_init()` spostata in `main.c` dopo `indicator_model_init()` (fix: event loop non ancora creato durante `ui_manager_init()`)
-- `ui_manager.c`: helper `ensure_populated(scr)` — tutti i gesture handler usano questo helper invece di chiamate esplicite individuali
-- Settings tab "Traffic" (tra "Weather" e "Screens"): solo URL proxy Web UI dinamico (no switch — switch spostato in tab Screens)
-- Settings tab "Screens": aggiunto switch "Traffic" dopo "Weather" — controlla `g_scr_traffic_enabled` + NVS `scr_traffic_en`
-- `docs/screenshots/`: cartella placeholder per screenshot schermate (immagini da aggiungere manualmente)
+- `screen_traffic.c/.h` + `indicator_traffic.c/.h`: schermata Traffic (slot 6) con layout adattivo — singola route (1 route, centrato) o doppio (2 route, schermo diviso); indicatore stato OK/SLOW/HEAVY (verde/arancione/rosso); tempo stimato, delta vs normale, distanza; lazy populate; timer refresh 30s; label "Configure route via proxy Web UI" se dati non disponibili
+- `sensedeck_proxy.py`: endpoint `GET /traffic` — itera `traffic_routes` abilitate, chiama Google Maps Distance Matrix API per ognuna, ritorna array JSON; `{"error":"not_configured"}` se API key assente o nessuna route configurata
+- `sensedeck_proxy.py` Web UI `/config/ui`: layout riscritto da 3 colonne a **6 tab** (Hue | LocalServer | Proxy | Launcher | Weather | Traffic); tab bar con bordo attivo #7ec8e0; Save button sempre visibile
+- `indicator_traffic_force_poll()`: poll immediato one-shot senza attendere il timer da 10 min; chiamato da "Reload config" in Settings → tab Proxy — la schermata Traffic si aggiorna senza riavvio device
+- `ui_manager.c`: helper `ensure_populated(scr)` unificato — tutti i gesture handler vi passano prima di navigare
 
-### Changed
-- Navigazione: ordine schermate riorganizzato — Traffic spostato da slot 2 a slot 6 (ultima schermata prima del ritorno al clock): `clock↔[sensors]↔[hue]↔[sibilla]↔[launcher]↔[weather]↔[traffic]`
-- Settings: ordine tab aggiornato — Hue · Server · Proxy · Weather · Traffic · Screens (6 tab)
+### Fixed
+- `sensedeck_proxy.py`: merge superficiale (`dict.update`) sostituito con `_merge_config()` ricorsivo — preserva correttamente strutture annidate (`traffic_routes` array di dict) al riavvio del proxy; aggiunto log `[config] loaded N keys` + nomi route per debug
+- `indicator_traffic.c` + `main.c`: `indicator_traffic_init()` spostata dopo `indicator_model_init()` in `app_main.c` — il default event loop deve esistere prima di registrare handler su `IP_EVENT_STA_GOT_IP`
+- `screen_traffic.c`: fix schermata nera al primo swipe — `traffic_wait_data_cb` (timer ricorrente 1000ms) attende `g_traffic.valid == true`, esegue il primo `screen_traffic_update()`, poi si auto-cancella
+
+### Refactor
+- `indicator_traffic.c`: logica poll estratta in `do_traffic_poll()` condivisa tra loop periodico (`traffic_poll_task`) e force-poll one-shot (`force_poll_task`); static buffer spostati a livello modulo (evita stack overflow)
 
 ### Changed
 - Navigazione: `screen_settings_custom` spostata fuori dalla rotazione orizzontale — raggiungibile solo via swipe UP dal clock (MOVE_TOP); swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM)
