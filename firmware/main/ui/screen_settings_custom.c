@@ -603,11 +603,9 @@ static void on_screen_load_start(lv_event_t *e)
         nvs_read_str_buf(NVS_KEY_PROXY_PORT, proxy_port, sizeof(proxy_port), APP_CFG_PROXY_PORT);
         snprintf(url_text, sizeof(url_text),
                  "http://%s:%s/config/ui", proxy_ip, proxy_port);
-        lv_label_set_text(lbl_meteo_url,    url_text);
-        lv_label_set_text(lbl_traffic_url,  url_text);
-        snprintf(url_text, sizeof(url_text),
-                 "Config UI: #7ec8e0 http://%s:%s/config/ui#", proxy_ip, proxy_port);
-        lv_label_set_text(lbl_proxy_url, url_text);
+        lv_label_set_text(lbl_traffic_url, url_text);
+        lv_label_set_text(lbl_meteo_url,   "http://localhost:8765/config/ui");
+        lv_label_set_text(lbl_proxy_url,   "Config UI: #7ec8e0 http://localhost:8765/config/ui#");
     }
 
     /* Schermate switches: riflette i flag globali (già caricati da NVS al boot). */

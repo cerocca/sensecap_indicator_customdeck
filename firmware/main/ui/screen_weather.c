@@ -25,6 +25,10 @@ static lv_obj_t  *lbl_hum_wind      = NULL;
 static lv_obj_t  *lbl_fc_hour[3];
 static lv_obj_t  *lbl_fc_icon[3];
 static lv_obj_t  *lbl_fc_temp[3];
+static lv_obj_t  *lbl_days_hdr      = NULL;
+static lv_obj_t  *lbl_day_name[3];
+static lv_obj_t  *lbl_day_icon[3];
+static lv_obj_t  *lbl_day_temp[3];
 static lv_obj_t  *lbl_updated       = NULL;
 static lv_obj_t  *lbl_error         = NULL;
 static lv_timer_t *s_refresh_timer  = NULL;
@@ -46,6 +50,12 @@ static void weather_update_ui(void)
             lv_label_set_text(lbl_fc_hour[i], "");
             lv_label_set_text(lbl_fc_icon[i], "");
             lv_label_set_text(lbl_fc_temp[i], "");
+        }
+        lv_obj_add_flag(lbl_days_hdr, LV_OBJ_FLAG_HIDDEN);
+        for (int i = 0; i < 3; i++) {
+            lv_obj_add_flag(lbl_day_name[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(lbl_day_icon[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(lbl_day_temp[i], LV_OBJ_FLAG_HIDDEN);
         }
         lv_label_set_text(lbl_updated, "No data");
         lv_obj_clear_flag(lbl_error, LV_OBJ_FLAG_HIDDEN);
@@ -78,6 +88,38 @@ static void weather_update_ui(void)
         snprintf(buf, sizeof(buf), "%.0f%s",
                  d->forecast[i].temp, d->is_metric ? "\xc2\xb0" "C" : "\xc2\xb0" "F");
         lv_label_set_text(lbl_fc_temp[i], buf);
+    }
+
+    /* ── Next 3 days ── */
+    if (d->days_count > 0) {
+        lv_obj_clear_flag(lbl_days_hdr, LV_OBJ_FLAG_HIDDEN);
+        for (int i = 0; i < 3; i++) {
+            if (i < d->days_count) {
+                const char *dlabel = d->days[i].day_label[0]
+                                     ? d->days[i].day_label
+                                     : (i == 0 ? "D+1" : i == 1 ? "D+2" : "D+3");
+                lv_label_set_text(lbl_day_name[i], dlabel);
+                lv_label_set_text(lbl_day_icon[i],
+                                  weather_icon_label(d->days[i].icon));
+                snprintf(buf, sizeof(buf), "%.0f\xc2\xb0/%.0f\xc2\xb0",
+                         d->days[i].temp_max, d->days[i].temp_min);
+                lv_label_set_text(lbl_day_temp[i], buf);
+                lv_obj_clear_flag(lbl_day_name[i], LV_OBJ_FLAG_HIDDEN);
+                lv_obj_clear_flag(lbl_day_icon[i], LV_OBJ_FLAG_HIDDEN);
+                lv_obj_clear_flag(lbl_day_temp[i], LV_OBJ_FLAG_HIDDEN);
+            } else {
+                lv_obj_add_flag(lbl_day_name[i], LV_OBJ_FLAG_HIDDEN);
+                lv_obj_add_flag(lbl_day_icon[i], LV_OBJ_FLAG_HIDDEN);
+                lv_obj_add_flag(lbl_day_temp[i], LV_OBJ_FLAG_HIDDEN);
+            }
+        }
+    } else {
+        lv_obj_add_flag(lbl_days_hdr, LV_OBJ_FLAG_HIDDEN);
+        for (int i = 0; i < 3; i++) {
+            lv_obj_add_flag(lbl_day_name[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(lbl_day_icon[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(lbl_day_temp[i], LV_OBJ_FLAG_HIDDEN);
+        }
     }
 
     /* "Aggiornato HH:MM" da last_update_ms (ms dall'avvio, non ora di sistema) */
@@ -185,47 +227,47 @@ void screen_weather_populate(void)
     lv_obj_set_style_text_font(lbl_city, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_width(lbl_city, 440);
     lv_obj_set_style_text_align(lbl_city, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_city, LV_ALIGN_TOP_MID, 0, 57);
+    lv_obj_align(lbl_city, LV_ALIGN_TOP_MID, 0, 52);
 
     /* ── Icona condizione (testo ASCII) ── */
     lbl_icon = lv_label_create(scr);
     lv_label_set_text(lbl_icon, "---");
     lv_obj_set_style_text_color(lbl_icon, lv_color_white(), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_icon, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_icon, LV_ALIGN_TOP_MID, 0, 93);
+    lv_obj_align(lbl_icon, LV_ALIGN_TOP_MID, 0, 74);
 
     /* ── Temperatura ── */
     lbl_temp = lv_label_create(scr);
     lv_label_set_text(lbl_temp, "--\xc2\xb0");
     lv_obj_set_style_text_color(lbl_temp, lv_color_white(), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_temp, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_temp, LV_ALIGN_TOP_MID, 0, 123);
+    lv_obj_align(lbl_temp, LV_ALIGN_TOP_MID, 0, 96);
 
     /* ── Feels like ── */
     lbl_feels = lv_label_create(scr);
     lv_label_set_text(lbl_feels, "");
     lv_obj_set_style_text_color(lbl_feels, lv_color_hex(0x888888), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_feels, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_feels, LV_ALIGN_TOP_MID, 0, 171);
+    lv_obj_align(lbl_feels, LV_ALIGN_TOP_MID, 0, 138);
 
     /* ── Descrizione ── */
     lbl_desc = lv_label_create(scr);
     lv_label_set_text(lbl_desc, "");
     lv_obj_set_style_text_color(lbl_desc, lv_color_hex(0xcccccc), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_desc, &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_desc, LV_ALIGN_TOP_MID, 0, 195);
+    lv_obj_align(lbl_desc, LV_ALIGN_TOP_MID, 0, 160);
 
     /* ── Riga umidità + vento ── */
     lbl_hum_wind = lv_label_create(scr);
     lv_label_set_text(lbl_hum_wind, "H: --%   W: -- km/h");
     lv_obj_set_style_text_color(lbl_hum_wind, lv_color_hex(0xaaaaaa), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_hum_wind, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_hum_wind, LV_ALIGN_TOP_MID, 0, 227);
+    lv_obj_align(lbl_hum_wind, LV_ALIGN_TOP_MID, 0, 186);
 
     /* ── Separatore centrale ── */
     lv_obj_t *sep = lv_obj_create(scr);
     lv_obj_set_size(sep, 440, 1);
-    lv_obj_set_pos(sep, 20, 257);
+    lv_obj_set_pos(sep, 20, 212);
     lv_obj_set_style_bg_color(sep, lv_color_hex(0x2a2a3a), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(sep, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_clear_flag(sep, LV_OBJ_FLAG_SCROLLABLE);
@@ -235,7 +277,7 @@ void screen_weather_populate(void)
     lv_label_set_text(fc_hdr, "Next hours");
     lv_obj_set_style_text_color(fc_hdr, lv_color_hex(0x7ec8e0), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(fc_hdr, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(fc_hdr, LV_ALIGN_TOP_MID, 0, 267);
+    lv_obj_align(fc_hdr, LV_ALIGN_TOP_MID, 0, 222);
 
     /* ── 3 colonne previsione (160px ciascuna, 480/3=160) ── */
     static const int fc_x[3] = {0, 160, 320};
@@ -250,7 +292,7 @@ void screen_weather_populate(void)
         lv_obj_set_width(lbl_fc_hour[i], 160);
         lv_obj_set_style_text_align(lbl_fc_hour[i], LV_TEXT_ALIGN_CENTER,
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_pos(lbl_fc_hour[i], fc_x[i], 293);
+        lv_obj_set_pos(lbl_fc_hour[i], fc_x[i], 245);
 
         /* Icona condizione */
         lbl_fc_icon[i] = lv_label_create(scr);
@@ -262,7 +304,7 @@ void screen_weather_populate(void)
         lv_obj_set_width(lbl_fc_icon[i], 160);
         lv_obj_set_style_text_align(lbl_fc_icon[i], LV_TEXT_ALIGN_CENTER,
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_pos(lbl_fc_icon[i], fc_x[i], 317);
+        lv_obj_set_pos(lbl_fc_icon[i], fc_x[i], 265);
 
         /* Temperatura */
         lbl_fc_temp[i] = lv_label_create(scr);
@@ -274,16 +316,65 @@ void screen_weather_populate(void)
         lv_obj_set_width(lbl_fc_temp[i], 160);
         lv_obj_set_style_text_align(lbl_fc_temp[i], LV_TEXT_ALIGN_CENTER,
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_pos(lbl_fc_temp[i], fc_x[i], 339);
+        lv_obj_set_pos(lbl_fc_temp[i], fc_x[i], 283);
     }
 
     /* ── Separatore basso ── */
     lv_obj_t *sep2 = lv_obj_create(scr);
     lv_obj_set_size(sep2, 440, 1);
-    lv_obj_set_pos(sep2, 20, 361);
+    lv_obj_set_pos(sep2, 20, 301);
     lv_obj_set_style_bg_color(sep2, lv_color_hex(0x2a2a3a), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(sep2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_clear_flag(sep2, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* ── Header "Next 3 days" ── */
+    lbl_days_hdr = lv_label_create(scr);
+    lv_label_set_text(lbl_days_hdr, "Next 3 days");
+    lv_obj_set_style_text_color(lbl_days_hdr, lv_color_hex(0x7ec8e0),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_days_hdr, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_days_hdr, LV_ALIGN_TOP_MID, 0, 311);
+
+    /* ── 3 colonne giorni (160px ciascuna) ── */
+    static const int day_x[3] = {0, 160, 320};
+    for (int i = 0; i < 3; i++) {
+        lbl_day_name[i] = lv_label_create(scr);
+        lv_label_set_text(lbl_day_name[i], "---");
+        lv_obj_set_style_text_color(lbl_day_name[i], lv_color_hex(0xaaaaaa),
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(lbl_day_name[i], &lv_font_montserrat_12,
+                                   LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_width(lbl_day_name[i], 160);
+        lv_obj_set_style_text_align(lbl_day_name[i], LV_TEXT_ALIGN_CENTER,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_pos(lbl_day_name[i], day_x[i], 328);
+        lv_obj_add_flag(lbl_day_name[i], LV_OBJ_FLAG_HIDDEN);
+
+        lbl_day_icon[i] = lv_label_create(scr);
+        lv_label_set_text(lbl_day_icon[i], "---");
+        lv_obj_set_style_text_color(lbl_day_icon[i], lv_color_white(),
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(lbl_day_icon[i], &lv_font_montserrat_14,
+                                   LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_width(lbl_day_icon[i], 160);
+        lv_obj_set_style_text_align(lbl_day_icon[i], LV_TEXT_ALIGN_CENTER,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_pos(lbl_day_icon[i], day_x[i], 343);
+        lv_obj_add_flag(lbl_day_icon[i], LV_OBJ_FLAG_HIDDEN);
+
+        lbl_day_temp[i] = lv_label_create(scr);
+        lv_label_set_text(lbl_day_temp[i], "--\xc2\xb0/--\xc2\xb0");
+        lv_obj_set_style_text_color(lbl_day_temp[i], lv_color_hex(0xaaaaaa),
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(lbl_day_temp[i], &lv_font_montserrat_12,
+                                   LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_width(lbl_day_temp[i], 160);
+        lv_obj_set_style_text_align(lbl_day_temp[i], LV_TEXT_ALIGN_CENTER,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_pos(lbl_day_temp[i], day_x[i], 358);
+        lv_obj_add_flag(lbl_day_temp[i], LV_OBJ_FLAG_HIDDEN);
+    }
 
     /* ── Label "Aggiornato" ── */
     lbl_updated = lv_label_create(scr);
@@ -292,7 +383,7 @@ void screen_weather_populate(void)
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_updated, &lv_font_montserrat_12,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_updated, LV_ALIGN_BOTTOM_MID, 0, -64);
+    lv_obj_align(lbl_updated, LV_ALIGN_BOTTOM_MID, 0, -30);
 
     /* ── Label errore ── */
     lbl_error = lv_label_create(scr);
@@ -301,7 +392,7 @@ void screen_weather_populate(void)
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(lbl_error, &lv_font_montserrat_12,
                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_align(lbl_error, LV_ALIGN_BOTTOM_MID, 0, -40);
+    lv_obj_align(lbl_error, LV_ALIGN_BOTTOM_MID, 0, -10);
     lv_obj_set_width(lbl_error, 440);
     lv_obj_set_style_text_align(lbl_error, LV_TEXT_ALIGN_CENTER,
                                 LV_PART_MAIN | LV_STATE_DEFAULT);

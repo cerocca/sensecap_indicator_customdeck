@@ -5,8 +5,7 @@
 1. [x] **Screen Traffic** (slot 6): Google Maps Distance Matrix API via proxy Mac.
       Polling ogni 10 min, indicatore OK/SLOW/HEAVY, tempo stimato, delta vs normale.
       Layout adattivo single/dual route. force_poll via "Reload config".
-2. [ ] **Screen Weather**: icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;
-      fix layout: abbassare linea sotto titolo e aggiungere next 3 days
+2. [ ] **Screen Weather**: fix layout: abbassare linea sotto titolo e aggiungere next 3 days
       ⚠️ **Attenzione al prompt per next 3 days**: la sessione precedente ha applicato le modifiche
       correttamente (build OK) ma il monitor seriale non era verificabile da Claude Code — fare
       flash+monitor da terminale esterno per verificare assenza crash prima di committare
@@ -27,8 +26,7 @@
 
 
 ## Various
-- [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — `traffic_wait_data_cb` (1000ms ricorrente) parzialmente risolve ma da investigare ulteriormente; verificare con flash+monitor e route configurata
-- [ ] **Screen Weather**: ricontrollare layout e funzionamento completo (flash+monitor)
+- [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — logica UI riscritta seguendo pattern weather (timer 5s, `traffic_update_ui()` static, indicator_traffic.c non chiama mai UI); build OK, verificare con flash+monitor e route configurata
 - [ ] **Uniformità font schermate custom** — HUE come riferimento, verificare tutte le schermate
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Code review sistematica pre-pubblicazione**: `ui_manager.c` (gesture/guard), `model/` (task HTTP, buffer, stack), `ui/` (lazy init, lv_port_sem), proxy (endpoints, error handling)
@@ -36,11 +34,11 @@
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
-- [ ] **Code review sistematica pre-pubblicazione**: ui_manager.c (gesture/guard), model/ (task HTTP, buffer, stack), ui/ (lazy init, lv_port_sem), proxy (endpoints, error handling) — vedere note sessione per dettagli
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
+- [x] **Screen Weather**: ricontrollare layout e funzionamento completo (flash+monitor)
 - [x] Rimuovere vecchio progetto: eliminare repo locale `/Users/ciru/SenseCAP_Indicator_ESP32`
       e archiviare/eliminare repo GitHub `cerocca/mySenseCAP_Indicator_ESP32` (locale eliminato; GitHub da fare manualmente)
 - [x] Restart firmware da base pulita (indicator_basis)
@@ -73,3 +71,5 @@
       microfono + speaker I2S gestiti da XIAO, comunicazione con SI via Grove UART.
       XIAO → Grove 2 (UART) → RP2040 SI → UART interno → ESP32-S3 → Claude API.
       Approccio analogo all'architettura interna SI (RP2040 come bridge sensori).
+- [ ] **Screen Weather**: implementare icone PNG reali (LVGL image converter C array) — attualmente testo ASCII;      
+

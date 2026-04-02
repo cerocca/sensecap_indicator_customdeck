@@ -163,13 +163,12 @@ Se `gmaps_api_key` vuota o nessuna route abilitata/configurata → `{"error":"no
 - Pattern task: vedi `indicator_glances.c`
 - `indicator_traffic_force_poll()`: lancia task one-shot (`force_poll_task`) che esegue `do_traffic_poll()` immediatamente e poi si auto-cancella; chiamato da "Reload config" in Settings tab Proxy
 
-### Primo update UI — `traffic_wait_data_cb`
-Al termine di `screen_traffic_populate()` viene avviato un timer LVGL ricorrente ogni 1000ms.
-Il callback controlla `g_traffic.valid && !s_first_update_done`: alla prima occorrenza chiama
-`screen_traffic_update()`, setta `s_first_update_done = true`, si auto-cancella con `lv_timer_del(t)`.
-**Motivazione**: `populate()` è chiamata nel gesture handler prima che `_ui_screen_change()` avvii
-l'animazione (200ms) — qualsiasi update del widget in quel momento non produce rendering visibile
-(schermata nera). Il timer attende che `g_traffic.valid` sia `true` (dati arrivati dal proxy).
+### Pattern aggiornamento UI — identico a screen_weather
+`traffic_update_ui()` è **static** — non esposta in `.h`. `indicator_traffic.c` non include
+`screen_traffic.h` e non chiama mai funzioni UI (niente `lv_port_sem_take/give`).
+La UI viene aggiornata esclusivamente da:
+1. `traffic_update_ui()` chiamata al termine di `screen_traffic_populate()`
+2. Timer LVGL ricorrente ogni **5s** (`traffic_refresh_cb`) — esegue solo se `lv_scr_act() == ui_screen_traffic`
 
 ### Struct dati
 ```c
@@ -435,20 +434,25 @@ Il proxy serve solo per configurare i parametri (API key, lat/lon, units, locati
 
 ### Layout UI (480×480)
 - `y=0-44` Header "Weather" — font20, **bianco**
-- `y=57` Città/location — font14, #aaaaaa
-- `y=93` Icona condizione — testo ASCII font20, bianco (LVGL Montserrat non supporta emoji — icone PNG sono TODO futuro)
-- `y=123` Temperatura — font20, bianco
-- `y=171` Feels like — font14, #888888
-- `y=195` Descrizione — font16, #cccccc
-- `y=227` Umidità + vento — font14, #aaaaaa
-- `y=257` Separatore
-- `y=267` "Next hours" — font12, #7ec8e0
-- `y=293` Ora forecast (4 colonne 120px)
-- `y=317` Icona forecast
-- `y=339` Temp forecast
-- `y=361` Separatore
-- `LV_ALIGN_BOTTOM_MID` "Updated X min ago" — font12, #555555
-- `LV_ALIGN_BOTTOM_MID` Label errore — font12, #e07070
+- `y=34` Separatore header
+- `y=52` Città/location — font14, #aaaaaa
+- `y=74` Icona condizione — testo ASCII font20, bianco (LVGL Montserrat non supporta emoji — icone PNG sono TODO futuro)
+- `y=96` Temperatura — font20, bianco
+- `y=138` Feels like — font14, #888888
+- `y=160` Descrizione — font16, #cccccc
+- `y=186` Umidità + vento — font14, #aaaaaa
+- `y=212` Separatore
+- `y=222` "Next hours" — font12, #7ec8e0
+- `y=245` Ora forecast (3 colonne 160px)
+- `y=265` Icona forecast
+- `y=283` Temp forecast
+- `y=301` Separatore
+- `y=311` "Next 3 days" — font12, #7ec8e0
+- `y=328` Nome giorno (3 colonne 160px) — font12, #aaaaaa
+- `y=343` Icona giorno — font14, bianco
+- `y=358` Temp max/min — font12, #aaaaaa (formato "max°/min°")
+- `LV_ALIGN_BOTTOM_MID, 0, -30` "Updated X min ago" — font12, #555555
+- `LV_ALIGN_BOTTOM_MID, 0, -10` Label errore — font12, #e07070
 
 ### Icone meteo (ASCII fallback)
 Mapping OWM icon code → testo breve (font Montserrat non ha emoji):

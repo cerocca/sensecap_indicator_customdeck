@@ -1,8 +1,6 @@
 #include "indicator_traffic.h"
-#include "screen_traffic.h"
 #include "indicator_storage.h"
 #include "app_config.h"
-#include "lv_port.h"        /* lv_port_sem_take / lv_port_sem_give */
 
 #include "esp_http_client.h"
 #include "esp_event.h"
@@ -19,6 +17,9 @@
 static const char *TAG = "TRAFFIC";
 
 #define TRAFFIC_BUF_SIZE 512
+
+#undef  TRAFFIC_FIRST_DELAY_MS
+#define TRAFFIC_FIRST_DELAY_MS 3000   /* ridotto da 8000: traffic è leggero, 3s sufficienti */
 
 /* ─── Global state ────────────────────────────────────────────────────────── */
 
@@ -190,10 +191,6 @@ static void do_traffic_poll(void)
         }
     }
 
-    /* Aggiornamento UI — sempre con lv_port_sem_take/give — CLAUDE.md regola 4 */
-    lv_port_sem_take();
-    screen_traffic_update();
-    lv_port_sem_give();
 }
 
 /* ─── Poll task (loop permanente ogni TRAFFIC_POLL_MS) ───────────────────── */

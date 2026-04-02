@@ -3,6 +3,16 @@
 ## [Unreleased]
 
 ### Added
+- `screen_weather.c`: sezione "Next 3 days" — 3 colonne giorni (nome giorno, icona ASCII, temp max/min); header "Next 3 days" font12 #7ec8e0; separatore; nascosta se `days_count == 0`
+- `indicator_weather.c/.h`: aggregazione forecast per giorno (3 giorni successivi) — bin per data da `/forecast?cnt=24` (72h OWM); icona dominante per giorno con normalizzazione base (senza suffisso d/n); `weather_day_t` struct (`day_label`, `icon`, `temp_min`, `temp_max`); `days[3]` + `days_count` in `weather_data_t`; buffer forecast PSRAM 12KB (`heap_caps_malloc MALLOC_CAP_SPIRAM`)
+
+### Changed
+- `screen_weather.c`: tutte le coordinate y ridimensionate per ridurre gap eccessivi — città 74→52, icona 101→74, temp 123→96, feels_like 171→138, descrizione 195→160, umidità/vento 227→186, separatore "Next hours" 250→212, header "Next hours" 260→222, slot forecast 283/303/321→245/265/283, separatore "Next 3 days" 339→301, header "Next 3 days" 349→311, righe giorni 366/381/396→328/343/358
+- `screen_traffic.c`: logica aggiornamento UI riscritta seguendo il pattern di `screen_weather` — `screen_traffic_update()` rinominata `traffic_update_ui()` (static, non esposta); rimossi `traffic_screen_loaded_cb`, `traffic_wait_data_cb`, `traffic_force_redraw_cb`, `on_screen_load_start`; timer refresh 30s→5s; `screen_traffic.h` rimuove la dichiarazione pubblica di `screen_traffic_update()`
+- `indicator_traffic.c`: rimossi `#include "screen_traffic.h"`, `#include "lv_port.h"`, `lv_port_sem_take/give` e chiamata `screen_traffic_update()` — il model aggiorna solo `g_traffic`, mai la UI
+- `screen_settings_custom.c`: tab Proxy e Weather mostrano URL fisso `http://localhost:8765/config/ui`; tab Traffic mantiene URL dinamico da NVS
+
+### Added
 - `screen_traffic.c/.h` + `indicator_traffic.c/.h`: schermata Traffic (slot 6) con layout adattivo — singola route (1 route, centrato) o doppio (2 route, schermo diviso); indicatore stato OK/SLOW/HEAVY (verde/arancione/rosso); tempo stimato, delta vs normale, distanza; lazy populate; timer refresh 30s; label "Configure route via proxy Web UI" se dati non disponibili
 - `sensedeck_proxy.py`: endpoint `GET /traffic` — itera `traffic_routes` abilitate, chiama Google Maps Distance Matrix API per ognuna, ritorna array JSON; `{"error":"not_configured"}` se API key assente o nessuna route configurata
 - `sensedeck_proxy.py` Web UI `/config/ui`: layout riscritto da 3 colonne a **6 tab** (Hue | LocalServer | Proxy | Launcher | Weather | Traffic); tab bar con bordo attivo #7ec8e0; Save button sempre visibile

@@ -3,13 +3,10 @@
 #include "app_config.h"
 #include "lvgl/lvgl.h"
 #include "esp_timer.h"
-#include "esp_log.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-static const char *TAG = "SCR_TRAFFIC";
 
 /* ─── Screen object ──────────────────────────────────────────────────────── */
 
@@ -18,7 +15,6 @@ lv_obj_t *ui_screen_traffic;
 /* ─── Widget state ───────────────────────────────────────────────────────── */
 
 static bool        s_populated           = false;
-static bool        s_first_update_done   = false;
 static lv_timer_t *s_refresh_timer       = NULL;
 
 /* Common widgets (always visible) */
@@ -168,7 +164,7 @@ static void show_dual_layout(bool show)
 
 /* ─── UI update from g_traffic ───────────────────────────────────────────── */
 
-void screen_traffic_update(void)
+static void traffic_update_ui(void)
 {
     if (!s_populated) return;
 
@@ -228,33 +224,13 @@ void screen_traffic_update(void)
     }
 }
 
-/* ─── Refresh timer callback (ogni 30s) ─────────────────────────────────── */
+/* ─── Refresh timer callback (ogni 5s) ──────────────────────────────────── */
 
 static void traffic_refresh_cb(lv_timer_t *timer)
 {
     if (lv_scr_act() != ui_screen_traffic) return;
     if (!s_populated) return;
-    screen_traffic_update();
-}
-
-/* ─── Recurring timer: attende g_traffic.valid, poi fa il primo update ──── */
-
-static void traffic_wait_data_cb(lv_timer_t *t)
-{
-    if (g_traffic.valid && !s_first_update_done) {
-        s_first_update_done = true;
-        screen_traffic_update();
-        lv_timer_del(t);
-    }
-}
-
-/* ─── Screen load event ─────────────────────────────────────────────────── */
-
-static void on_screen_load_start(lv_event_t *e)
-{
-    if (lv_event_get_code(e) != LV_EVENT_SCREEN_LOAD_START) return;
-    if (!s_populated) return;
-    screen_traffic_update();
+    traffic_update_ui();
 }
 
 /* ─── Populate (heavy, lazy al primo swipe) ──────────────────────────────── */
@@ -341,20 +317,11 @@ void screen_traffic_populate(void)
     lv_obj_align(lbl_error, LV_ALIGN_BOTTOM_MID, 0, -25);
     lv_obj_add_flag(lbl_error, LV_OBJ_FLAG_HIDDEN);
 
-    /* ── Timer refresh ogni 30s ── */
-    s_refresh_timer = lv_timer_create(traffic_refresh_cb, 30000, NULL);
+    /* ── Timer refresh ogni 5s ── */
+    s_refresh_timer = lv_timer_create(traffic_refresh_cb, 5000, NULL);
 
     s_populated = true;
-
-    ESP_LOGI(TAG, "populate done: valid=%d route_count=%d",
-             g_traffic.valid, g_traffic.route_count);
-
-    /* Recurring 1000ms: controlla g_traffic.valid ogni secondo, chiama
-     * screen_traffic_update() alla prima occorrenza, poi si auto-cancella.
-     * populate() è chiamata prima che l'animazione avvii (schermo non visibile);
-     * attendere valid==true evita schermata nera al primo swipe. */
-    s_first_update_done = false;
-    lv_timer_create(traffic_wait_data_cb, 1000, NULL);
+    traffic_update_ui();
 }
 
 /* ─── Init (lightweight — solo schermo + event handler) ─────────────────── */
@@ -365,9 +332,6 @@ void screen_traffic_init(void)
     lv_obj_clear_flag(ui_screen_traffic, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_bg_color(ui_screen_traffic, lv_color_hex(0x0a0f1a),
                                LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_add_event_cb(ui_screen_traffic, on_screen_load_start,
-                        LV_EVENT_ALL, NULL);
 }
 
 /* ─── Getter ─────────────────────────────────────────────────────────────── */

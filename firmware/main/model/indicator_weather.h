@@ -4,6 +4,13 @@
 #include <stdint.h>
 
 typedef struct {
+    char  day_label[8];   /* giorno abbreviato: "Mon", "Tue", "Wed" */
+    char  icon[8];        /* OWM icon code → ASCII via weather_icon_label */
+    float temp_min;
+    float temp_max;
+} weather_day_t;
+
+typedef struct {
     float temp;
     float feels_like;
     char  desc[32];
@@ -16,6 +23,8 @@ typedef struct {
         char  icon[8];
         float temp;
     } forecast[3];        /* 3 slot × 3h da OWM /forecast?cnt=4 */
+    weather_day_t days[3];
+    int           days_count;  /* 0 se non disponibili */
     bool    valid;
     int64_t last_update_ms;
 } weather_data_t;

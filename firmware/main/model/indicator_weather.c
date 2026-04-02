@@ -8,23 +8,28 @@
 #include "cJSON.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_heap_caps.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 static const char *TAG = "WEATHER";
 
-/* Risposta OWM current: ~700 byte; forecast cnt=4: ~1500 byte → 2048 ok */
-#define WEATHER_BUF_SIZE  2048
+/* Risposta OWM current: ~700 byte → 2048 ok */
+#define WEATHER_BUF_SIZE    2048
+/* Risposta OWM forecast cnt=24: ~8-10KB → buffer PSRAM */
+#define FORECAST_BUF_SIZE   12288
 /* Intervallo poll: 10 minuti */
-#define WEATHER_POLL_MS   600000
+#define WEATHER_POLL_MS     600000
 /* Prima poll dopo boot: 8s (lascia tempo al Wi-Fi di connettersi) */
 #define WEATHER_FIRST_DELAY_MS 8000
 
 /* ─── Internal state ──────────────────────────────────────────────────────── */
 
 static weather_data_t s_weather;           /* static — regola #6 CLAUDE.md */
+static char          *s_forecast_buf = NULL;  /* PSRAM — allocato una volta nel task */
 
 /* ─── NVS helper ──────────────────────────────────────────────────────────── */
 
@@ -135,6 +140,15 @@ static void weather_poll_task(void *arg)
     static char s_lon[24];
     static char s_units[12];
 
+    /* Buffer PSRAM per forecast cnt=24 (~8-10KB) — allocato una volta */
+    if (!s_forecast_buf) {
+        s_forecast_buf = heap_caps_malloc(FORECAST_BUF_SIZE,
+                                          MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+        if (!s_forecast_buf) {
+            ESP_LOGW(TAG, "PSRAM alloc forecast buf fallita — forecast disabilitato");
+        }
+    }
+
     while (1) {
         /* Leggi config da NVS ad ogni ciclo */
         nvs_read_str(NVS_KEY_WTH_APIKEY, s_apikey, sizeof(s_apikey), "");
@@ -207,43 +221,181 @@ static void weather_poll_task(void *arg)
             }
         }
 
-        /* ── Forecast (cnt=4 slot × 3h) ── */
+        /* ── Forecast (cnt=24 slot × 3h → next hours + next 3 days) ── */
         bool forecast_ok = false;
-        snprintf(s_url, sizeof(s_url),
-                 "https://api.openweathermap.org/data/2.5/forecast"
-                 "?lat=%s&lon=%s&appid=%s&units=%s&cnt=4",
-                 s_lat, s_lon, s_apikey, s_units);
+        s_weather.days_count = 0;
 
-        if (weather_https_get(s_url, s_buf, WEATHER_BUF_SIZE) > 0) {
-            cJSON *root = cJSON_Parse(s_buf);
-            if (root) {
-                cJSON *list = cJSON_GetObjectItem(root, "list");
-                int n = list ? cJSON_GetArraySize(list) : 0;
-                int filled = 0;
-                for (int i = 0; i < n && filled < 3; i++) {
-                    cJSON *slot    = cJSON_GetArrayItem(list, i);
-                    if (!slot) continue;
-                    cJSON *dt_txt  = cJSON_GetObjectItem(slot, "dt_txt");
-                    cJSON *main_o  = cJSON_GetObjectItem(slot, "main");
-                    cJSON *weather = cJSON_GetArrayItem(
-                                        cJSON_GetObjectItem(slot, "weather"), 0);
-                    if (!main_o || !weather) continue;
-                    cJSON *temp    = cJSON_GetObjectItem(main_o, "temp");
-                    cJSON *icon    = cJSON_GetObjectItem(weather, "icon");
-                    if (!cJSON_IsNumber(temp) || !cJSON_IsString(icon)) continue;
+        if (s_forecast_buf) {
+            snprintf(s_url, sizeof(s_url),
+                     "https://api.openweathermap.org/data/2.5/forecast"
+                     "?lat=%s&lon=%s&appid=%s&units=%s&cnt=24",
+                     s_lat, s_lon, s_apikey, s_units);
 
-                    s_weather.forecast[filled].hour = cJSON_IsString(dt_txt)
-                        ? parse_dt_hour(dt_txt->valuestring) : 0;
-                    s_weather.forecast[filled].temp = (float)temp->valuedouble;
-                    strncpy(s_weather.forecast[filled].icon,
-                            icon->valuestring,
-                            sizeof(s_weather.forecast[filled].icon) - 1);
-                    s_weather.forecast[filled].icon[
-                        sizeof(s_weather.forecast[filled].icon) - 1] = '\0';
-                    filled++;
+            if (weather_https_get(s_url, s_forecast_buf, FORECAST_BUF_SIZE) > 0) {
+                cJSON *root = cJSON_Parse(s_forecast_buf);
+                if (root) {
+                    cJSON *list = cJSON_GetObjectItem(root, "list");
+                    int n = list ? cJSON_GetArraySize(list) : 0;
+
+                    /* ── Next hours: primi 3 slot ── */
+                    int filled = 0;
+                    for (int i = 0; i < n && filled < 3; i++) {
+                        cJSON *slot    = cJSON_GetArrayItem(list, i);
+                        if (!slot) continue;
+                        cJSON *dt_txt  = cJSON_GetObjectItem(slot, "dt_txt");
+                        cJSON *main_o  = cJSON_GetObjectItem(slot, "main");
+                        cJSON *weather = cJSON_GetArrayItem(
+                                            cJSON_GetObjectItem(slot, "weather"), 0);
+                        if (!main_o || !weather) continue;
+                        cJSON *temp    = cJSON_GetObjectItem(main_o, "temp");
+                        cJSON *icon    = cJSON_GetObjectItem(weather, "icon");
+                        if (!cJSON_IsNumber(temp) || !cJSON_IsString(icon)) continue;
+
+                        s_weather.forecast[filled].hour = cJSON_IsString(dt_txt)
+                            ? parse_dt_hour(dt_txt->valuestring) : 0;
+                        s_weather.forecast[filled].temp = (float)temp->valuedouble;
+                        strncpy(s_weather.forecast[filled].icon,
+                                icon->valuestring,
+                                sizeof(s_weather.forecast[filled].icon) - 1);
+                        s_weather.forecast[filled].icon[
+                            sizeof(s_weather.forecast[filled].icon) - 1] = '\0';
+                        filled++;
+                    }
+                    forecast_ok = (filled > 0);
+
+                    /* ── Next 3 days: aggregazione su tutti i 24 slot ── */
+
+                    /* Chiave giorno del primo slot (da saltare come "oggi") */
+                    char today_key[11] = {0};
+                    {
+                        cJSON *s0 = cJSON_GetArrayItem(list, 0);
+                        cJSON *dt0 = s0 ? cJSON_GetObjectItem(s0, "dt_txt") : NULL;
+                        if (cJSON_IsString(dt0) && strlen(dt0->valuestring) >= 10) {
+                            strncpy(today_key, dt0->valuestring, 10);
+                        }
+                    }
+
+                    /* Strutture di aggregazione (static → BSS, non stack) */
+#define DAY_MAX_ICONS 8
+                    static char  day_keys[3][11];
+                    static float day_min[3];
+                    static float day_max[3];
+                    static char  day_icons[3][DAY_MAX_ICONS][8];
+                    static int   day_icon_cnt[3][DAY_MAX_ICONS];
+                    static int   day_icon_total[3];
+                    static int   day_count;
+
+                    memset(day_keys, 0, sizeof(day_keys));
+                    memset(day_icons, 0, sizeof(day_icons));
+                    memset(day_icon_cnt, 0, sizeof(day_icon_cnt));
+                    memset(day_icon_total, 0, sizeof(day_icon_total));
+                    day_count = 0;
+                    for (int d = 0; d < 3; d++) {
+                        day_min[d] =  9999.0f;
+                        day_max[d] = -9999.0f;
+                    }
+
+                    for (int i = 0; i < n; i++) {
+                        cJSON *slot = cJSON_GetArrayItem(list, i);
+                        if (!slot) continue;
+                        cJSON *dt_txt  = cJSON_GetObjectItem(slot, "dt_txt");
+                        cJSON *main_o  = cJSON_GetObjectItem(slot, "main");
+                        cJSON *weather = cJSON_GetArrayItem(
+                                            cJSON_GetObjectItem(slot, "weather"), 0);
+                        if (!cJSON_IsString(dt_txt) || !main_o || !weather) continue;
+
+                        char slot_key[11] = {0};
+                        strncpy(slot_key, dt_txt->valuestring, 10);
+
+                        /* Salta il giorno odierno */
+                        if (today_key[0] != '\0' &&
+                            strcmp(slot_key, today_key) == 0) continue;
+
+                        /* Trova o inserisci giorno */
+                        int d = -1;
+                        for (int j = 0; j < day_count; j++) {
+                            if (strcmp(day_keys[j], slot_key) == 0) { d = j; break; }
+                        }
+                        if (d == -1) {
+                            if (day_count >= 3) continue;
+                            d = day_count++;
+                            strncpy(day_keys[d], slot_key, 10);
+                        }
+
+                        cJSON *tmin_j = cJSON_GetObjectItem(main_o, "temp_min");
+                        cJSON *tmax_j = cJSON_GetObjectItem(main_o, "temp_max");
+                        cJSON *icon_j = cJSON_GetObjectItem(weather, "icon");
+
+                        float tmin = cJSON_IsNumber(tmin_j)
+                                     ? (float)tmin_j->valuedouble : 9999.0f;
+                        float tmax = cJSON_IsNumber(tmax_j)
+                                     ? (float)tmax_j->valuedouble : -9999.0f;
+                        if (tmin < day_min[d]) day_min[d] = tmin;
+                        if (tmax > day_max[d]) day_max[d] = tmax;
+
+                        if (cJSON_IsString(icon_j)) {
+                            /* Normalizza "01d"/"01n" → "01": gli slot notturni
+                             * consecutivi non devono far vincere MOON */
+                            char icon_base[4] = {0};
+                            strncpy(icon_base, icon_j->valuestring, 2);
+                            int ic = -1;
+                            for (int k = 0; k < day_icon_total[d]; k++) {
+                                if (strcmp(day_icons[d][k], icon_base) == 0) {
+                                    ic = k; break;
+                                }
+                            }
+                            if (ic == -1 && day_icon_total[d] < DAY_MAX_ICONS) {
+                                ic = day_icon_total[d]++;
+                                strncpy(day_icons[d][ic], icon_base, 3);
+                            }
+                            if (ic != -1) day_icon_cnt[d][ic]++;
+                        }
+                    }
+
+                    /* Salva risultati in s_weather.days[] */
+                    s_weather.days_count = day_count;
+                    for (int d = 0; d < day_count; d++) {
+                        s_weather.days[d].temp_min = day_min[d];
+                        s_weather.days[d].temp_max = day_max[d];
+
+                        /* Icona più frequente del giorno */
+                        int best_ic = 0, best_cnt = 0;
+                        for (int k = 0; k < day_icon_total[d]; k++) {
+                            if (day_icon_cnt[d][k] > best_cnt) {
+                                best_cnt = day_icon_cnt[d][k];
+                                best_ic  = k;
+                            }
+                        }
+                        if (day_icon_total[d] > 0) {
+                            /* Ricostruisce codice con suffisso 'd' (diurno):
+                             * "01" → "01d", "10" → "10d" */
+                            snprintf(s_weather.days[d].icon,
+                                     sizeof(s_weather.days[d].icon),
+                                     "%sd", day_icons[d][best_ic]);
+                        } else {
+                            s_weather.days[d].icon[0] = '\0';
+                        }
+
+                        /* Etichetta giorno da YYYY-MM-DD via mktime/strftime */
+                        int yr, mo, dy;
+                        if (sscanf(day_keys[d], "%4d-%2d-%2d",
+                                   &yr, &mo, &dy) == 3) {
+                            struct tm t = {0};
+                            t.tm_year = yr - 1900;
+                            t.tm_mon  = mo - 1;
+                            t.tm_mday = dy;
+                            t.tm_hour = 12;
+                            mktime(&t);
+                            strftime(s_weather.days[d].day_label,
+                                     sizeof(s_weather.days[d].day_label),
+                                     "%a", &t);
+                        }
+                        /* Se day_label rimane vuoto, lo gestisce la UI con D+N */
+                    }
+#undef DAY_MAX_ICONS
+
+                    cJSON_Delete(root);
                 }
-                forecast_ok = (filled > 0);
-                cJSON_Delete(root);
             }
         }
 
