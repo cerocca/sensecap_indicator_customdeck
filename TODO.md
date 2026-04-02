@@ -6,7 +6,12 @@
       convertire con LVGL image converter in C array, includere come `.c` nel progetto.
       **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
       Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
-- [ ] **Code review sistematica pre-pubblicazione**: `ui_manager.c` (gesture/guard), `model/` (task HTTP, buffer, stack), `ui/` (lazy init, lv_port_sem), proxy (endpoints, error handling)
+- [ ] **Code review sistematica pre-pubblicazione**:
+  - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
+  - [ ] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
+  - [ ] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
+  - [ ] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
+  - [ ] **Sanity check finale**: dopo ogni fase, lanciare `/code-review` in Claude Code CLI come verifica aggiuntiva sui file modificati
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
