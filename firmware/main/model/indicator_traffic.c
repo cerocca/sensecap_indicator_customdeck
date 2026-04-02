@@ -25,7 +25,8 @@ static const char *TAG = "TRAFFIC";
 
 traffic_data_t g_traffic = {0};
 
-static bool s_started = false;
+static bool          s_started             = false;
+static volatile bool s_force_poll_requested = false;
 
 /* ─── NVS helper ──────────────────────────────────────────────────────────── */
 
@@ -191,6 +192,10 @@ static void do_traffic_poll(void)
         }
     }
 
+    for (int i = 0; i < g_traffic.route_count; i++) {
+        ESP_LOGI(TAG, "route[%d] %s: %ds", i,
+                 g_traffic.routes[i].name, g_traffic.routes[i].duration_sec);
+    }
 }
 
 /* ─── Poll task (loop permanente ogni TRAFFIC_POLL_MS) ───────────────────── */
@@ -201,17 +206,12 @@ static void traffic_poll_task(void *arg)
     vTaskDelay(pdMS_TO_TICKS(TRAFFIC_FIRST_DELAY_MS));
     while (1) {
         do_traffic_poll();
-        vTaskDelay(pdMS_TO_TICKS(TRAFFIC_POLL_MS));
+        for (int i = 0; i < (TRAFFIC_POLL_MS / 500); i++) {
+            vTaskDelay(pdMS_TO_TICKS(500));
+            if (s_force_poll_requested) break;
+        }
+        s_force_poll_requested = false;
     }
-}
-
-/* ─── Force poll task (one-shot, si auto-cancella) ──────────────────────── */
-
-static void force_poll_task(void *arg)
-{
-    ESP_LOGI(TAG, "force poll avviato");
-    do_traffic_poll();
-    vTaskDelete(NULL);
 }
 
 /* ─── IP event → avvio task (una sola volta) ─────────────────────────────── */
@@ -236,6 +236,5 @@ void indicator_traffic_init(void)
 
 void indicator_traffic_force_poll(void)
 {
-    ESP_LOGI(TAG, "force_poll richiesto");
-    xTaskCreate(force_poll_task, "traffic_fp", 4096, NULL, 5, NULL);
+    s_force_poll_requested = true;
 }

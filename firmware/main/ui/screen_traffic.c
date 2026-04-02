@@ -224,6 +224,15 @@ static void traffic_update_ui(void)
     }
 }
 
+/* ─── Screen load event ──────────────────────────────────────────────────── */
+
+static void on_screen_load_start(lv_event_t *e)
+{
+    if (lv_event_get_code(e) != LV_EVENT_SCREEN_LOAD_START) return;
+    if (!s_populated) return;
+    traffic_update_ui();
+}
+
 /* ─── Refresh timer callback (ogni 5s) ──────────────────────────────────── */
 
 static void traffic_refresh_cb(lv_timer_t *timer)
@@ -332,6 +341,9 @@ void screen_traffic_init(void)
     lv_obj_clear_flag(ui_screen_traffic, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_bg_color(ui_screen_traffic, lv_color_hex(0x0a0f1a),
                                LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_screen_traffic, on_screen_load_start,
+                        LV_EVENT_ALL, NULL);
 }
 
 /* ─── Getter ─────────────────────────────────────────────────────────────── */

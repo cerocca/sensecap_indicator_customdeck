@@ -324,7 +324,7 @@ static lv_obj_t *build_tab_proxy(lv_obj_t *tabview)
     lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
 
     int y = 20;
-    make_label(tab, y, "Mac Proxy IP");  y += 18;
+    make_label(tab, y, "Proxy IP");  y += 18;
     ta_proxy_ip   = make_ta(tab, y, "192.168.1.x"); lv_obj_add_event_cb(ta_proxy_ip,   ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
     make_label(tab, y, "Port");           y += 18;
     ta_proxy_port = make_ta(tab, y, "8765");         lv_obj_add_event_cb(ta_proxy_port, ta_focused_cb, LV_EVENT_CLICKED, NULL); y += 54;
@@ -598,14 +598,15 @@ static void on_screen_load_start(lv_event_t *e)
 
     /* Aggiorna URL proxy nel tab Proxy, Weather e Traffic */
     {
-        char proxy_ip[64], proxy_port[8], url_text[128];
+        char proxy_ip[64], proxy_port[8], url_text[128], proxy_recolor[160];
         nvs_read_str_buf(NVS_KEY_PROXY_IP,   proxy_ip,   sizeof(proxy_ip),   APP_CFG_PROXY_IP);
         nvs_read_str_buf(NVS_KEY_PROXY_PORT, proxy_port, sizeof(proxy_port), APP_CFG_PROXY_PORT);
         snprintf(url_text, sizeof(url_text),
                  "http://%s:%s/config/ui", proxy_ip, proxy_port);
+        snprintf(proxy_recolor, sizeof(proxy_recolor), "Config UI: #7ec8e0 %s#", url_text);
         lv_label_set_text(lbl_traffic_url, url_text);
-        lv_label_set_text(lbl_meteo_url,   "http://localhost:8765/config/ui");
-        lv_label_set_text(lbl_proxy_url,   "Config UI: #7ec8e0 http://localhost:8765/config/ui#");
+        lv_label_set_text(lbl_meteo_url,   url_text);
+        lv_label_set_text(lbl_proxy_url,   proxy_recolor);
     }
 
     /* Schermate switches: riflette i flag globali (già caricati da NVS al boot). */

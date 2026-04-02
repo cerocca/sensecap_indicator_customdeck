@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+- `screen_weather.c`: separatore header riposizionato (y=34→45); separatore tra "Next hours" e "Next 3 days" riposizionato (y=297→305)
+- `screen_settings_custom.c`: label URL dinamica nel tab Weather (era hardcoded `localhost:8765`); label "Config UI" nel tab Proxy ora dinamica da NVS con recolor LVGL; rename label "Mac Proxy IP" → "Proxy IP"
+
+### Added
+- `screen_traffic.c`: handler `on_screen_load_start` (`LV_EVENT_SCREEN_LOAD_START`) — chiama `traffic_update_ui()` ad ogni carico schermata, identico al pattern di `screen_weather.c`; prima la UI si aggiornava solo dal timer 5s
+
+### Fixed
+- `indicator_traffic.c`: `indicator_traffic_force_poll()` non usa più `xTaskCreate` (falliva per heap insufficiente); sostituito con flag atomico `s_force_poll_requested`; il task polling periodico controlla il flag ogni 500ms e interrompe l'attesa, eseguendo il poll entro 500ms dalla richiesta
+
 ### Added
 - `screen_weather.c`: sezione "Next 3 days" — 3 colonne giorni (nome giorno, icona ASCII, temp max/min); header "Next 3 days" font12 #7ec8e0; separatore; nascosta se `days_count == 0`
 - `indicator_weather.c/.h`: aggregazione forecast per giorno (3 giorni successivi) — bin per data da `/forecast?cnt=24` (72h OWM); icona dominante per giorno con normalizzazione base (senza suffisso d/n); `weather_day_t` struct (`day_label`, `icon`, `temp_min`, `temp_max`); `days[3]` + `days_count` in `weather_data_t`; buffer forecast PSRAM 12KB (`heap_caps_malloc MALLOC_CAP_SPIRAM`)

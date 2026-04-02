@@ -51,7 +51,7 @@ Clock ↔ [Sensors] ↔ [Hue] ↔ [LocalServer] ↔ [Launcher] ↔ [Weather] ↔
 | **Hue Control** | Custom | Toggle ON/OFF + brightness slider for 4 Philips Hue lights |
 | **LocalServer Dashboard** | Custom | CPU, RAM, disk, uptime, load avg; top Docker containers; service status |
 | **Launcher** | Custom | 4 configurable buttons to open URLs on Mac |
-| **Weather** | Custom | Current conditions + 4-slot forecast via OpenWeatherMap |
+| **Weather** | Custom | Current conditions + hourly forecast + next 3 days via OpenWeatherMap |
 | **Traffic** | Custom | Estimated travel time + delta vs normal + green/yellow/red indicator |
 | **Custom Settings** | Custom | Tabbed config screen — accessible via swipe UP from Clock |
 | **Default Settings** | Original | Device Wi-Fi and display settings |
@@ -68,7 +68,7 @@ Toggle ON/OFF and adjust brightness (0–100%) for 4 configurable Philips Hue li
 ### Weather
 *Does not require SenseDeck Proxy on Mac*
 
-Current conditions (temperature, feels-like, description, humidity, wind speed) and 4-slot hourly forecast via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS. Refresh every 30 seconds; polling every 10 minutes.
+Current conditions (temperature, feels-like, description, humidity, wind speed), hourly forecast (3 slots), and next 3 days (icon, max/min temp) via OpenWeatherMap free tier. Data fetched directly from OWM over HTTPS. Refresh every 30 seconds; polling every 10 minutes.
 
 ### LocalServer Dashboard
 *Requires SenseDeck Proxy on Mac*

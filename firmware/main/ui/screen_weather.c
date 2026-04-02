@@ -215,7 +215,7 @@ void screen_weather_populate(void)
     /* ── Separatore header ── */
     lv_obj_t *sep_hdr = lv_obj_create(scr);
     lv_obj_set_size(sep_hdr, 440, 1);
-    lv_obj_set_pos(sep_hdr, 20, 34);
+    lv_obj_set_pos(sep_hdr, 20, 45);
     lv_obj_set_style_bg_color(sep_hdr, lv_color_hex(0x2a2a3a), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(sep_hdr, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_clear_flag(sep_hdr, LV_OBJ_FLAG_SCROLLABLE);
@@ -322,7 +322,7 @@ void screen_weather_populate(void)
     /* ── Separatore basso ── */
     lv_obj_t *sep2 = lv_obj_create(scr);
     lv_obj_set_size(sep2, 440, 1);
-    lv_obj_set_pos(sep2, 20, 301);
+    lv_obj_set_pos(sep2, 20, 305);
     lv_obj_set_style_bg_color(sep2, lv_color_hex(0x2a2a3a), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(sep2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_clear_flag(sep2, LV_OBJ_FLAG_SCROLLABLE);
