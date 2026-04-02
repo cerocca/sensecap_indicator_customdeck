@@ -609,6 +609,20 @@ lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_ALL, NULL);  // sost
 nello stesso tick carica *immediatamente* la prima schermata (flash visivo) e poi anima alla seconda
 (`lv_disp.c:229`, controllo `d->scr_to_load`). L'unico modo sicuro è *rimuovere* il primo handler.
 
+### Traffic black screen — bug irrisolto (sessione 2026-04-02)
+Sintomo: schermata Traffic nera al primo swipe dopo boot. Funziona solo
+passando prima da Weather.
+Tentate senza successo: LV_EVENT_SCREEN_LOADED, timer wait 1000ms,
+lv_obj_invalidate, force_redraw timer, update() in populate().
+Soluzione parziale attuale: pattern identico a Weather (traffic_update_ui()
+static, timer 5s, indicator_traffic.c senza chiamate UI).
+Root cause non identificata: Weather funziona con lo stesso pattern,
+Traffic no. Differenza sospetta: traffic ha route_count e layout
+adattivo (single/dual) — weather ha layout fisso.
+Prossima ipotesi da verificare: il problema è nel layout adattivo
+show_single_layout()/show_dual_layout() che mostra/nasconde widget —
+provare a forzare il layout prima che la schermata diventi visibile.
+
 ---
 
 ## Checklist pre-commit
