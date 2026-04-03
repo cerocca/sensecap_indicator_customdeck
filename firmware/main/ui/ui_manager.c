@@ -151,13 +151,25 @@ static void ensure_traffic_populated(void)
     }
 }
 
+/* ─── lazy init screen_sibilla ──────────────────────────────── */
+static bool s_sibilla_populated = false;
+
+static void ensure_sibilla_populated(void)
+{
+    if (!s_sibilla_populated) {
+        screen_sibilla_populate();
+        s_sibilla_populated = true;
+    }
+}
+
 /* ─── ensure_populated helper ───────────────────────────────── *
  * Chiama la lazy-populate corretta in base al puntatore schermata.
- * clock(0), sensors(1), sibilla(3): nessuna populate esplicita.
+ * clock(0), sensors(1): nessuna populate esplicita.
  * ─────────────────────────────────────────────────────────────*/
 static void ensure_populated(lv_obj_t *scr)
 {
     if      (scr == ui_screen_hue)      ensure_hue_populated();
+    else if (scr == ui_screen_sibilla)  ensure_sibilla_populated();
     else if (scr == ui_screen_launcher) ensure_launcher_populated();
     else if (scr == ui_screen_weather)  ensure_weather_populated();
     else if (scr == ui_screen_traffic)  ensure_traffic_populated();
@@ -352,20 +364,20 @@ void ui_manager_init(void)
     /* Sostituisce l'handler Seeed ui_event_screen_time con gesture_clock
      * che usa next_from() e gestisce UP/DOWN per navigazione verticale. */
     lv_obj_remove_event_cb(ui_screen_time, ui_event_screen_time);
-    lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_GESTURE, NULL);
 
     /* Sostituisce l'handler Seeed ui_event_screen_sensor: aveva LEFT hardcoded
      * su ui_screen_settings_custom, ora fuori rotazione. */
     lv_obj_remove_event_cb(ui_screen_sensor, ui_event_screen_sensor);
-    lv_obj_add_event_cb(ui_screen_sensor, gesture_sensor, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_sensor, gesture_sensor, LV_EVENT_GESTURE, NULL);
 
     /* settings_custom: solo swipe DOWN torna al clock (fuori dalla rotazione orizzontale). */
-    lv_obj_add_event_cb(ui_screen_settings_custom, gesture_settings_custom, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_settings_custom, gesture_settings_custom, LV_EVENT_GESTURE, NULL);
 
     /* ui_screen_setting (Seeed): rimuove l'handler Seeed per evitare doppia chiamata
      * a _ui_screen_change su LV_DIR_TOP (stesso pattern di gesture_clock / ui_event_screen_time). */
     lv_obj_remove_event_cb(ui_screen_setting, ui_event_screen_setting);
-    lv_obj_add_event_cb(ui_screen_setting, gesture_seeed_setting, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_setting, gesture_seeed_setting, LV_EVENT_GESTURE, NULL);
 
     /* Nasconde elementi non necessari su ui_screen_sensor (NON si modifica ui.c).
      * Nascondere il container nasconde automaticamente tutti i figli. */
@@ -378,9 +390,9 @@ void ui_manager_init(void)
     lv_obj_add_flag(ui_setting_icon,  LV_OBJ_FLAG_HIDDEN); /* icona ingranaggio */
     lv_obj_add_flag(ui_scrolldots3,   LV_OBJ_FLAG_HIDDEN); /* container 3 puntini navigazione */
 
-    lv_obj_add_event_cb(ui_screen_traffic,  gesture_traffic,  LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_screen_hue,      gesture_hue,      LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_screen_sibilla,  gesture_sibilla,  LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_screen_launcher, gesture_launcher, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_screen_weather,  gesture_weather,  LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_screen_traffic,  gesture_traffic,  LV_EVENT_GESTURE, NULL);
+    lv_obj_add_event_cb(ui_screen_hue,      gesture_hue,      LV_EVENT_GESTURE, NULL);
+    lv_obj_add_event_cb(ui_screen_sibilla,  gesture_sibilla,  LV_EVENT_GESTURE, NULL);
+    lv_obj_add_event_cb(ui_screen_launcher, gesture_launcher, LV_EVENT_GESTURE, NULL);
+    lv_obj_add_event_cb(ui_screen_weather,  gesture_weather,  LV_EVENT_GESTURE, NULL);
 }

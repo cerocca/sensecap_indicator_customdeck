@@ -210,5 +210,5 @@ void screen_launcher_init(void)
 
     /* Lazy populate + refresh labels al caricamento schermata */
     lv_obj_add_event_cb(ui_screen_launcher, on_screen_load_start,
-                        LV_EVENT_ALL, NULL);
+                        LV_EVENT_SCREEN_LOAD_START, NULL);
 }

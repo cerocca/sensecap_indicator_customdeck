@@ -418,5 +418,5 @@ void screen_weather_init(void)
                                LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_screen_weather, on_screen_load_start,
-                        LV_EVENT_ALL, NULL);
+                        LV_EVENT_SCREEN_LOAD_START, NULL);
 }

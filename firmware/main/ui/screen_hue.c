@@ -11,6 +11,7 @@ lv_obj_t *ui_screen_hue;
 static lv_obj_t *s_sw[HUE_LIGHT_COUNT];
 static lv_obj_t *s_slider[HUE_LIGHT_COUNT];
 static lv_obj_t *s_name_lbl[HUE_LIGHT_COUNT];
+static bool      s_populated = false;
 
 /* ─── UI update callback ────────────────────────────────────────────────────
  * Chiamata dal poll task (con LVGL sem già acquisito) dopo ogni risposta.
@@ -18,6 +19,7 @@ static lv_obj_t *s_name_lbl[HUE_LIGHT_COUNT];
  * ─────────────────────────────────────────────────────────────────────────*/
 static void hue_update_ui(void)
 {
+    if (!s_populated) return;
     for (int i = 0; i < HUE_LIGHT_COUNT; i++) {
         hue_light_t light;
         indicator_hue_get_light(i, &light);
@@ -131,6 +133,8 @@ void screen_hue_populate(void)
         lv_obj_add_event_cb(s_slider[i], slider_cb, LV_EVENT_RELEASED,
                              (void *)(intptr_t)i);
     }
+
+    s_populated = true;
 
     /* Registra callback per aggiornamenti dal poll task */
     indicator_hue_set_update_cb(hue_update_ui);
