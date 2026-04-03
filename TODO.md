@@ -2,7 +2,7 @@
 
 ## Pending
 
-- [ ] **Code review sistematica pre-pubblicazione**:
+- [x] **Code review sistematica pre-pubblicazione**:
   - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
   - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
   - [x] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
