@@ -2,15 +2,11 @@
 
 ## [Unreleased]
 
-### Fixed (code review Fase 2 — model/)
-- `indicator_hue.c`: stack `hue_poll_task` 6144 → 8192 (TLS, minimo da checklist)
-- `indicator_hue.c`: stack `hue_cmd_task` 4096 → 8192 (TLS one-shot, cold handshake)
-- `indicator_weather.c`: stack `weather_poll_task` 4096 → 6144 (TLS HTTPS OWM)
-- `indicator_weather.c`: allineamento al pattern IP_EVENT_STA_GOT_IP (come glances/hue/traffic) — aggiunto `s_task_started` guard, `ip_event_handler`, rimosso `xTaskCreate` diretto in `init`; aggiunti include `esp_event.h`, `esp_wifi.h`
-- `indicator_traffic.c`: `TRAFFIC_BUF_SIZE` 512 → 2048 (allineamento regola CLAUDE.md buffer minimo 2048)
-- `indicator_config.c`: rimossa variabile `content_len` inutilizzata (warning `-Wunused-variable`)
-- `app_config.h`: aggiunto `WEATHER_FIRST_DELAY_MS 8000` (centralizzato come `TRAFFIC_FIRST_DELAY_MS`)
-- `docs/SCREENS.md`: aggiornata nota buffer Traffic da 512 a 2048 byte
+### Note interne
+- Code review Fase 2 completata su firmware/main/model/ — identificati 4 ATTENZIONE
+  e 2 COSMETICI (stack TLS, buffer traffic, pattern IP_EVENT weather, unused var)
+- Fix revertiti per regressione Hue/Traffic — da riapplicare uno alla volta
+  nella prossima sessione (vedi docs/WARNINGS.md)
 
 ### Changed
 - `screen_weather.c`: separatore header riposizionato (y=34→45); separatore tra "Next hours" e "Next 3 days" riposizionato (y=297→305)

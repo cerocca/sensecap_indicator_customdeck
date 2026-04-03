@@ -163,3 +163,20 @@ adattivo (single/dual) — weather ha layout fisso.
 Prossima ipotesi da verificare: il problema è nel layout adattivo
 show_single_layout()/show_dual_layout() che mostra/nasconde widget —
 provare a forzare il layout prima che la schermata diventi visibile.
+
+### Fix Fase 2 — regressione confermata (aprile 2026)
+
+I seguenti fix sono stati identificati dalla code review Fase 2 ma causano
+regressioni su Hue e Traffic. NON applicare finché non viene isolato il colpevole.
+
+Fix da applicare UNO ALLA VOLTA con flash e test su device tra l'uno e l'altro:
+
+- [A4] indicator_hue.c — hue_cmd_task stack 4096 → 8192
+- [A2] indicator_weather.c — weather_poll_task stack 4096 → 6144
+- [A3] indicator_hue.c — hue_poll_task stack 6144 → 8192
+- [A1] indicator_traffic.c — TRAFFIC_BUF_SIZE 512 → 2048
+- [C2] indicator_config.c — rimuovi content_len unused
+- [C1] indicator_weather.c — pattern IP_EVENT_STA_GOT_IP (più invasivo, applicare ultimo)
+
+Strategia: iniziare da C2 (meno invasivo), poi A1, A3, A4, A2, C1.
+Dopo ogni fix: build → flash → test Hue toggle/slider + Traffic popolamento → poi fix successivo.
