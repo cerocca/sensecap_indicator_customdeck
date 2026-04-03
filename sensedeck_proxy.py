@@ -14,6 +14,7 @@ Endpoints:
 """
 
 import http.server
+import html
 import json
 import os
 import subprocess
@@ -130,7 +131,7 @@ def load_config():
         print(f"[config] traffic routes: {[r['name'] for r in merged.get('traffic_routes', [])]}")
         return merged
     except (FileNotFoundError, json.JSONDecodeError):
-        return dict(DEFAULT_CONFIG)
+        return _merge_config(DEFAULT_CONFIG, {})
 
 
 def save_config(data):
@@ -332,14 +333,14 @@ def _build_route_fields(routes):
             f'<div class="field">'
             f'<label for="tr_{i}_name">Name</label>'
             f'<input type="text" id="tr_{i}_name" name="tr_{i}_name"'
-            f' value="{route.get("name", f"Route {i+1}")}">'
+            f' value="{html.escape(str(route.get("name", f"Route {i+1}")), quote=True)}">'
             f'</div>'
         )
         out += (
             f'<div class="field">'
             f'<label for="tr_{i}_origin">Origin</label>'
             f'<input type="text" id="tr_{i}_origin" name="tr_{i}_origin"'
-            f' value="{route.get("origin","")}"'
+            f' value="{html.escape(str(route.get("origin","")), quote=True)}"'
             f' placeholder="es. Via Roma 1, Firenze">'
             f'</div>'
         )
@@ -347,7 +348,7 @@ def _build_route_fields(routes):
             f'<div class="field">'
             f'<label for="tr_{i}_destination">Destination</label>'
             f'<input type="text" id="tr_{i}_destination" name="tr_{i}_destination"'
-            f' value="{route.get("destination","")}"'
+            f' value="{html.escape(str(route.get("destination","")), quote=True)}"'
             f' placeholder="es. Piazza Duomo, Firenze">'
             f'</div>'
         )
@@ -369,7 +370,9 @@ def build_config_ui(cfg):
         return (
             f'<div class="field">'
             f'<label for="{name}">{label}</label>'
-            f'<input type="text" id="{name}" name="{name}" value="{value}" placeholder="{placeholder}">'
+            f'<input type="text" id="{name}" name="{name}"'
+            f' value="{html.escape(str(value), quote=True)}"'
+            f' placeholder="{html.escape(str(placeholder), quote=True)}">'
             f'</div>'
         )
 
@@ -377,7 +380,8 @@ def build_config_ui(cfg):
         return (
             f'<div class="field">'
             f'<label for="{name}">{label}</label>'
-            f'<input type="password" id="{name}" name="{name}" value="{value}">'
+            f'<input type="password" id="{name}" name="{name}"'
+            f' value="{html.escape(str(value), quote=True)}">'
             f'</div>'
         )
 
@@ -684,9 +688,13 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             urls = launcher_urls()
             url = urls.get(key)
             if url:
-                subprocess.Popen(["open", "-a", "Firefox", url])
-                print(f"[launcher] opened {url}")
-                self.send_text(f"OK: {url}")
+                try:
+                    subprocess.Popen(["open", "-a", "Firefox", url])
+                    print(f"[launcher] opened {url}")
+                    self.send_text(f"OK: {url}")
+                except Exception as e:
+                    print(f"[launcher] open error: {e}")
+                    self.send_text(f"Error: {e}", status=500)
             else:
                 self.send_text(f"Unknown key: {key}", status=404)
 
