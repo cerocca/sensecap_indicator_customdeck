@@ -19,7 +19,7 @@ static const char *TAG = "TRAFFIC";
 #define TRAFFIC_BUF_SIZE 512
 
 #undef  TRAFFIC_FIRST_DELAY_MS
-#define TRAFFIC_FIRST_DELAY_MS 3000   /* ridotto da 8000: traffic è leggero, 3s sufficienti */
+#define TRAFFIC_FIRST_DELAY_MS 20000  /* aumentato: diluire task HTTP/TLS al boot (crash lwIP OOM) */
 
 /* ─── Global state ────────────────────────────────────────────────────────── */
 

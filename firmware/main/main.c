@@ -12,6 +12,7 @@
 #include "ui_manager.h"
 #include "indicator_glances.h"
 #include "indicator_uptime_kuma.h"
+#include "model/indicator_weather.h"
 #include "model/indicator_traffic.h"
 
 static const char *TAG = "app_main";
@@ -60,6 +61,7 @@ void app_main(void)
     indicator_model_init();
     indicator_glances_init();
     indicator_uptime_kuma_init();
+    indicator_weather_init();
     indicator_traffic_init();
     indicator_controller_init();
 

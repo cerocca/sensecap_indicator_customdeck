@@ -609,6 +609,19 @@ lv_obj_add_event_cb(ui_screen_time, gesture_clock, LV_EVENT_ALL, NULL);  // sost
 nello stesso tick carica *immediatamente* la prima schermata (flash visivo) e poi anima alla seconda
 (`lv_disp.c:229`, controllo `d->scr_to_load`). L'unico modo sicuro è *rimuovere* il primo handler.
 
+### Task HTTP boot — diluire i delay di primo poll
+
+Troppi task HTTP/TLS simultanei al boot esauriscono la heap lwIP →
+`thread_sem_init: out of memory` → `LoadProhibited` in `netconn_gethostbyname`.
+Valori attuali (non ridurre):
+- glances: 3000ms (hardcoded)
+- weather: 8000ms (WEATHER_FIRST_DELAY_MS)
+- traffic: 20000ms (TRAFFIC_FIRST_DELAY_MS)
+
+Hue polling TLS produce `esp-aes: Failed to allocate memory` al primo ciclo
+(4 richieste consecutive) — non causa crash ma le luci risultano HTTP -1
+al boot. CONFIG_MBEDTLS_DYNAMIC_BUFFER=y deve essere presente in sdkconfig.defaults.
+
 ### Traffic black screen — bug irrisolto (sessione 2026-04-02)
 Sintomo: schermata Traffic nera al primo swipe dopo boot. Funziona solo
 passando prima da Weather.

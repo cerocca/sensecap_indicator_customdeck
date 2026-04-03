@@ -62,6 +62,8 @@
       in ui_event_screen_time (dead code, handler già sostituito da gesture_clock). Footprint: 4 byte BSS, costo zero.
 
 
+- [ ] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
+
 ## Futuro
 
 - [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — logica UI riscritta seguendo pattern weather (timer 5s, `traffic_update_ui()` static, `on_screen_load_start` aggiunto); build OK, verificare con flash+monitor e route configurata. Root cause sospetta: layout adattivo show_single/show_dual — provare a forzare il layout prima che la schermata diventi visibile.

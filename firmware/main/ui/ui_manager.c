@@ -1,8 +1,6 @@
 #include "ui_manager.h"
 #include "ui_helpers.h"   /* _ui_screen_change, include ui.h → ui_screen_time, ui_screen_setting */
 #include "indicator_storage.h"
-#include "indicator_weather.h"
-#include "../model/indicator_traffic.h"
 #include "app_config.h"
 
 /* ui_screen_last è non-static in ui.c (necessario per il ritorno da ui_screen_wifi). */
@@ -178,11 +176,15 @@ static void gesture_clock(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_time) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
-        _ui_screen_change(next_from(0, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
-    else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(0, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
-    else if (dir == LV_DIR_TOP) {
+    if (dir == LV_DIR_LEFT) {
+        lv_obj_t *next = next_from(0, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+    } else if (dir == LV_DIR_RIGHT) {
+        lv_obj_t *next = next_from(0, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    } else if (dir == LV_DIR_TOP) {
         ensure_settings_populated();
         _ui_screen_change(ui_screen_settings_custom, LV_SCR_LOAD_ANIM_MOVE_TOP, 200, 0);
     }
@@ -216,9 +218,11 @@ static void gesture_traffic(lv_event_t *e)
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
     if (lv_scr_act() != ui_screen_traffic) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-    if (dir == LV_DIR_LEFT)
-        _ui_screen_change(next_from(6, +1), LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    else if (dir == LV_DIR_RIGHT) {
+    if (dir == LV_DIR_LEFT) {
+        lv_obj_t *next = next_from(6, +1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT, 200, 0);
+    } else if (dir == LV_DIR_RIGHT) {
         lv_obj_t *next = next_from(6, -1);
         ensure_populated(next);
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
@@ -260,8 +264,11 @@ static void gesture_hue(lv_event_t *e)
         lv_obj_t *next = next_from(2, +1);
         ensure_populated(next);
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    } else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(2, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    } else if (dir == LV_DIR_RIGHT) {
+        lv_obj_t *next = next_from(2, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    }
 }
 
 static void gesture_sibilla(lv_event_t *e)
@@ -289,8 +296,11 @@ static void gesture_launcher(lv_event_t *e)
         lv_obj_t *next = next_from(4, +1);
         ensure_populated(next);
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    } else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(4, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    } else if (dir == LV_DIR_RIGHT) {
+        lv_obj_t *next = next_from(4, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    }
 }
 
 static void gesture_weather(lv_event_t *e)
@@ -302,8 +312,11 @@ static void gesture_weather(lv_event_t *e)
         lv_obj_t *next = next_from(5, +1);
         ensure_populated(next);
         _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_LEFT,  200, 0);
-    } else if (dir == LV_DIR_RIGHT)
-        _ui_screen_change(next_from(5, -1), LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    } else if (dir == LV_DIR_RIGHT) {
+        lv_obj_t *next = next_from(5, -1);
+        ensure_populated(next);
+        _ui_screen_change(next, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0);
+    }
 }
 
 
@@ -321,12 +334,10 @@ void ui_manager_init(void)
     screen_weather_init();
     screen_traffic_init();
 
-    /* Avvia i modelli dati (registrano handler IP_EVENT_STA_GOT_IP). */
-    indicator_weather_init();
-    /* indicator_traffic_init() NON va qui: ui_manager_init() è chiamata prima
-     * di indicator_model_init() (che crea il default event loop), quindi
-     * esp_event_handler_register fallirebbe silenziosamente.
-     * È chiamata da main.c dopo indicator_model_init(). */
+    /* indicator_weather_init() e indicator_traffic_init() NON vanno qui:
+     * ui_manager_init() è chiamata prima di indicator_model_init()
+     * (che crea il default event loop), quindi esp_event_handler_register
+     * fallirebbe silenziosamente. Sono chiamate da main.c dopo indicator_model_init(). */
 
     /* Popola la tabella degli indici schermata per next_from().
      * 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic */
