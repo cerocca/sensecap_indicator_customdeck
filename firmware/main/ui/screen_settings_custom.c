@@ -7,6 +7,7 @@
 #include "app_config.h"
 #include "lv_port.h"              /* lv_port_sem_take/give */
 #include "esp_log.h"
+#include "esp_app_desc.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <string.h>
@@ -573,6 +574,75 @@ static lv_obj_t *build_tab_traffic(lv_obj_t *tabview)
 }
 
 /***********************************************************
+ * Info tab
+ ***********************************************************/
+
+static lv_obj_t *build_tab_info(lv_obj_t *tabview)
+{
+    lv_obj_t *tab = lv_tabview_add_tab(tabview, "Info");
+    lv_obj_clear_flag(tab, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* ── Titolo progetto ── */
+    lv_obj_t *lbl_title = lv_label_create(tab);
+    lv_label_set_text(lbl_title, "SenseDeck");
+    lv_obj_set_style_text_color(lbl_title, lv_color_hex(0x7ec8a0),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_title, &lv_font_montserrat_20,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_title, LV_ALIGN_TOP_MID, 0, 8);
+
+    /* ── Versione firmware ── */
+    const esp_app_desc_t *desc = esp_app_get_description();
+    char ver_buf[32];
+    snprintf(ver_buf, sizeof(ver_buf), "v%s", desc->version);
+    lv_obj_t *lbl_ver = lv_label_create(tab);
+    lv_label_set_text(lbl_ver, ver_buf);
+    lv_obj_set_style_text_color(lbl_ver, lv_color_hex(0xaaaaaa),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_ver, &lv_font_montserrat_16,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_ver, LV_ALIGN_TOP_MID, 0, 38);
+
+    /* ── QR code → repository GitHub ── */
+    static const char *QR_URL =
+        "https://github.com/cerocca/sensecap_indicator_customdeck";
+    lv_obj_t *qr = lv_qrcode_create(tab, 180,
+                                     lv_color_white(),
+                                     lv_color_hex(0x101418));
+    lv_qrcode_update(qr, QR_URL, (uint32_t)strlen(QR_URL));
+    lv_obj_align(qr, LV_ALIGN_TOP_MID, 0, 66);
+
+    /* ── URL repository ── */
+    lv_obj_t *lbl_url = lv_label_create(tab);
+    lv_label_set_text(lbl_url, "github.com/cerocca/sensecap_indicator_customdeck");
+    lv_obj_set_style_text_color(lbl_url, lv_color_hex(0xaaaaaa),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_url, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_url, LV_ALIGN_TOP_MID, 0, 250);
+
+    /* ── Credits ── */
+    lv_obj_t *lbl_credits = lv_label_create(tab);
+    lv_label_set_text(lbl_credits, "cerocca");
+    lv_obj_set_style_text_color(lbl_credits, lv_color_hex(0xaaaaaa),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_credits, &lv_font_montserrat_14,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_credits, LV_ALIGN_TOP_MID, 0, 272);
+
+    /* ── Licenza ── */
+    lv_obj_t *lbl_license = lv_label_create(tab);
+    lv_label_set_text(lbl_license, "MIT License");
+    lv_obj_set_style_text_color(lbl_license, lv_color_hex(0x666666),
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(lbl_license, &lv_font_montserrat_12,
+                               LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align(lbl_license, LV_ALIGN_TOP_MID, 0, 296);
+
+    return tab;
+}
+
+/***********************************************************
  * SCREEN_LOAD_START → populate fields from NVS
  ***********************************************************/
 
@@ -663,13 +733,14 @@ void screen_settings_custom_populate(void)
     lv_obj_set_style_border_color(tab_bar, lv_color_hex(0x529d53),
                                   LV_PART_ITEMS | LV_STATE_CHECKED);
 
-    /* build tabs (order matters: tab index 0..5) */
+    /* build tabs (order matters: tab index 0..6) */
     build_tab_hue(tv);
     build_tab_server(tv);
     build_tab_proxy(tv);
     build_tab_weather(tv);
     build_tab_traffic(tv);
     build_tab_screens(tv);
+    build_tab_info(tv);
 
     /* populate fields on screen load */
     lv_obj_add_event_cb(ui_screen_settings_custom, on_screen_load_start,

@@ -561,38 +561,6 @@ CONFIG_LCD_TASK_REFRESH_TIME=10
 # end of Board Configuration
 
 #
-# LoRaWAN 1-CH HUB Configuration
-#
-
-#
-# Hardware Configuration
-#
-# CONFIG_SEMTECH_DEVKIT is not set
-CONFIG_HELTEC_WIFI_LORA_32_V3=y
-# CONFIG_RADIO_TYPE_SX1261 is not set
-CONFIG_RADIO_TYPE_SX1262=y
-# CONFIG_RADIO_TYPE_SX1268 is not set
-# CONFIG_RADIO_TYPE_LLCC68 is not set
-# CONFIG_RADIO_TYPE_LR1121 is not set
-CONFIG_GATEWAY_DISPLAY=y
-# end of Hardware Configuration
-
-#
-# Packet Forwarder Configuration
-#
-CONFIG_GATEWAY_ID_AUTO=y
-CONFIG_GET_CFG_FROM_FLASH=y
-CONFIG_CHANNEL_FREQ_HZ=868100000
-CONFIG_CHANNEL_LORA_DATARATE=7
-CONFIG_CHANNEL_LORA_BANDWIDTH=125
-CONFIG_NETWORK_SERVER_ADDRESS="eu1.cloud.thethings.network"
-CONFIG_NETWORK_SERVER_PORT=1700
-CONFIG_SNTP_SERVER_ADDRESS="pool.ntp.org"
-CONFIG_WIFI_PROV_DELAY_S=5
-# end of Packet Forwarder Configuration
-# end of LoRaWAN 1-CH HUB Configuration
-
-#
 # Compiler options
 #
 # CONFIG_COMPILER_OPTIMIZATION_DEBUG is not set
@@ -2398,7 +2366,7 @@ CONFIG_LV_USE_GRID=y
 # CONFIG_LV_USE_BMP is not set
 # CONFIG_LV_USE_SJPG is not set
 # CONFIG_LV_USE_GIF is not set
-# CONFIG_LV_USE_QRCODE is not set
+CONFIG_LV_USE_QRCODE=y
 # CONFIG_LV_USE_FREETYPE is not set
 # CONFIG_LV_USE_RLOTTIE is not set
 # CONFIG_LV_USE_FFMPEG is not set
