@@ -8,9 +8,9 @@
       Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
 - [ ] **Code review sistematica pre-pubblicazione**:
   - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
-  - [ ] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
-  - [ ] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
-  - [ ] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
+  - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
+  - [x] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
+  - [x] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
   - [ ] **Sanity check finale**: dopo ogni fase, lanciare `/code-review` in Claude Code CLI come verifica aggiuntiva sui file modificati
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
@@ -21,6 +21,7 @@
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
+- [x] **Tab Info in Settings**: versione firmware (`esp_app_get_description`), QR code repo (`LV_USE_QRCODE`), URL, credits "cerocca", MIT License
 - [x] **Screen Weather**: fix layout — separatore sotto titolo, aggiunta sezione "Next 3 days"
 - [x] **Uniformità font schermate custom** — HUE come riferimento, verificare tutte le schermate
 - [x] **Screen Traffic** (slot 6): Google Maps Distance Matrix API via proxy Mac.

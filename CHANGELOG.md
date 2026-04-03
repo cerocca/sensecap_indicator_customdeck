@@ -2,11 +2,20 @@
 
 ## [Unreleased]
 
-### Note interne
-- Code review Fase 2 completata su firmware/main/model/ — identificati 4 ATTENZIONE
-  e 2 COSMETICI (stack TLS, buffer traffic, pattern IP_EVENT weather, unused var)
-- Fix revertiti per regressione Hue/Traffic — da riapplicare uno alla volta
-  nella prossima sessione (vedi docs/WARNINGS.md)
+### Added
+- `screen_settings_custom.c`: tab **Info** (ultimo tab) — titolo "SenseDeck" (font_montserrat_20, #7ec8a0), versione firmware da `esp_app_get_description()->version`, QR code 180×180 (`lv_qrcode`) → `https://github.com/cerocca/sensecap_indicator_customdeck`, URL repo testo (font_12 #aaaaaa), credits "cerocca" (font_14), "MIT License" (font_12 #666666)
+- `firmware/sdkconfig`: `LV_USE_QRCODE=y` abilitato (necessario per `lv_qrcode_create`/`lv_qrcode_update` nel tab Info)
+
+### Fixed
+- `indicator_traffic.c`: `TRAFFIC_BUF_SIZE` 512→2048 — fix parse failure silenzioso su risposta proxy `/api/4/fs` (buffer troppo piccolo troncava il JSON)
+- `sensedeck_proxy.py`: `/open/<n>` — `subprocess.Popen` wrappato in `try/except`; risposta HTTP 500 invece di connection reset se `open -a Firefox` fallisce
+- `sensedeck_proxy.py`: Web UI `/config/ui` — valori config inseriti in attributi HTML con `html.escape(..., quote=True)`; fix rendering rotto con `"` nei valori
+- `sensedeck_proxy.py`: `load_config()` fallback usa `_merge_config(DEFAULT_CONFIG, {})` invece di `dict(DEFAULT_CONFIG)` — deep copy corretta per `traffic_routes`
+
+### Changed
+- `ui_manager.c`: tutti i gesture handler registrati con `LV_EVENT_GESTURE` (era `LV_EVENT_ALL`); `on_screen_load_start` handler in sibilla/launcher/weather/traffic registrati con `LV_EVENT_SCREEN_LOAD_START`
+- `ui_manager.c`: `ensure_sibilla_populated()` aggiunta e inclusa in `ensure_populated()` — sibilla ora allineata al pattern di hue/launcher/weather/traffic
+- `screen_hue.c`: aggiunto `static bool s_populated` + guard `if (!s_populated) return` in `hue_update_ui()` — allineato al pattern delle altre schermate custom
 
 ### Changed
 - `screen_weather.c`: separatore header riposizionato (y=34→45); separatore tra "Next hours" e "Next 3 days" riposizionato (y=297→305)

@@ -39,6 +39,7 @@ idf.py -p /dev/cu.usbserial-1110 monitor
 7. Pattern reference per nuovi task HTTP polling: `indicator_glances.c`.
 8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`).
 9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: includere `"esp_wifi.h"` — non `"esp_netif.h"`. Il tipo corretto per il metodo HTTP client è `esp_http_client_method_t` (non `esp_http_method_t`).
+10. **`LV_USE_QRCODE=y`** abilitato in `firmware/sdkconfig` (non in `sdkconfig.defaults`) — necessario per il tab Info di `screen_settings_custom`. Se `sdkconfig` viene rigenerato dai defaults, reimpostare manualmente.
 
 ---
 
@@ -104,7 +105,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 | 4 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
 | 5 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
 | 6 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
-| — | `screen_settings_custom` | Custom — fuori rotazione | Accessibile solo via swipe UP dal clock |
+| — | `screen_settings_custom` | Custom — fuori rotazione | Accessibile solo via swipe UP dal clock. Tab: Hue \| Server \| Proxy \| Weather \| Traffic \| Screens \| **Info** (versione firmware, QR code repo, credits) |
 | — | `ui_screen_setting` | Originale Seeed — NON toccare | Accessibile via swipe DOWN dal clock |
 
 ### Struttura file
