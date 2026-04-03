@@ -2,10 +2,6 @@
 
 ## Pending
 
-- [ ] **Schermata Clock**: immagine di sfondo custom (es. tema circuito PCB) + crediti cirutech + versione in UI —
-      convertire con LVGL image converter in C array, includere come `.c` nel progetto.
-      **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
-      Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
 - [ ] **Code review sistematica pre-pubblicazione**:
   - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
   - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
@@ -21,6 +17,8 @@
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
+- [ ] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
+
 - [x] **Tab Info in Settings**: versione firmware (`esp_app_get_description`), QR code repo (`LV_USE_QRCODE`), URL, credits "cerocca", MIT License
 - [x] **Screen Weather**: fix layout — separatore sotto titolo, aggiunta sezione "Next 3 days"
 - [x] **Uniformità font schermate custom** — HUE come riferimento, verificare tutte le schermate
@@ -62,11 +60,12 @@
 - [x] Valutare rimozione `screen_ai.c/.h` — NON rimosso: ui.c (Seeed) ha ancora extern + riferimento
       in ui_event_screen_time (dead code, handler già sostituito da gesture_clock). Footprint: 4 byte BSS, costo zero.
 
-
-- [ ] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
-
 ## Futuro
 
+- [ ] **Schermata Clock**: immagine di sfondo custom (es. tema circuito PCB) —
+      convertire con LVGL image converter in C array, includere come `.c` nel progetto.
+      **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
+      Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
 - [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — logica UI riscritta seguendo pattern weather (timer 5s, `traffic_update_ui()` static, `on_screen_load_start` aggiunto); build OK, verificare con flash+monitor e route configurata. Root cause sospetta: layout adattivo show_single/show_dual — provare a forzare il layout prima che la schermata diventi visibile.
 - [ ] **Nota schermata AI:** Visti i limiti hardware del SI (GPIO Grove su RP2040, conflitto Wi-Fi/BT per audio),
       Valutare scheda esterna XIAO (ESP32-S3 o RP2040) come coprocessore audio:
