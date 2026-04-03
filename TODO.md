@@ -2,11 +2,6 @@
 
 ## Pending
 
-- [x] **Code review sistematica pre-pubblicazione**:
-  - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
-  - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
-  - [x] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
-  - [x] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
@@ -18,6 +13,11 @@
       (rimuovere path assoluti o riferimenti personali)
 - [ ] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
 
+- [x] **Code review sistematica pre-pubblicazione**:
+  - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
+  - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
+  - [x] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
+  - [x] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
 - [x] **Tab Info in Settings**: versione firmware (`esp_app_get_description`), QR code repo (`LV_USE_QRCODE`), URL, credits "cerocca", MIT License
 - [x] **Screen Weather**: fix layout — separatore sotto titolo, aggiunta sezione "Next 3 days"
 - [x] **Uniformità font schermate custom** — HUE come riferimento, verificare tutte le schermate
