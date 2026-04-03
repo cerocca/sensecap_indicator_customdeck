@@ -40,6 +40,7 @@ idf.py -p /dev/cu.usbserial-1110 monitor
 8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`).
 9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: includere `"esp_wifi.h"` — non `"esp_netif.h"`. Il tipo corretto per il metodo HTTP client è `esp_http_client_method_t` (non `esp_http_method_t`).
 10. **`LV_USE_QRCODE=y`** abilitato in `firmware/sdkconfig` (non in `sdkconfig.defaults`) — necessario per il tab Info di `screen_settings_custom`. Se `sdkconfig` viene rigenerato dai defaults, reimpostare manualmente.
+11. **`indicator_hue.c` — `hue_poll_task`**: delay iniziale **10s** (attende che le altre connessioni TLS al boot si completino); pausa **200ms** tra le 4 richieste HTTPS consecutive — evita `esp-aes: Failed to allocate memory` per contesa heap TLS.
 
 ---
 

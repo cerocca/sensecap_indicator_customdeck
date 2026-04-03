@@ -27,6 +27,7 @@
 ### Fixed
 - `ui_manager.c`: aggiunto `ensure_populated()` prima di `_ui_screen_change()` in tutti i gesture handler (clock LEFT/RIGHT, traffic LEFT, weather RIGHT, hue RIGHT, launcher RIGHT) — preveniva schermata vuota al primo swipe verso schermate con lazy init
 - `indicator_weather_init()` spostata da `ui_manager_init()` a `main.c` dopo `indicator_uptime_kuma_init()` — corretto posizionamento init modello fuori dal contesto LVGL sem
+- `indicator_hue.c`: delay primo poll aumentato 3s→10s; aggiunta pausa 200ms tra le 4 richieste HTTPS consecutive — risolve `esp-aes: Failed to allocate memory` al boot causato da contesa heap TLS
 - `TRAFFIC_FIRST_DELAY_MS` aumentato da 8000ms a 20000ms — risolto crash lwIP out of memory (`LoadProhibited` in `netconn_gethostbyname`) causato da contesa connessioni TLS simultanee al boot
 - `indicator_traffic.c`: `indicator_traffic_force_poll()` non usa più `xTaskCreate` (falliva per heap insufficiente); sostituito con flag atomico `s_force_poll_requested`; il task polling periodico controlla il flag ogni 500ms e interrompe l'attesa, eseguendo il poll entro 500ms dalla richiesta
 

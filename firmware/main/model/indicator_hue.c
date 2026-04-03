@@ -240,14 +240,17 @@ static void hue_cmd_task(void *arg)
 static void hue_poll_task(void *arg)
 {
     /* Attende il completamento del config fetch (1.5 s) prima di leggere NVS */
-    vTaskDelay(pdMS_TO_TICKS(3000));
+    vTaskDelay(pdMS_TO_TICKS(10000));
 
     while (1) {
         hue_read_config();
 
         if (s_bridge_ip[0] != '\0' && s_api_key[0] != '\0') {
-            for (int i = 0; i < HUE_LIGHT_COUNT; i++)
+            for (int i = 0; i < HUE_LIGHT_COUNT; i++) {
                 hue_get_light_state(i);
+                if (i < HUE_LIGHT_COUNT - 1)
+                    vTaskDelay(pdMS_TO_TICKS(200));
+            }
 
             /* Notifica UI — deve avvenire con LVGL sem acquisito */
             if (s_update_cb) {

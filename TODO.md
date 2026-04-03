@@ -11,7 +11,7 @@
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command
       (rimuovere path assoluti o riferimenti personali)
-- [ ] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
+- [x] **esp-aes: Failed to allocate memory su Hue polling** — al boot, il polling TLS di Hue (4 luci in sequenza) fallisce per heap DRAM insufficiente. Il device non crasha ma le luci risultano HTTP -1 al primo ciclo. Investigare: aumentare delay primo poll Hue, o serializzare le 4 richieste con pausa tra una e l'altra, o verificare se `CONFIG_MBEDTLS_DYNAMIC_BUFFER=y` è effettivamente attivo in sdkconfig.
 
 - [x] **Code review sistematica pre-pubblicazione**:
   - [x] **Fase 1** — `ui_manager.c` (gesture/guard/navigazione): fix applicati (ensure_populated mancanti, indicator_weather_init spostata)
