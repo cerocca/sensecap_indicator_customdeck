@@ -14,7 +14,7 @@ Se `gmaps_api_key` vuota o nessuna route abilitata/configurata → `{"error":"no
 ### Polling
 - Ogni **10 minuti** (TRAFFIC_POLL_MS = 600000 ms)
 - Primo poll: 8s dopo boot (TRAFFIC_FIRST_DELAY_MS)
-- Buffer response: 512 byte
+- Buffer response: 2048 byte
 - Pattern task: vedi `indicator_glances.c`
 - `indicator_traffic_force_poll()`: lancia task one-shot (`force_poll_task`) che esegue `do_traffic_poll()` immediatamente e poi si auto-cancella; chiamato da "Reload config" in Settings tab Proxy
 
