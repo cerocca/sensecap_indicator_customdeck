@@ -7,7 +7,6 @@
   - [x] **Fase 2** — `model/` (task HTTP, buffer, stack, guard FreeRTOS)
   - [x] **Fase 3** — `ui/` (lazy init, lv_port_sem, event handler)
   - [x] **Fase 4** — `sensedeck_proxy.py` (endpoints, error handling, merge config)
-  - [ ] **Sanity check finale**: dopo ogni fase, lanciare `/code-review` in Claude Code CLI come verifica aggiuntiva sui file modificati
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
