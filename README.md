@@ -18,7 +18,7 @@
   </a>
   <img src="https://img.shields.io/badge/esp--idf-v5.3.2-00b202" alt="esp-idf">
   <img src="https://img.shields.io/badge/LVGL-v8.x-blue" alt="lvgl">
-  <img src="https://img.shields.io/badge/status-in--development-orange" alt="status">
+  <img src="https://img.shields.io/badge/status-stable-green" alt="status">
 </p>
 
 ---
