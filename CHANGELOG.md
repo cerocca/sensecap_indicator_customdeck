@@ -4,6 +4,7 @@
 
 ### Fixed
 - `indicator_config.c`: boot config fetch — delay iniziale 1500→3000ms; retry 3× con backoff 2000ms tra i tentativi. Il proxy potrebbe non essere pronto al boot; il retry garantisce il caricamento della config.
+- `indicator_model.c`: disabilitato `indicator_city_init()` — crash OOM lwIP al boot (`lwip_arch: thread_sem_init: out of memory` → Guru Meditation LoadProhibited in `indicator_city.c:216`). Il modulo fa `getaddrinfo` al boot, esaurendo i semafori lwIP. Label `ui_city` rimane `" -- "`.
 
 ### Added
 - **NTP / POSIX TZ string**: timezone con DST automatico via `setenv("TZ", ...) + tzset()`. La stringa POSIX è composta al volo da `__tz_apply_from_cfg()` a partire dai valori UTC offset e DST già gestiti dai controlli Seeed (schermata Date&Time). Formato EU: `"STD-{n}DST,M3.5.0,M10.5.0/3"` con DST ON, `"STD-{n}"` con DST OFF. Nessun widget aggiuntivo, nessuna NVS aggiuntiva. File: `indicator_time.c` (aggiunta `__tz_apply_from_cfg`, `tzset()` dopo ogni `setenv`).
