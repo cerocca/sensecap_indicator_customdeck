@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- `ui_manager.c`: nascosti `ui_location`, `ui_location_Icon`, `ui_city` sul clock — `indicator_city` è disabilitato, i widget mostravano solo `" -- "` e un'icona GPS inutile.
+
 ### Changed
 - `screen_sibilla.c/.h` rinominato in `screen_server.c/.h`; tutti i simboli `screen_sibilla_*` / `ui_screen_sibilla` / `gesture_sibilla` / `s_sibilla_populated` aggiornati in `ui_manager.c`, `ui_manager.h`, `indicator_glances.h`, `indicator_uptime_kuma.h`.
 

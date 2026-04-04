@@ -390,6 +390,12 @@ void ui_manager_init(void)
     lv_obj_add_flag(ui_setting_icon,  LV_OBJ_FLAG_HIDDEN); /* icona ingranaggio */
     lv_obj_add_flag(ui_scrolldots3,   LV_OBJ_FLAG_HIDDEN); /* container 3 puntini navigazione */
 
+    /* Nasconde widget location/city sul clock — indicator_city è disabilitato,
+     * i widget resterebbero con " -- " e icona GPS inutile (NON si modifica ui.c). */
+    lv_obj_add_flag(ui_location,      LV_OBJ_FLAG_HIDDEN); /* container città */
+    lv_obj_add_flag(ui_location_Icon, LV_OBJ_FLAG_HIDDEN); /* icona pin GPS */
+    lv_obj_add_flag(ui_city,          LV_OBJ_FLAG_HIDDEN); /* label " -- " */
+
     lv_obj_add_event_cb(ui_screen_traffic,  gesture_traffic,  LV_EVENT_GESTURE, NULL);
     lv_obj_add_event_cb(ui_screen_hue,      gesture_hue,      LV_EVENT_GESTURE, NULL);
     lv_obj_add_event_cb(ui_screen_server,   gesture_server,   LV_EVENT_GESTURE, NULL);
