@@ -2,6 +2,7 @@
 
 ## Pending
 
+- [ ] Rinominare screen_sibilla.c/.h e tutti i riferimenti nel firmware in un nome più generico (es. screen_server o screen_monitor)
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
@@ -42,7 +43,7 @@
 - [x] Sistema configurazione per nuovi utenti (quali schermate abilitare) con switch su ogni screen
 - [x] Screen Hue — toggle ON/OFF + slider luminosità
 - [x] Screen LocalServer Dashboard — Glances + Uptime Kuma via proxy
-- [x] Screen LocalServer Dashboard — top 3 container Docker per RAM (via Glances API /api/4/containers)
+- [x] Screen LocalServer Dashboard — top 5 container Docker per RAM (via proxy /docker, Beszel integration)
 - [x] Screen LocalServer Dashboard — Nome server LocalServer parametrico (da NVS)
 - [x] Screen Launcher — 4 pulsanti proxy Mac, nomi mnemonici NVS, Beszel Docker integration
 - [x] Screen Weather — meteo OWM diretto (temp, icona ASCII, umidità, vento, 4 slot forecast 3h)

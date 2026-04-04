@@ -14,11 +14,11 @@ typedef struct {
  * cpu, ram, dsk : percentuali 0–100 (-1.0 se errore di rete)
  * uptime        : stringa raw Glances (es. "1 day, 2:34:56") — buffer interno, copiare se necessario
  * load1/5/15    : load average 1/5/15 min (-1.0 se errore)
- * top_ram       : top 3 processi per memory_percent, ordinati decrescente */
+ * top_ram       : top 5 container Docker per mem_mb, ordinati decrescente */
 typedef void (*glances_data_cb_t)(float cpu, float ram, float dsk,
                                   const char *uptime,
                                   float load1, float load5, float load15,
-                                  const glances_proc_t top_ram[3]);
+                                  const glances_proc_t top_ram[5]);
 
 /* Registra handler IP_EVENT_STA_GOT_IP e legge config iniziale da NVS. */
 void indicator_glances_init(void);

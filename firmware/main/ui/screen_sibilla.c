@@ -28,8 +28,8 @@ static lv_obj_t *s_services_lbl;
 static lv_obj_t *s_down_lbls[6];
 
 static lv_obj_t *s_topram_hdr_lbl;
-static lv_obj_t *s_topram_name_lbls[3];
-static lv_obj_t *s_topram_mb_lbls[3];
+static lv_obj_t *s_topram_name_lbls[5];
+static lv_obj_t *s_topram_mb_lbls[5];
 
 static bool s_populated = false;
 
@@ -159,11 +159,11 @@ static void on_glances_data(float cpu, float ram, float dsk,
     }
 
     /* Top Docker — reset prima di sovrascrivere, così gli slot vuoti si puliscono */
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         lv_label_set_text(s_topram_name_lbls[i], "--");
         lv_label_set_text(s_topram_mb_lbls[i],   "");
     }
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         if (top_ram[i].name[0] != '\0') {
             lv_label_set_text(s_topram_name_lbls[i], top_ram[i].name);
             snprintf(buf, sizeof(buf), "%"PRIu32" MB", top_ram[i].mem_mb);
@@ -242,16 +242,16 @@ void screen_sibilla_populate(void)
 
     /* ── Header Top Docker (y=254, subito sotto il separatore) ── */
     s_topram_hdr_lbl = lv_label_create(scr);
-    lv_label_set_text(s_topram_hdr_lbl, "Top Docker (RAM):");
+    lv_label_set_text(s_topram_hdr_lbl, "Top 5 Docker (RAM):");
     lv_obj_set_style_text_color(s_topram_hdr_lbl, lv_color_hex(0x7ec8a0),
                                   LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(s_topram_hdr_lbl, &lv_font_montserrat_16,
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_pos(s_topram_hdr_lbl, 10, 254);
 
-    /* ── 3 righe container Docker: nome (sx, max 32 char) + MB (dx allineato) ── */
-    for (int i = 0; i < 3; i++) {
-        int y = 276 + i * 22;
+    /* ── 5 righe container Docker: nome (sx, max 32 char) + MB (dx allineato) ── */
+    for (int i = 0; i < 5; i++) {
+        int y = 276 + i * 18;
 
         s_topram_name_lbls[i] = lv_label_create(scr);
         lv_label_set_text(s_topram_name_lbls[i], "--");
@@ -275,16 +275,16 @@ void screen_sibilla_populate(void)
         lv_obj_set_pos(s_topram_mb_lbls[i], 350, y);
     }
 
-    /* ── Label servizi Uptime Kuma (placeholder) — 2 righe sotto il terzo container ── */
+    /* ── Label servizi Uptime Kuma (placeholder) — sotto il quinto container ── */
     s_services_lbl = lv_label_create(scr);
     lv_label_set_text(s_services_lbl, "Monitored Services: --/-- UP");
     lv_obj_set_style_text_color(s_services_lbl, lv_color_white(),
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(s_services_lbl, &lv_font_montserrat_16,
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_pos(s_services_lbl, 10, 366);
+    lv_obj_set_pos(s_services_lbl, 10, 372);
 
-    /* ── 6 label DOWN pre-allocate (nascoste) — y=388+i*18 ── */
+    /* ── 6 label DOWN pre-allocate (nascoste) — y=394+i*14 ── */
     for (int i = 0; i < 6; i++) {
         s_down_lbls[i] = lv_label_create(scr);
         lv_label_set_text(s_down_lbls[i], "");
@@ -292,7 +292,7 @@ void screen_sibilla_populate(void)
                                      LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_text_font(s_down_lbls[i], &lv_font_montserrat_14,
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_pos(s_down_lbls[i], 10, 388 + i * 16);
+        lv_obj_set_pos(s_down_lbls[i], 10, 394 + i * 14);
         lv_obj_add_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
     }
 

@@ -125,11 +125,11 @@ static float parse_float_key(const char *json, const char *key)
  * Parsa la risposta di GET /docker dal proxy Mac.
  * Formato: array JSON già ordinato per mem_mb desc:
  *   [{"name": "uptime-kuma", "mem_mb": 203.73}, ...]
- * Prende i primi 3 elementi (proxy pre-ordina e pre-filtra).
+ * Prende i primi 5 elementi (proxy pre-ordina e pre-filtra).
  */
-static void parse_top_docker(const char *json, glances_proc_t top[3])
+static void parse_top_docker(const char *json, glances_proc_t top[5])
 {
-    memset(top, 0, 3 * sizeof(glances_proc_t));
+    memset(top, 0, 5 * sizeof(glances_proc_t));
 
     cJSON *root = cJSON_Parse(json);
     if (!root || !cJSON_IsArray(root)) {
@@ -139,7 +139,7 @@ static void parse_top_docker(const char *json, glances_proc_t top[3])
 
     int n = cJSON_GetArraySize(root);
     int filled = 0;
-    for (int i = 0; i < n && filled < 3; i++) {
+    for (int i = 0; i < n && filled < 5; i++) {
         cJSON *item   = cJSON_GetArrayItem(root, i);
         if (!item) continue;
         cJSON *name   = cJSON_GetObjectItem(item, "name");
@@ -177,7 +177,7 @@ static void glances_poll_task(void *arg)
     static char           s_buf[GLANCES_BUF_SIZE];
     static char           s_url[128];
     static char           s_uptime[64];
-    static glances_proc_t s_top_docker[3];
+    static glances_proc_t s_top_docker[5];
 
     while (1) {
         if (!s_poll_running) {
@@ -268,10 +268,12 @@ static void glances_poll_task(void *arg)
 
         ESP_LOGI(TAG, "CPU=%.1f RAM=%.1f DSK=%.1f load=%.2f/%.2f/%.2f uptime=%s",
                  cpu, ram, dsk, load1, load5, load15, s_uptime);
-        ESP_LOGI(TAG, "docker[0]=%s %.0fMB  [1]=%s %.0fMB  [2]=%s %.0fMB",
+        ESP_LOGI(TAG, "docker[0]=%s %.0fMB  [1]=%s %.0fMB  [2]=%s %.0fMB  [3]=%s %.0fMB  [4]=%s %.0fMB",
                  s_top_docker[0].name[0] ? s_top_docker[0].name : "(empty)", (float)s_top_docker[0].mem_mb,
                  s_top_docker[1].name[0] ? s_top_docker[1].name : "(empty)", (float)s_top_docker[1].mem_mb,
-                 s_top_docker[2].name[0] ? s_top_docker[2].name : "(empty)", (float)s_top_docker[2].mem_mb);
+                 s_top_docker[2].name[0] ? s_top_docker[2].name : "(empty)", (float)s_top_docker[2].mem_mb,
+                 s_top_docker[3].name[0] ? s_top_docker[3].name : "(empty)", (float)s_top_docker[3].mem_mb,
+                 s_top_docker[4].name[0] ? s_top_docker[4].name : "(empty)", (float)s_top_docker[4].mem_mb);
 
         if (s_data_cb) {
             lv_port_sem_take();

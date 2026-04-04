@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- `screen_sibilla.c` + `indicator_glances.c/.h`: top Docker container per RAM aumentati da 3 a 5; label aggiornata a "Top 5 Docker (RAM)"; spaziatura righe 22→18px; `Monitored Services` y 366→372; label DOWN y 388→394
+
 ### Added
 - `screen_settings_custom.c`: tab **Info** (ultimo tab) — titolo "SenseDeck" (font_montserrat_20, #7ec8a0), versione firmware da `esp_app_get_description()->version`, QR code 180×180 (`lv_qrcode`) → `https://github.com/cerocca/sensecap_indicator_customdeck`, URL repo testo (font_12 #aaaaaa), credits "cerocca" (font_14), "MIT License" (font_12 #666666)
 - `firmware/sdkconfig`: `LV_USE_QRCODE=y` abilitato (necessario per `lv_qrcode_create`/`lv_qrcode_update` nel tab Info)

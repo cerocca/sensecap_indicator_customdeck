@@ -102,7 +102,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 | 0 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
 | 2 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
-| 3 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy |
+| 3 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy; top 5 container Docker per RAM |
 | 4 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
 | 5 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
 | 6 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
