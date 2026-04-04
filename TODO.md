@@ -4,8 +4,6 @@
 
 - [ ] Rinominare screen_sibilla.c/.h e tutti i riferimenti nel firmware in un nome più generico (es. screen_server o screen_monitor)
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
-- [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
-      (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [x] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [x] NTP/Timezone: CET/CEST, passaggio ora legale automatico — POSIX TZ string via `setenv`/`tzset` in `indicator_time.c`; composta da zone offset + DST flag esistenti Seeed; nessun widget aggiuntivo
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
@@ -73,3 +71,5 @@
       XIAO → Grove 2 (UART) → RP2040 SI → UART interno → ESP32-S3 → Claude API.
       Approccio analogo all'architettura interna SI (RP2040 come bridge sensori).
 - [ ] **Screen Weather**: implementare icone PNG reali (LVGL image converter C array) — attualmente testo ASCII
+- [ ] **Screenshots**: photograph the device and add images to `docs/screenshots/`
+      (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
