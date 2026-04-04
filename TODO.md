@@ -6,7 +6,7 @@
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
-- [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
+- [x] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [x] NTP/Timezone: CET/CEST, passaggio ora legale automatico — POSIX TZ string via `setenv`/`tzset` in `indicator_time.c`; composta da zone offset + DST flag esistenti Seeed; nessun widget aggiuntivo
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
