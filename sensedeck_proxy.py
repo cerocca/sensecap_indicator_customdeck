@@ -655,19 +655,27 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                 _cfg = load_config()
                 _uk_host = _cfg.get("server_ip", DEFAULT_CONFIG["server_ip"])
                 _uk_port = _cfg.get("uk_port",   DEFAULT_CONFIG["uk_port"])
+                # 1. Recupera nomi reali da /api/status-page/active → publicGroupList
+                page_url = f"http://{_uk_host}:{_uk_port}/api/status-page/active"
+                with urllib.request.urlopen(page_url, timeout=5) as r:
+                    page = json.loads(r.read())
+                name_map = {}
+                for group in page.get("publicGroupList", []):
+                    for m in group.get("monitorList", []):
+                        name_map[str(m["id"])] = m["name"]
+
+                # 2. Heartbeat list
                 _uk_url  = f"http://{_uk_host}:{_uk_port}/api/status-page/heartbeat/active"
                 req = urllib.request.Request(_uk_url)
                 with urllib.request.urlopen(req, timeout=5) as resp:
                     raw = json.loads(resp.read())
 
-                monitor_list = raw.get("monitorList", {})
                 result = []
                 for monitor_id, heartbeats in raw.get("heartbeatList", {}).items():
                     if not heartbeats:
                         continue
                     last = heartbeats[-1]
-                    info = monitor_list.get(str(monitor_id), {})
-                    name = info.get("name", f"Monitor {monitor_id}")
+                    name = name_map.get(str(monitor_id), f"Monitor {monitor_id}")
                     # Escludi intestazioni gruppo (es. "0-Infra")
                     if name.startswith("0-"):
                         continue

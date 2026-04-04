@@ -40,6 +40,14 @@ Sostituisce il merge superficiale `dict.update`. Usato in `load_config()` e `POS
 - Chiavi extra in saved (non in defaults) vengono preservate (forward compat)
 - DEFAULT_CONFIG non viene mutato (copia profonda per liste/dict)
 
+## Uptime Kuma — `/uptime`
+
+Due fetch sequenziali alla stessa status page di Uptime Kuma:
+1. `GET /api/status-page/active` → `publicGroupList[].monitorList[]` — costruisce `name_map {id→name}`
+2. `GET /api/status-page/heartbeat/active` → `heartbeatList {id→[heartbeat]}` — stato corrente
+
+`monitorList` nel corpo di `/heartbeat/active` è assente in questa versione di Uptime Kuma; i nomi si trovano solo in `/api/status-page/active`. I monitor con nome prefisso `"0-"` vengono esclusi (intestazioni gruppo). Fallback: `f"Monitor {id}"` se l'id non è in `name_map`.
+
 ## Beszel Docker integration — `/docker`
 
 Beszel è una dashboard per container Docker (PocketBase-based). Il proxy autentica e fornisce un endpoint compatto al firmware.

@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- `sensedeck_proxy.py`: endpoint `/uptime` — usa due fetch sequenziali (`/api/status-page/active` per `name_map id→name`, poi `/api/status-page/heartbeat/active` per lo stato). `monitorList` in `/heartbeat/active` è assente in questa versione di Uptime Kuma; i nomi reali si trovano solo in `publicGroupList[].monitorList[]` di `/api/status-page/active`.
 - `indicator_config.c`: boot config fetch — delay iniziale 1500→3000ms; retry 3× con backoff 2000ms tra i tentativi. Il proxy potrebbe non essere pronto al boot; il retry garantisce il caricamento della config.
 - `indicator_model.c`: disabilitato `indicator_city_init()` — crash OOM lwIP al boot (`lwip_arch: thread_sem_init: out of memory` → Guru Meditation LoadProhibited in `indicator_city.c:216`). Il modulo fa `getaddrinfo` al boot, esaurendo i semafori lwIP. Label `ui_city` rimane `" -- "`.
 
