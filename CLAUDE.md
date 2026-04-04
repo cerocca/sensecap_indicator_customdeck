@@ -41,6 +41,13 @@ idf.py -p /dev/cu.usbserial-1110 monitor
 9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: includere `"esp_wifi.h"` — non `"esp_netif.h"`. Il tipo corretto per il metodo HTTP client è `esp_http_client_method_t` (non `esp_http_method_t`).
 10. **`LV_USE_QRCODE=y`** abilitato in `firmware/sdkconfig` (non in `sdkconfig.defaults`) — necessario per il tab Info di `screen_settings_custom`. Se `sdkconfig` viene rigenerato dai defaults, reimpostare manualmente.
 11. **`indicator_hue.c` — `hue_poll_task`**: delay iniziale **10s** (attende che le altre connessioni TLS al boot si completino); pausa **200ms** tra le 4 richieste HTTPS consecutive — evita `esp-aes: Failed to allocate memory` per contesa heap TLS.
+12. **NTP / POSIX TZ string**: la timezone viene applicata come POSIX TZ string via `setenv("TZ", ...) + tzset()`. La stringa è composta da `__tz_apply_from_cfg()` a partire da `zone` (offset UTC) e `daylight` (DST flag) salvati dal Seeed nel blob NVS `"time-cfg"`. Formato: `"STD-{n}DST,M3.5.0,M10.5.0/3"` se DST ON (regole EU), `"STD-{n}"` se DST OFF (con segno invertito per POSIX). Chiamata dopo `__time_cfg()` in `indicator_time_init()` e in `VIEW_EVENT_TIME_CFG_APPLY`. Nessuna NVS aggiuntiva, nessun widget nuovo: si usano i controlli Seeed esistenti (UTC offset + DST switch).
+
+---
+
+## Eccezioni esplicite alla regola #1
+
+- **`ui_screen_time` (Clock Seeed)** — solo sfondo custom, nessuna modifica alla logica (vedi TODO Futuro).
 
 ---
 

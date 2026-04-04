@@ -7,7 +7,7 @@
 - [ ] **Screenshot schermate**: fotografare il device e aggiungere immagini in `docs/screenshots/`
       (traffic.png, hue.png, sibilla.png, launcher.png, weather.png, settings.png)
 - [ ] aumentare spazio titoli schermate per swipe (o altro metodo)
-- [ ] NTP/Timezone: CET/CEST, passaggio ora legale automatico, sincronizzazione NTP da rifinire
+- [x] NTP/Timezone: CET/CEST, passaggio ora legale automatico — POSIX TZ string via `setenv`/`tzset` in `indicator_time.c`; composta da zone offset + DST flag esistenti Seeed; nessun widget aggiuntivo
 - [ ] Prima di rendere pubblico il repo: decidere se aggiungere CLAUDE.md
       a .gitignore (consigliato) o pulirlo da riferimenti personali;
       anonimizzare SenseDeck_Proxy_Start.command e SenseDeck_Proxy_Stop.command

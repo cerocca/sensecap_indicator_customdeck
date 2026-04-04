@@ -95,6 +95,7 @@ static void __time_zone_set(struct view_data_time_cfg *p_cfg)
             snprintf(zone_str, sizeof(zone_str) - 1, "UTC+%d", 0 - zone);
         }
         setenv("TZ", zone_str, 1);
+        tzset();
     } else {
 
         char net_zone[64] = {0};
@@ -104,6 +105,7 @@ static void __time_zone_set(struct view_data_time_cfg *p_cfg)
 
         if( strlen(net_zone) > 0 ) {
             setenv("TZ", net_zone, 1);
+            tzset();
         }
     }
 }
@@ -156,6 +158,38 @@ static __time_view_update_init(void)
 }
 
 
+/* Compose a proper POSIX TZ string from zone offset + DST flag and apply it.
+ * Uses EU DST transition rules (last Sun Mar / last Sun Oct) when DST is ON.
+ * POSIX TZ offset convention: negative = east of UTC (opposite to UTC offset sign).
+ * Call AFTER __time_cfg() to override the legacy UTC±n format. */
+static void __tz_apply_from_cfg(const struct view_data_time_cfg *p_cfg)
+{
+    if (p_cfg->auto_update_zone) return; /* net zone already handled by __time_zone_set */
+
+    int8_t zone = p_cfg->zone;
+    char tz_str[48];
+
+    if (p_cfg->daylight) {
+        /* DST ON: full POSIX TZ with EU rules (last Sun Mar→Oct) */
+        if (zone >= 0) {
+            snprintf(tz_str, sizeof(tz_str), "STD-%dDST,M3.5.0,M10.5.0/3", (int)zone);
+        } else {
+            snprintf(tz_str, sizeof(tz_str), "STD%dDST,M3.5.0,M10.5.0/3", (int)(-zone));
+        }
+    } else {
+        /* DST OFF: fixed offset only */
+        if (zone >= 0) {
+            snprintf(tz_str, sizeof(tz_str), "STD-%d", (int)zone);
+        } else {
+            snprintf(tz_str, sizeof(tz_str), "STD%d", (int)(-zone));
+        }
+    }
+
+    setenv("TZ", tz_str, 1);
+    tzset();
+    ESP_LOGI(TAG, "TZ: %s (zone=%d, dst=%d)", tz_str, zone, p_cfg->daylight);
+}
+
 static void __view_event_handler(void* handler_args, esp_event_base_t base, int32_t id, void* event_data)
 {
     switch (id)
@@ -167,6 +201,7 @@ static void __view_event_handler(void* handler_args, esp_event_base_t base, int3
             __time_cfg_set(p_cfg);
             __time_cfg_save(p_cfg);
             __time_cfg(p_cfg, p_cfg->set_time);  //config;
+            __tz_apply_from_cfg(p_cfg);  // override legacy UTC±n with proper POSIX TZ string
 
             bool time_format_24 = p_cfg->time_format_24;
             esp_event_post_to(view_event_handle, VIEW_EVENT_BASE, VIEW_EVENT_TIME, &time_format_24, sizeof(time_format_24), portMAX_DELAY);
@@ -242,6 +277,7 @@ int indicator_time_init(void)
     struct view_data_time_cfg cfg;
     __time_cfg_get(&cfg);
     __time_cfg(&cfg, true);
+    __tz_apply_from_cfg(&cfg);  // override legacy UTC±n with proper POSIX TZ string
     esp_event_post_to(view_event_handle, VIEW_EVENT_BASE, VIEW_EVENT_TIME_CFG_UPDATE, &cfg, sizeof(cfg), portMAX_DELAY);
 
     __time_view_update_init();

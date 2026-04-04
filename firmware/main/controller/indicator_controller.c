@@ -156,6 +156,7 @@ static void __time_cfg_apply(bool set_time)
     } else {
         cfg.daylight = false;
     }
+
     esp_event_post_to(view_event_handle, VIEW_EVENT_BASE, VIEW_EVENT_TIME_CFG_APPLY, &cfg, sizeof(cfg), portMAX_DELAY);
 }
 

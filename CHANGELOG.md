@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- **NTP / POSIX TZ string**: timezone con DST automatico via `setenv("TZ", ...) + tzset()`. La stringa POSIX è composta al volo da `__tz_apply_from_cfg()` a partire dai valori UTC offset e DST già gestiti dai controlli Seeed (schermata Date&Time). Formato EU: `"STD-{n}DST,M3.5.0,M10.5.0/3"` con DST ON, `"STD-{n}"` con DST OFF. Nessun widget aggiuntivo, nessuna NVS aggiuntiva. File: `indicator_time.c` (aggiunta `__tz_apply_from_cfg`, `tzset()` dopo ogni `setenv`).
+
 ### Changed
 - `screen_sibilla.c` + `indicator_glances.c/.h`: top Docker container per RAM aumentati da 3 a 5; label aggiornata a "Top 5 Docker (RAM)"; spaziatura righe 22→18px; `Monitored Services` y 366→372; label DOWN y 388→394
 
