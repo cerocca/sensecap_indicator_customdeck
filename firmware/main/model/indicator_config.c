@@ -177,11 +177,26 @@ int config_fetch_from_proxy(void)
 
 /* ─── Boot fetch task ──────────────────────────────────────────────────────── */
 
+#define CFG_MAX_RETRIES    3
+#define CFG_RETRY_DELAY_MS 2000
+
 static void config_boot_fetch_task(void *arg)
 {
-    /* Piccolo delay per lasciar stabilizzare lo stack IP */
-    vTaskDelay(pdMS_TO_TICKS(1500));
-    config_fetch_from_proxy();
+    /* Delay iniziale: lascia stabilizzare lo stack IP e diluisce le connessioni al boot */
+    vTaskDelay(pdMS_TO_TICKS(3000));
+
+    for (int attempt = 0; attempt < CFG_MAX_RETRIES; attempt++) {
+        int ret = config_fetch_from_proxy();
+        if (ret == 0) {
+            ESP_LOGI(TAG, "config fetch OK (attempt %d)", attempt + 1);
+            break;
+        }
+        ESP_LOGW(TAG, "config fetch failed (attempt %d/%d), retry in %dms",
+                 attempt + 1, CFG_MAX_RETRIES, CFG_RETRY_DELAY_MS);
+        if (attempt < CFG_MAX_RETRIES - 1)
+            vTaskDelay(pdMS_TO_TICKS(CFG_RETRY_DELAY_MS));
+    }
+
     vTaskDelete(NULL);
 }
 
