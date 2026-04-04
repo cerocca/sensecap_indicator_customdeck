@@ -64,7 +64,7 @@
       convertire con LVGL image converter in C array, includere come `.c` nel progetto.
       **Eccezione concordata a regola #1 CLAUDE.md** (solo sfondo, no modifica logica Seeed).
       Annotare l'eccezione in CLAUDE.md al momento dell'implementazione.
-- [ ] **Screen Traffic: schermata nera al primo swipe dopo boot** — logica UI riscritta seguendo pattern weather (timer 5s, `traffic_update_ui()` static, `on_screen_load_start` aggiunto); build OK, verificare con flash+monitor e route configurata. Root cause sospetta: layout adattivo show_single/show_dual — provare a forzare il layout prima che la schermata diventi visibile.
+- [x] **Screen Traffic: schermata nera al primo swipe dopo boot** — logica UI riscritta seguendo pattern weather (timer 5s, `traffic_update_ui()` static, `on_screen_load_start` aggiunto); build OK, verificare con flash+monitor e route configurata. Root cause sospetta: layout adattivo show_single/show_dual — provare a forzare il layout prima che la schermata diventi visibile.
 - [ ] **Nota schermata AI:** Visti i limiti hardware del SI (GPIO Grove su RP2040, conflitto Wi-Fi/BT per audio),
       Valutare scheda esterna XIAO (ESP32-S3 o RP2040) come coprocessore audio:
       microfono + speaker I2S gestiti da XIAO, comunicazione con SI via Grove UART.
