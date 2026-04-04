@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# SenseCAP Indicator Custom Deck
+# SenseDeck - SenseCAP Indicator Custom Deck
 
 *A custom firmware turning the SenseCAP Indicator D1S into a personal home automation dashboard — inspired by the Elgato Stream Deck concept.*
 

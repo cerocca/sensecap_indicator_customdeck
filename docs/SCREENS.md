@@ -1,31 +1,159 @@
-# Dettaglio schermate custom — SenseDeck
+# Custom screens detail — SenseDeck
 
-## Schermata 6 — Traffic
+## Screen 2 — Hue Control
 
-### Sorgente dati
-Proxy Mac `GET /traffic` → itera `traffic_routes` abilitate, chiama Google Maps Distance Matrix API per ognuna.
-Risposta: **array JSON** di route:
+### API (Hue Bridge Local REST API v2)
+- Base URL: `https://<HUE_BRIDGE_IP>/clip/v2/resource/light`
+- Header: `hue-application-key: <HUE_API_KEY>`
+- SSL: `skip_common_name = true`, `use_global_ca_store = false`
+
+### Operations
+```
+GET  /clip/v2/resource/light/<ID>          # light state
+PUT  /clip/v2/resource/light/<ID>          # body: {"on":{"on":true/false}}
+PUT  /clip/v2/resource/light/<ID>          # body: {"dimming":{"brightness":80.0}}
+```
+
+### UI
+- List of 4 lights: name + ON/OFF status + brightness slider (0–100%)
+- ON/OFF toggle on tap, polling every 5 seconds
+- Visual feedback on network error
+
+---
+
+## Screen 3 — LocalServer Dashboard
+
+### Data sources
+- **Glances API:** `http://<LOCALSERVER_IP>:<GLANCES_PORT>/api/4/`
+  - CPU: `/cpu` → `total`
+  - RAM: `/mem` → `percent`
+  - Disk: `/fs` → first element, `percent`
+  - Uptime: `/uptime`
+  - Load avg: `/load`
+- **Uptime Kuma:** via Mac proxy → `GET http://<PROXY_IP>:<PROXY_PORT>/uptime` → JSON array `[{"name": "...", "up": true/false}]`; names from Uptime Kuma `monitorList`; groups "0-..." excluded
+
+### UI layout — y positions (480×480)
+```
+y=65   CPU bar
+y=105  RAM bar
+y=145  DSK bar
+y=185  Uptime
+y=215  Load avg (1m · 5m · 15m)
+y=242  Horizontal separator
+y=254  "Top Docker (RAM):" — header, font16, #7ec8a0
+y=276+i×22  Docker container rows (i=0..4, y=276/294/312/330/348):
+              name: label left x=10, width=330, LV_LABEL_LONG_DOT, font16, #b0c8e0
+              MB:   label right x=350, width=100, LV_TEXT_ALIGN_RIGHT, font16, #b0c8e0
+y=372  "Services: X/Y UP" (green=all UP, red=some DOWN), font16, white
+y=394+i×14  DOWN service rows in red (max 6, pre-allocated, hidden if unused), font14
+```
+
+### Critical notes
+- `/api/status-page/heartbeat/myuk` → ~55KB, cannot be buffered — **DO NOT use**
+- Use only Mac proxy `GET /uptime` → compact JSON
+- Uptime Kuma group parsing: exclude names starting with `"0-"`
+- `esp_http_client_read` does not loop automatically — iterate until `r <= 0`
+
+---
+
+## Screen 4 — Launcher
+
+- 4 buttons in 2×2 grid (200×170 px)
+- On tap: `GET http://<PROXY_IP>:<PROXY_PORT>/open/<n>` (n=1..4)
+- The Python proxy opens the corresponding URL on the Mac
+
+---
+
+## Screen 5 — Weather
+
+### Data sources
+The firmware calls **OpenWeatherMap directly** (HTTPS), without going through the Mac proxy.
+The proxy is only used to configure parameters (API key, lat/lon, units, location) via Web UI → saved to NVS via `indicator_config.c` at boot (GET `/config`).
+
+- **Current:** `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units={units}`
+- **Forecast:** `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={key}&units={units}&cnt=4`
+
+### NVS keys
+| Key | Content |
+|---|---|
+| `wth_api_key` | OWM API key (32 chars) |
+| `wth_lat` | Latitude e.g. "43.7711" |
+| `wth_lon` | Longitude e.g. "11.2486" |
+| `wth_units` | "metric" or "imperial" |
+| `wth_city` | City name (e.g. "Florence") |
+| `wth_location` | Location display string (e.g. "Florence, IT") — takes priority over wth_city |
+| `scr_wthr_en` | Screen enable flag |
+
+### Location label — priority
+`update_city_label()` looks in order:
+1. `wth_location` (NVS) — e.g. "Florence, IT"
+2. `wth_city` (NVS) — e.g. "Florence"
+3. Fallback: formatted lat/lon — e.g. "43.77°N 11.25°E"
+
+### UI layout (480×480)
+- `y=0-44` Header "Weather" — font20, **white**
+- `y=34` Header separator
+- `y=52` City/location — font14, #aaaaaa
+- `y=74` Condition icon — ASCII text font20, white (LVGL Montserrat does not support emoji — PNG icons are a future TODO)
+- `y=96` Temperature — font20, white
+- `y=138` Feels like — font14, #888888
+- `y=160` Description — font16, #cccccc
+- `y=186` Humidity + wind — font14, #aaaaaa
+- `y=212` Separator
+- `y=222` "Next hours" — font12, #7ec8e0
+- `y=245` Forecast time (3 columns 160px)
+- `y=265` Forecast icon
+- `y=283` Forecast temp
+- `y=301` Separator
+- `y=311` "Next 3 days" — font12, #7ec8e0
+- `y=328` Day name (3 columns 160px) — font12, #aaaaaa
+- `y=343` Day icon — font14, white
+- `y=358` Max/min temp — font12, #aaaaaa (format "max°/min°")
+- `LV_ALIGN_BOTTOM_MID, 0, -30` "Updated X min ago" — font12, #555555
+- `LV_ALIGN_BOTTOM_MID, 0, -10` Error label — font12, #e07070
+
+### Weather icons (ASCII fallback)
+OWM icon code → short text mapping (Montserrat font has no emoji):
+`01d`→SUN, `01n`→MOON, `02x`→PRTC, `03x`→CLD, `04x`→OCLD, `09x`→DRZL, `10x`→RAIN, `11x`→STRM, `13x`→SNOW, `50x`→FOG
+
+### Polling
+- Every **10 minutes** (WEATHER_POLL_MS = 600000 ms)
+- First poll: 5s after boot (WEATHER_FIRST_DELAY_MS)
+- If `wth_api_key` NVS empty → no polling, `valid = false`
+- Response buffer: 2048 bytes on stack (response ~700 bytes current, ~1500 bytes forecast cnt=4)
+- TLS: `skip_cert_common_name_check=true, use_global_ca_store=false, cert_pem=NULL` → MBEDTLS_SSL_VERIFY_NONE (same pattern as Hue)
+
+### UI timer
+`lv_timer_create(weather_refresh_cb, 30000, NULL)` — refresh every 30s in timer cb (already in LVGL context → NO lv_port_sem_take/give in the cb itself)
+
+---
+
+## Screen 6 — Traffic
+
+### Data source
+Mac proxy `GET /traffic` → iterates enabled `traffic_routes`, calls Google Maps Distance Matrix API for each.
+Response: **JSON array** of routes:
 ```json
 [{"name":"Route 1","duration_sec":877,"duration_normal_sec":912,"delta_sec":-35,"distance_m":14721,"status":"ok"}, ...]
 ```
-`status` per route: `"ok"` (delta ≤120s), `"slow"` (120-600s), `"bad"` (>600s).
-Se `gmaps_api_key` vuota o nessuna route abilitata/configurata → `{"error":"not_configured"}`.
+`status` per route: `"ok"` (delta ≤120s), `"slow"` (120–600s), `"bad"` (>600s).
+If `gmaps_api_key` is empty or no routes are enabled/configured → `{"error":"not_configured"}`.
 
 ### Polling
-- Ogni **10 minuti** (TRAFFIC_POLL_MS = 600000 ms)
-- Primo poll: 8s dopo boot (TRAFFIC_FIRST_DELAY_MS)
-- Buffer response: 2048 byte
-- Pattern task: vedi `indicator_glances.c`
-- `indicator_traffic_force_poll()`: lancia task one-shot (`force_poll_task`) che esegue `do_traffic_poll()` immediatamente e poi si auto-cancella; chiamato da "Reload config" in Settings tab Proxy
+- Every **10 minutes** (TRAFFIC_POLL_MS = 600000 ms)
+- First poll: 8s after boot (TRAFFIC_FIRST_DELAY_MS)
+- Response buffer: 2048 bytes
+- Task pattern: see `indicator_glances.c`
+- `indicator_traffic_force_poll()`: launches one-shot task (`force_poll_task`) that immediately executes `do_traffic_poll()` then self-deletes; called from "Reload config" in Settings tab Proxy
 
-### Pattern aggiornamento UI — identico a screen_weather
-`traffic_update_ui()` è **static** — non esposta in `.h`. `indicator_traffic.c` non include
-`screen_traffic.h` e non chiama mai funzioni UI (niente `lv_port_sem_take/give`).
-La UI viene aggiornata esclusivamente da:
-1. `traffic_update_ui()` chiamata al termine di `screen_traffic_populate()`
-2. Timer LVGL ricorrente ogni **5s** (`traffic_refresh_cb`) — esegue solo se `lv_scr_act() == ui_screen_traffic`
+### UI update pattern — identical to screen_weather
+`traffic_update_ui()` is **static** — not exposed in `.h`. `indicator_traffic.c` does not include
+`screen_traffic.h` and never calls UI functions (no `lv_port_sem_take/give`).
+The UI is updated exclusively by:
+1. `traffic_update_ui()` called at the end of `screen_traffic_populate()`
+2. Recurring LVGL timer every **5s** (`traffic_refresh_cb`) — runs only if `lv_scr_act() == ui_screen_traffic`
 
-### Struct dati
+### Data structs
 ```c
 typedef struct {
     char name[32];
@@ -35,196 +163,68 @@ typedef struct {
 
 typedef struct {
     traffic_route_t routes[2];
-    int     route_count;   /* 0, 1 o 2 */
+    int     route_count;   /* 0, 1 or 2 */
     bool    valid;
     int64_t last_update_ms;
 } traffic_data_t;
 ```
 
-### Layout UI (480×480) — adattivo
+### UI layout (480×480) — adaptive
 **1 route (route_count == 1):**
-- Header "Traffic" — font20, bianco, TOP_MID
-- `y=55` Separatore
-- `y=110` Nome route — **font20**, #aaaaaa, center, **sottolineato** (più grande dello stato)
-- `y=155` Stato "OK"/"SLOW"/"HEAVY" — font16, colore dinamico (no ●)
-- `y=200` Tempo stimato — font20, bianco
-- `y=245` Delta — font16, colore dinamico
-- `y=285` Distanza — font14, #aaaaaa
-- `y=320` Separatore
-- `y=345` "Configure route via proxy Web UI" — solo se `!valid`, font14, #aaaaaa
+- Header "Traffic" — font20, white, TOP_MID
+- `y=55` Separator
+- `y=110` Route name — **font20**, #aaaaaa, center, **underlined** (larger than status)
+- `y=155` Status "OK"/"SLOW"/"HEAVY" — font16, dynamic color (no ●)
+- `y=200` Estimated time — font20, white
+- `y=245` Delta — font16, dynamic color
+- `y=285` Distance — font14, #aaaaaa
+- `y=320` Separator
+- `y=345` "Configure route via proxy Web UI" — only if `!valid`, font14, #aaaaaa
 - `BOTTOM_MID -50` "Updated X min ago" — font12, #555555
-- `BOTTOM_MID -25` Label errore — font12, #e07070
+- `BOTTOM_MID -25` Error label — font12, #e07070
 
-**2 route (route_count == 2), schermo diviso:**
-- Header "Traffic" — font20, bianco
-- `y=55` Separatore header
+**2 routes (route_count == 2), split screen:**
+- Header "Traffic" — font20, white
+- `y=55` Header separator
 - Route 0: name(72,**font20**,underline) · status(104,font16) · duration(132,**font18**) · delta(162,font14) · distance(186,font12)
-- `y=212` Separatore metà schermo
+- `y=212` Mid-screen separator
 - Route 1: name(224,**font20**,underline) · status(256,font16) · duration(284,**font18**) · delta(314,font14) · distance(338,font12)
-- `BOTTOM_MID` Updated / errore
+- `BOTTOM_MID` Updated / error
 
-**Se `!valid`:** layout singolo con "NO DATA" + label configure visibile.
+**If `!valid`:** single layout with "NO DATA" + configure label visible.
 
 ### Settings tab "Traffic"
-Solo info label: "Configure origin/destination at: http://\<proxy\>/config/ui" (URL dinamico da NVS).
-Nessuno switch ON/OFF — lo switch Traffic è nel tab Screens.
+Info label only: "Configure origin/destination at: http://\<proxy\>/config/ui" (dynamic URL from NVS).
+No ON/OFF switch — the Traffic switch is in the Screens tab.
 
 ---
 
-## Schermata 3 — Settings (custom)
+## Settings (custom) — outside rotation
 
-Accessibile via **swipe UP dal clock** (fuori dalla rotazione orizzontale).
-Layout: tabview LVGL (44px header), 6 tab orizzontali.
+Accessible via **swipe UP from clock** (outside horizontal rotation).
+Layout: LVGL tabview (44px header), 6 horizontal tabs.
 
-| Tab | Contenuto |
+| Tab | Content |
 |---|---|
-| **Hue** | IP Bridge, API key, nomi 4 luci — textarea + Save → NVS |
-| **Server** | Server IP, Server Name, Glances Port, Beszel Port, Uptime Kuma Port → NVS (5 campi) |
-| **Proxy** | IP + porta proxy Mac → NVS · pulsante "Ricarica config" → fetch da proxy senza reboot · label "Config UI: http://..." con recolor LVGL (bianco + #7ec8e0), aggiornata dinamicamente da NVS |
-| **Weather** | Info URL proxy Web UI (dinamico, no switch — lo switch è in Screens) |
-| **Traffic** | Info URL proxy Web UI (dinamico, no switch — lo switch è in Screens) |
-| **Screens** | 6 switch: Default sensor screen, Hue, LocalServer, Launcher, Weather, Traffic → aggiornano flag + NVS |
+| **Hue** | Bridge IP, API key, names of 4 lights — textarea + Save → NVS |
+| **Server** | Server IP, Server Name, Glances Port, Beszel Port, Uptime Kuma Port → NVS (5 fields) |
+| **Proxy** | Mac proxy IP + port → NVS · "Reload config" button → fetch from proxy without reboot · "Config UI: http://..." label with LVGL recolor (white + #7ec8e0), updated dynamically from NVS |
+| **Weather** | Info URL proxy Web UI (dynamic, no switch — switch is in Screens) |
+| **Traffic** | Info URL proxy Web UI (dynamic, no switch — switch is in Screens) |
+| **Screens** | 6 switches: Default sensor screen, Hue, LocalServer, Launcher, Weather, Traffic → update flag + NVS |
 
-**Nota**: Tab Wi-Fi rimosso — la configurazione Wi-Fi è accessibile via swipe DOWN dal clock → `ui_screen_setting` Seeed.
+**Note**: Wi-Fi tab removed — Wi-Fi configuration is accessible via swipe DOWN from clock → Seeed `ui_screen_setting`.
 
-- Valori letti da NVS su `SCREEN_LOAD_START`; fallback a `app_config.h` se NVS vuoto.
-- Tastiera LVGL popup al tap su qualsiasi textarea; chiude su READY/CANCEL.
-- Chiavi NVS max 15 char — centralizzate in `app_config.h`.
+- Values read from NVS on `SCREEN_LOAD_START`; fallback to `app_config.h` if NVS empty.
+- LVGL popup keyboard on tap on any textarea; closes on READY/CANCEL.
+- NVS keys max 15 chars — centralized in `app_config.h`.
 
-**`ui_screen_sensor` (Seeed) — personalizzazione dall'esterno in `ui_manager_init()`:**
-- `ui_wifi__st_button_2` (bottone status Wi-Fi top-right + icona figlia) → `LV_OBJ_FLAG_HIDDEN`
-- `ui_scrolldots2` (container 3 puntini navigazione) → `LV_OBJ_FLAG_HIDDEN`
+**`ui_screen_sensor` (Seeed) — customized from outside in `ui_manager_init()`:**
+- `ui_wifi__st_button_2` (Wi-Fi status button top-right + child icon) → `LV_OBJ_FLAG_HIDDEN`
+- `ui_scrolldots2` (3-dot navigation container) → `LV_OBJ_FLAG_HIDDEN`
 
-**`ui_screen_setting` (Seeed) — personalizzazione dall'esterno:**
-- Handler sostituito con `gesture_seeed_setting` (UP → clock)
-- Elementi nascosti via `lv_obj_add_flag(..., LV_OBJ_FLAG_HIDDEN)` in `ui_manager_init()`:
-  `ui_setting_title` (label "Setting"), `ui_setting_icon` (ingranaggio), `ui_scrolldots3` (3 puntini)
-- Wi-Fi button e icona restano visibili e funzionanti
-
----
-
-## Schermata 4 — Hue Control
-
-### API (Hue Bridge Local REST API v2)
-- Base URL: `https://<HUE_BRIDGE_IP>/clip/v2/resource/light`
-- Header: `hue-application-key: <HUE_API_KEY>`
-- SSL: `skip_common_name = true`, `use_global_ca_store = false`
-
-### Operazioni
-```
-GET  /clip/v2/resource/light/<ID>          # stato luce
-PUT  /clip/v2/resource/light/<ID>          # body: {"on":{"on":true/false}}
-PUT  /clip/v2/resource/light/<ID>          # body: {"dimming":{"brightness":80.0}}
-```
-
-### UI
-- Lista 4 luci: nome + stato ON/OFF + slider luminosità (0–100%)
-- Toggle ON/OFF al tap, polling ogni 5 secondi
-- Feedback visivo su errore di rete
-
----
-
-## Schermata 5 — LocalServer Dashboard
-
-### Sorgenti dati
-- **Glances API:** `http://<LOCALSERVER_IP>:<GLANCES_PORT>/api/4/`
-  - CPU: `/cpu` → `total`
-  - RAM: `/mem` → `percent`
-  - Disco: `/fs` → primo elemento, `percent`
-  - Uptime: `/uptime`
-  - Load avg: `/load`
-- **Uptime Kuma:** via proxy Mac → `GET http://<PROXY_IP>:<PROXY_PORT>/uptime` → array JSON `[{"name": "...", "up": true/false}]`; nomi da `monitorList` Uptime Kuma; gruppi "0-..." esclusi
-
-### Layout UI — posizioni y (480×480)
-```
-y=65   CPU bar
-y=105  RAM bar
-y=145  DSK bar
-y=185  Uptime
-y=215  Load avg (1m · 5m · 15m) — spazio dopo ":"
-y=242  Separatore orizzontale
-y=254  "Top Docker (RAM):" — header, font16, #7ec8a0
-y=276+i×22  Righe container Docker (i=0..2, y=276/298/320):
-              nome: label sx x=10, width=330, LV_LABEL_LONG_DOT, font16, #b0c8e0
-              MB:   label dx x=350, width=100, LV_TEXT_ALIGN_RIGHT, font16, #b0c8e0
-y=366  "Servizi: X/Y UP" (verde=tutti UP, arancione=qualcuno DOWN), font16, white
-y=388+i×16  Righe servizi DOWN in rosso (max 6, pre-allocate, nascoste se non usate), font14
-```
-
-### Note critiche
-- `/api/status-page/heartbeat/myuk` → ~55KB, non bufferizzabile — **NON usare**
-- Usare solo proxy Mac `GET /uptime` → JSON compatto
-- Parsing gruppi Uptime Kuma: escludere nomi che iniziano per `"0-"`
-- `esp_http_client_read` non fa loop automatico — iterare fino a `r <= 0`
-
----
-
-## Schermata 6 — Launcher
-
-- 4 pulsanti griglia 2×2 (200×170 px)
-- Al tap: `GET http://<PROXY_IP>:<PROXY_PORT>/open/<n>` (n=1..4)
-- Il proxy Python apre l'URL corrispondente sul Mac
-
----
-
-## Schermata 7 — Weather (sostituisce AI)
-
-### Sorgenti dati
-Il firmware chiama **OpenWeatherMap direttamente** (HTTPS), senza passare dal proxy Mac.
-Il proxy serve solo per configurare i parametri (API key, lat/lon, units, location) via Web UI → saved in NVS via `indicator_config.c` al boot (GET `/config`).
-
-- **Current:** `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units={units}`
-- **Forecast:** `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={key}&units={units}&cnt=4`
-
-### NVS keys
-| Chiave | Contenuto |
-|---|---|
-| `wth_api_key` | OWM API key (32 char) |
-| `wth_lat` | Latitudine es. "43.7711" |
-| `wth_lon` | Longitudine es. "11.2486" |
-| `wth_units` | "metric" o "imperial" |
-| `wth_city` | Nome città (es. "Firenze") |
-| `wth_location` | Stringa location display (es. "Firenze, IT") — priorità su wth_city |
-| `scr_wthr_en` | Flag abilitazione schermata |
-
-### Location label — priorità
-`update_city_label()` cerca in ordine:
-1. `wth_location` (NVS) — es. "Firenze, IT"
-2. `wth_city` (NVS) — es. "Firenze"
-3. Fallback: lat/lon formattato — es. "43.77°N 11.25°E"
-
-### Layout UI (480×480)
-- `y=0-44` Header "Weather" — font20, **bianco**
-- `y=34` Separatore header
-- `y=52` Città/location — font14, #aaaaaa
-- `y=74` Icona condizione — testo ASCII font20, bianco (LVGL Montserrat non supporta emoji — icone PNG sono TODO futuro)
-- `y=96` Temperatura — font20, bianco
-- `y=138` Feels like — font14, #888888
-- `y=160` Descrizione — font16, #cccccc
-- `y=186` Umidità + vento — font14, #aaaaaa
-- `y=212` Separatore
-- `y=222` "Next hours" — font12, #7ec8e0
-- `y=245` Ora forecast (3 colonne 160px)
-- `y=265` Icona forecast
-- `y=283` Temp forecast
-- `y=301` Separatore
-- `y=311` "Next 3 days" — font12, #7ec8e0
-- `y=328` Nome giorno (3 colonne 160px) — font12, #aaaaaa
-- `y=343` Icona giorno — font14, bianco
-- `y=358` Temp max/min — font12, #aaaaaa (formato "max°/min°")
-- `LV_ALIGN_BOTTOM_MID, 0, -30` "Updated X min ago" — font12, #555555
-- `LV_ALIGN_BOTTOM_MID, 0, -10` Label errore — font12, #e07070
-
-### Icone meteo (ASCII fallback)
-Mapping OWM icon code → testo breve (font Montserrat non ha emoji):
-`01d`→SUN, `01n`→MOON, `02x`→PRTC, `03x`→CLD, `04x`→OCLD, `09x`→DRZL, `10x`→RAIN, `11x`→STRM, `13x`→SNOW, `50x`→FOG
-
-### Polling
-- Ogni **10 minuti** (WEATHER_POLL_MS = 600000 ms)
-- Prima poll: 5 s dopo boot (WEATHER_FIRST_DELAY_MS)
-- Se `wth_api_key` NVS vuota → non polla, `valid = false`
-- Buffer response: 2048 byte in stack (response ~700 byte current, ~1500 byte forecast cnt=4)
-- TLS: `skip_cert_common_name_check=true, use_global_ca_store=false, cert_pem=NULL` → MBEDTLS_SSL_VERIFY_NONE (stesso pattern Hue)
-
-### Timer UI
-`lv_timer_create(weather_refresh_cb, 30000, NULL)` — refresh ogni 30s nel timer cb (già in LVGL context → NO lv_port_sem_take/give nel cb stesso)
+**`ui_screen_setting` (Seeed) — customized from outside:**
+- Handler replaced with `gesture_seeed_setting` (UP → clock)
+- Elements hidden via `lv_obj_add_flag(..., LV_OBJ_FLAG_HIDDEN)` in `ui_manager_init()`:
+  `ui_setting_title` (label "Setting"), `ui_setting_icon` (gear icon), `ui_scrolldots3` (3 dots)
+- Wi-Fi button and icon remain visible and functional

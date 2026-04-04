@@ -1,85 +1,85 @@
 # SenseCAP Indicator Deck — CLAUDE.md
 
-## Progetto
-Firmware custom per **SenseCAP Indicator D1S** (ESP32-S3, schermo touch 480×480).
+## Project
+Custom firmware for **SenseCAP Indicator D1S** (ESP32-S3, 480×480 touch display).
 Toolchain: ESP-IDF + LVGL 8.x + FreeRTOS. IDE: Claude Code (CLI).
-Repo: `https://github.com/cerocca/sensecap_indicator_customdeck` (privato)
+Repo: `https://github.com/cerocca/sensecap_indicator_customdeck`
 Build:
 ```bash
-source ~/esp/esp-idf/export.sh   # ogni nuovo terminale
+source ~/esp/esp-idf/export.sh   # every new terminal
 cd firmware && idf.py build
 ```
 
-> **Nota CMake**: quando si aggiungono nuovi `.c` in directory con `GLOB_RECURSE`, eseguire `idf.py reconfigure` prima di `idf.py build`.
+> **CMake note**: when adding new `.c` files in directories using `GLOB_RECURSE`, run `idf.py reconfigure` before `idf.py build`.
 
 ---
 
 ## Workflow
 
-**Flash e monitor: li esegue sempre Niwla manualmente, non Claude Code.**
-Salvo diverse indicazioni esplicite, Claude Code si ferma al `idf.py build`.
+**Flash and monitor: always run manually by the developer, not Claude Code.**
+Unless explicitly instructed otherwise, Claude Code stops at `idf.py build`.
 
-Comandi di riferimento (solo per documentazione):
+Reference commands (documentation only):
 ```bash
 source ~/esp/esp-idf/export.sh
 cd firmware && idf.py build flash
-idf.py -p /dev/cu.usbserial-1110 monitor
+idf.py -p /dev/cu.usbserial-XXXX monitor
 ```
 
 ---
 
-## Regole fondamentali
+## Core rules
 
-1. **Non toccare mai** le schermate originali Seeed: clock, sensors — né il pulsante fisico.
-2. La schermata **settings** originale Seeed viene **sostituita** dalla settings custom.
-3. Le altre schermate custom si **aggiungono** alla navigazione.
-4. Aggiornamenti UI sempre con `lv_port_sem_take()` / `lv_port_sem_give()` — mai `lv_lock()`/`lv_unlock()`.
-5. Buffer HTTP: minimo **2048 bytes** (1024 causa parse failure silenzioso su `/api/4/fs`).
-6. Struct grandi in task FreeRTOS: sempre `static` — evita stack overflow.
-7. Pattern reference per nuovi task HTTP polling: `indicator_glances.c`.
-8. Schermate con molti widget LVGL: usare sempre il pattern **lazy init** (split `init`/`populate`).
-9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: includere `"esp_wifi.h"` — non `"esp_netif.h"`. Il tipo corretto per il metodo HTTP client è `esp_http_client_method_t` (non `esp_http_method_t`).
-10. **`LV_USE_QRCODE=y`** abilitato in `firmware/sdkconfig` (non in `sdkconfig.defaults`) — necessario per il tab Info di `screen_settings_custom`. Se `sdkconfig` viene rigenerato dai defaults, reimpostare manualmente.
-11. **`indicator_hue.c` — `hue_poll_task`**: delay iniziale **10s** (attende che le altre connessioni TLS al boot si completino); pausa **200ms** tra le 4 richieste HTTPS consecutive — evita `esp-aes: Failed to allocate memory` per contesa heap TLS.
-12. **`indicator_config.c` — boot fetch**: delay iniziale **3000ms** (stagger rispetto agli altri task HTTP al boot); retry **3×** con backoff **2000ms** — `config_fetch_from_proxy()` ritorna `int` (0=OK, -1=errore), non `esp_err_t`. Costanti: `CFG_MAX_RETRIES 3`, `CFG_RETRY_DELAY_MS 2000`.
-13. **`sensedeck_proxy.py` — `/uptime`**: `monitorList` è assente in `/api/status-page/heartbeat/active` in questa versione di Uptime Kuma. I nomi si trovano in `/api/status-page/active` → `publicGroupList[].monitorList[]`. Il proxy fa due fetch sequenziali: prima `/active` per costruire `name_map {id→name}`, poi `/heartbeat/active` per lo stato. Vedere `docs/PROXY.md` per i dettagli.
-14. **`indicator_city` — DISABILITATO**: `indicator_city_init()` e `#include "indicator_city.h"` commentati in `indicator_model.c`. Causa crash OOM lwIP al boot (`lwip_arch: thread_sem_init: out of memory` → Guru Meditation LoadProhibited in `indicator_city.c:216`) per `getaddrinfo`. I widget `ui_location`, `ui_location_Icon`, `ui_city` sono nascosti in `ui_manager_init()` via `LV_OBJ_FLAG_HIDDEN` (senza toccare `ui.c`). Non ripristinare senza prima investigare il memory budget lwIP al boot.
-14. **NTP / POSIX TZ string**: la timezone viene applicata come POSIX TZ string via `setenv("TZ", ...) + tzset()`. La stringa è composta da `__tz_apply_from_cfg()` a partire da `zone` (offset UTC) e `daylight` (DST flag) salvati dal Seeed nel blob NVS `"time-cfg"`. Formato: `"STD-{n}DST,M3.5.0,M10.5.0/3"` se DST ON (regole EU), `"STD-{n}"` se DST OFF (con segno invertito per POSIX). Chiamata dopo `__time_cfg()` in `indicator_time_init()` e in `VIEW_EVENT_TIME_CFG_APPLY`. Nessuna NVS aggiuntiva, nessun widget nuovo: si usano i controlli Seeed esistenti (UTC offset + DST switch).
-
----
-
-## Eccezioni esplicite alla regola #1
-
-- **`ui_screen_time` (Clock Seeed)** — solo sfondo custom, nessuna modifica alla logica (vedi TODO Futuro).
+1. **Never touch** the original Seeed screens: clock, sensors — or the physical button.
+2. The original Seeed **settings** screen is **replaced** by the custom settings screen.
+3. Custom screens are **added** to the navigation.
+4. UI updates always use `lv_port_sem_take()` / `lv_port_sem_give()` — never `lv_lock()`/`lv_unlock()`.
+5. HTTP buffers: minimum **2048 bytes** (1024 causes silent parse failure on `/api/4/fs`).
+6. Large structs in FreeRTOS tasks: always `static` — prevents stack overflow.
+7. Reference pattern for new HTTP polling tasks: `indicator_glances.c`.
+8. Screens with many LVGL widgets: always use the **lazy init** pattern (split `init`/`populate`).
+9. **`IP_EVENT` / `IP_EVENT_STA_GOT_IP`**: include `"esp_wifi.h"` — not `"esp_netif.h"`. Correct type for the HTTP client method is `esp_http_client_method_t` (not `esp_http_method_t`).
+10. **`LV_USE_QRCODE=y`** enabled in `firmware/sdkconfig` (not in `sdkconfig.defaults`) — required for the Info tab in `screen_settings_custom`. If `sdkconfig` is regenerated from defaults, re-enable manually.
+11. **`indicator_hue.c` — `hue_poll_task`**: initial delay **10s** (waits for other TLS connections at boot to complete); **200ms** pause between the 4 consecutive HTTPS requests — prevents `esp-aes: Failed to allocate memory` from TLS heap contention.
+12. **`indicator_config.c` — boot fetch**: initial delay **3000ms** (staggered from other HTTP tasks at boot); retry **3×** with **2000ms** backoff — `config_fetch_from_proxy()` returns `int` (0=OK, -1=error), not `esp_err_t`. Constants: `CFG_MAX_RETRIES 3`, `CFG_RETRY_DELAY_MS 2000`.
+13. **`sensedeck_proxy.py` — `/uptime`**: `monitorList` is absent from `/api/status-page/heartbeat/active` in this version of Uptime Kuma. Names are found in `/api/status-page/active` → `publicGroupList[].monitorList[]`. The proxy makes two sequential fetches: first `/active` to build `name_map {id→name}`, then `/heartbeat/active` for status. See `docs/PROXY.md` for details.
+14. **`indicator_city` — DISABLED**: `indicator_city_init()` and `#include "indicator_city.h"` commented out in `indicator_model.c`. Causes lwIP OOM crash at boot (`lwip_arch: thread_sem_init: out of memory` → Guru Meditation LoadProhibited in `indicator_city.c:216`) due to `getaddrinfo`. Widgets `ui_location`, `ui_location_Icon`, `ui_city` are hidden in `ui_manager_init()` via `LV_OBJ_FLAG_HIDDEN` (without touching `ui.c`). Do not re-enable without first investigating the lwIP memory budget at boot.
+15. **NTP / POSIX TZ string**: timezone is applied as a POSIX TZ string via `setenv("TZ", ...) + tzset()`. The string is composed by `__tz_apply_from_cfg()` from `zone` (UTC offset) and `daylight` (DST flag) saved by Seeed in the NVS blob `"time-cfg"`. Format: `"STD-{n}DST,M3.5.0,M10.5.0/3"` if DST ON (EU rules), `"STD-{n}"` if DST OFF (sign inverted for POSIX). Called after `__time_cfg()` in `indicator_time_init()` and in `VIEW_EVENT_TIME_CFG_APPLY`. No extra NVS keys, no new widgets: uses existing Seeed controls (UTC offset + DST switch).
 
 ---
 
-## Architettura
+## Explicit exceptions to rule #1
 
-### Navigazione
+- **`ui_screen_time` (Seeed Clock)** — custom background only, no logic changes (see Future TODO).
 
-**Orizzontale** (swipe LEFT = avanti, swipe RIGHT = indietro):
+---
+
+## Architecture
+
+### Navigation
+
+**Horizontal** (swipe LEFT = forward, swipe RIGHT = back):
 ```
 clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [server(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
 ```
 
-**Verticale dal clock:**
+**Vertical from clock:**
 ```
 swipe UP   → screen_settings_custom  (MOVE_TOP)
 swipe DOWN → ui_screen_setting Seeed (MOVE_BOTTOM)
 ```
 
-`screen_settings_custom` è **fuori dalla rotazione orizzontale** — raggiungibile solo via swipe UP dal clock.
-Swipe DOWN da settings_custom torna al clock (MOVE_BOTTOM).
-Swipe UP da ui_screen_setting torna al clock (MOVE_TOP).
+`screen_settings_custom` is **outside the horizontal rotation** — reachable only via swipe UP from clock.
+Swipe DOWN from settings_custom returns to clock (MOVE_BOTTOM).
+Swipe UP from ui_screen_setting returns to clock (MOVE_TOP).
 
-Le schermate tra `[]` sono opzionali: se disabilitate vengono saltate automaticamente.
-Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via switch "Default sensor screen" in tab Screens (**eccezione concordata a regola #1** — la schermata resta accessibile, viene solo saltata nello swipe). Traffic (idx 6) abilitabile/disabilitabile via switch "Traffic" nel tab Screens.
+Screens in `[]` are optional: if disabled they are automatically skipped.
+Clock (idx 0) is always enabled. Sensors (idx 1) can be disabled via the "Default sensor screen" switch in the Screens tab (**agreed exception to rule #1** — the screen remains accessible, only skipped in swipe). Traffic (idx 6) can be enabled/disabled via the "Traffic" switch in the Screens tab.
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=hue, 3=server, 4=launcher, 5=weather, 6=traffic
-// settings_custom è fuori dalla tabella s_scr[]
+// Indices: 0=clock, 1=sensors, 2=hue, 3=server, 4=launcher, 5=weather, 6=traffic
+// settings_custom is outside the s_scr[] table
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
         int idx = ((cur + dir * i) % N_SCREENS + N_SCREENS) % N_SCREENS;
@@ -88,57 +88,57 @@ static lv_obj_t *next_from(int cur, int dir) {
     return s_scr[cur];
 }
 ```
-`scr_enabled(1)` ritorna `g_scr_defsens_enabled`. `scr_enabled(6)` ritorna `g_scr_traffic_enabled`.
-Tutti i gesture handler usano `ensure_populated(next)` prima di navigare (helper in `ui_manager.c`).
-La tabella `s_scr[7]` è popolata in `ui_manager_init()` (s_scr[6] = screen_traffic_get_screen()).
+`scr_enabled(1)` returns `g_scr_defsens_enabled`. `scr_enabled(6)` returns `g_scr_traffic_enabled`.
+All gesture handlers call `ensure_populated(next)` before navigating (helper in `ui_manager.c`).
+The `s_scr[7]` table is populated in `ui_manager_init()` (s_scr[6] = screen_traffic_get_screen()).
 
-**Flag di abilitazione schermate:**
-- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled`, `g_scr_traffic_enabled` — definiti in `ui_manager.c`, esposti in `ui_manager.h`
-- Caricati da NVS in `ui_manager_init()` (chiavi in `app_config.h`, default `true`)
-- Aggiornati live da `screen_settings_custom.c` (tab "Screens") al toggle switch
-- Salvati in NVS come `"1"`/`"0"` (2 byte, coerente con il resto delle chiavi)
+**Screen enable flags:**
+- `g_scr_hue_enabled`, `g_scr_srv_enabled`, `g_scr_lnch_enabled`, `g_scr_wthr_enabled`, `g_scr_defsens_enabled`, `g_scr_traffic_enabled` — defined in `ui_manager.c`, exposed in `ui_manager.h`
+- Loaded from NVS in `ui_manager_init()` (keys in `app_config.h`, default `true`)
+- Updated live by `screen_settings_custom.c` (tab "Screens") on toggle switch
+- Saved to NVS as `"1"`/`"0"` (2 bytes, consistent with other keys)
 
-**Schermata iniziale al boot:** sempre `ui_screen_time` (clock). Nessuna navigazione automatica.
+**Boot screen:** always `ui_screen_time` (clock). No automatic navigation.
 
-**Sostituzioni handler Seeed (pattern `lv_obj_remove_event_cb` + `lv_obj_add_event_cb`):**
-- `ui_event_screen_time` → `gesture_clock` (clock): aveva RIGHT hardcoded su `ui_screen_ai`
-- `ui_event_screen_sensor` → `gesture_sensor` (sensors): aveva LEFT hardcoded su `ui_screen_settings_custom` (ora fuori rotazione)
-- `ui_event_screen_setting` → `gesture_seeed_setting` (Seeed settings): evita doppia chiamata su `LV_DIR_TOP`
-Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick e per correggere target hardcoded obsoleti.
+**Seeed handler replacements (pattern `lv_obj_remove_event_cb` + `lv_obj_add_event_cb`):**
+- `ui_event_screen_time` → `gesture_clock` (clock): had RIGHT hardcoded to `ui_screen_ai`
+- `ui_event_screen_sensor` → `gesture_sensor` (sensors): had LEFT hardcoded to `ui_screen_settings_custom` (now outside rotation)
+- `ui_event_screen_setting` → `gesture_seeed_setting` (Seeed settings): prevents double call on `LV_DIR_TOP`
+Required to avoid double `_ui_screen_change` call on the same tick and to fix obsolete hardcoded targets.
 
-### Schermate
-| idx | Nome | Tipo | Note |
-|-----|------|------|------|
-| 0 | `screen_clock` | Originale Seeed — NON toccare | — |
-| 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
-| 2 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
-| 3 | `screen_server` | Custom | Glances + Uptime Kuma via proxy; top 5 container Docker per RAM |
-| 4 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
-| 5 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
-| 6 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
-| — | `screen_settings_custom` | Custom — fuori rotazione | Accessibile solo via swipe UP dal clock. Tab: Hue \| Server \| Proxy \| Weather \| Traffic \| Screens \| **Info** (versione firmware, QR code repo, credits) |
-| — | `ui_screen_setting` | Originale Seeed — NON toccare | Accessibile via swipe DOWN dal clock |
+### Screens
+| idx | Name | Type | Notes |
+|-----|------|------|-------|
+| 0 | `screen_clock` | Original Seeed — DO NOT touch | — |
+| 1 | `screen_sensors` | Original Seeed — DO NOT touch | CO2, temp, humidity; optional via flag |
+| 2 | `screen_hue` | Custom | ON/OFF toggle + brightness slider |
+| 3 | `screen_server` | Custom | Glances + Uptime Kuma via proxy; top 5 Docker containers by RAM |
+| 4 | `screen_launcher` | Custom | 4 buttons → Mac proxy |
+| 5 | `screen_weather` | Custom | OWM weather: temp, icon, humidity, wind, 4 forecast slots |
+| 6 | `screen_traffic` | Custom | Travel time via Google Maps, delta vs normal |
+| — | `screen_settings_custom` | Custom — outside rotation | Reachable only via swipe UP from clock. Tabs: Hue \| Server \| Proxy \| Weather \| Traffic \| Screens \| **Info** (firmware version, repo QR code, credits) |
+| — | `ui_screen_setting` | Original Seeed — DO NOT touch | Reachable via swipe DOWN from clock |
 
-### Struttura file
+### File structure
 ```
-/Users/ciru/sensecap_indicator_cirutech/   ← root repo
+<project_root>/
 ├── CLAUDE.md
 ├── TODO.md
 ├── README.md
 ├── SETUP.md
 ├── CHANGELOG.md
-├── sensedeck_proxy.py                     # proxy Mac — /uptime, /traffic, /open/<n>, /config, /config/ui
-├── config.json                            # generato dal proxy — non in git (in .gitignore)
-├── sdkconfig.defaults                     # fix PSRAM XIP + mbedTLS dynamic — NON toccare
-├── docs/screenshots/                      # screenshot schermate (aggiungere manualmente)
-└── firmware/                              ← codice firmware
+├── sensedeck_proxy.py                     # Mac proxy — /uptime, /traffic, /open/<n>, /config, /config/ui
+├── config.json                            # generated by proxy — not in git (.gitignore)
+├── sdkconfig.defaults                     # PSRAM XIP + mbedTLS dynamic fixes — DO NOT touch
+├── docs/screenshots/                      # screen screenshots (add manually)
+└── firmware/                              ← firmware code
     ├── CMakeLists.txt                     # EXTRA_COMPONENT_DIRS = ../components
     ├── partitions.csv
     └── main/
         ├── app_main.c
-        ├── app_config.h                   # defaults NVS + chiavi NVS (NON usare NVS key > 15 char)
+        ├── app_config.h                   # NVS defaults + NVS keys (DO NOT use NVS key > 15 chars)
         ├── ui/
-        │   ├── ui_manager.c/.h            # navigazione schermate + init tutte le custom
+        │   ├── ui_manager.c/.h            # screen navigation + init all custom screens
         │   ├── screen_settings_custom.c/.h
         │   ├── screen_hue.c/.h
         │   ├── screen_server.c/.h
@@ -146,34 +146,33 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
         │   ├── screen_weather.c/.h
         │   └── screen_traffic.c/.h
         └── model/
-            ├── indicator_config.c/.h      # fetch config dal proxy al boot (IP_EVENT_STA_GOT_IP)
+            ├── indicator_config.c/.h      # config fetch from proxy at boot (IP_EVENT_STA_GOT_IP)
             ├── indicator_glances.c/.h
             ├── indicator_uptime_kuma.c/.h
             ├── indicator_weather.c/.h
-            ├── indicator_system.c/.h      # fetch hostname Glances al boot (5s delay)
+            ├── indicator_system.c/.h      # Glances hostname fetch at boot (5s delay)
             ├── indicator_hue.c/.h
-            └── indicator_traffic.c/.h     # polling /traffic proxy ogni 10 min
+            └── indicator_traffic.c/.h     # /traffic proxy polling every 10 min
 ```
 
 ---
 
-## Documentazione estesa
+## Extended documentation
 
-Leggere sempre all'inizio di ogni sessione:
-- `docs/WARNINGS.md` — warning critici sdkconfig, crash noti, bug irrisolti
+Always read at the start of each session:
+- `docs/WARNINGS.md` — critical sdkconfig warnings, known crashes, unresolved bugs
 
-Leggere se si lavora sui file indicati:
-- `docs/SCREENS.md` — dettaglio schermate (layout, API, struct dati, polling)
-- `docs/PROXY.md`   — proxy Python (endpoints, Web UI, merge config, Beszel)
+Read when working on the indicated files:
+- `docs/SCREENS.md` — screen details (layout, API, data structs, polling)
+- `docs/PROXY.md`   — Python proxy (endpoints, Web UI, config merge, Beszel)
 
 ---
 
-## Checklist pre-commit
+## Pre-commit checklist
 
-- [ ] **CLAUDE.md** aggiornato con learnings della sessione ← sempre per primo
-- [ ] **TODO.md** aggiornato (aggiungi/spunta task)
-- [ ] **CHANGELOG.md** aggiornato (sezione `[Unreleased]`)
-- [ ] **README.md** aggiornato se cambiano schermate o funzionalità
-- [ ] **Caricare CLAUDE.md aggiornato nel Project** su Claude.ai (sostituire il file esistente)
-- [ ] Al momento della release: rinomina `[Unreleased]` in `[x.y.z] — data`,
-      crea tag Git: `git tag -a vx.y.z -m "Release x.y.z" && git push origin vx.y.z`
+- [ ] **CLAUDE.md** updated with session learnings ← always first
+- [ ] **TODO.md** updated (add/check tasks)
+- [ ] **CHANGELOG.md** updated (`[Unreleased]` section)
+- [ ] **README.md** updated if screens or features change
+- [ ] At release time: rename `[Unreleased]` to `[x.y.z] — date`,
+      create Git tag: `git tag -a vx.y.z -m "Release x.y.z" && git push origin vx.y.z`

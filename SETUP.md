@@ -65,7 +65,7 @@ http://localhost:8765/config/ui
 
 ## 3. Configure via Web UI
 
-Open `http://localhost:8765/config/ui` in your browser to configure all integrations. Click **Save** — the config is written to `config.json`. The device will fetch it automatically on the next Wi-Fi connection (or immediately via Settings → Proxy → "Ricarica config").
+Open `http://localhost:8765/config/ui` in your browser to configure all integrations. Click **Save** — the config is written to `config.json`. The device will fetch it automatically on the next Wi-Fi connection (or immediately via Settings → Proxy → "Reload config").
 
 **Hue**
 - Hue Bridge IP and API key
