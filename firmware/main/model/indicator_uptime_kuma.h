@@ -16,7 +16,7 @@ typedef void (*uptime_kuma_cb_t)(int total, int up,
 /* Registra handler IP_EVENT_STA_GOT_IP e legge config iniziale da NVS. */
 void indicator_uptime_kuma_init(void);
 
-/* Registra la callback UI (chiamare da screen_sibilla_populate). */
+/* Registra la callback UI (chiamare da screen_server_populate). */
 void indicator_uptime_kuma_set_callback(uptime_kuma_cb_t cb);
 
 /* Avvia / sospende il polling (il task rimane in vita). */

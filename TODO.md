@@ -2,7 +2,7 @@
 
 ## Pending
 
-- [ ] Rinominare screen_sibilla.c/.h e tutti i riferimenti nel firmware in un nome più generico (es. screen_server o screen_monitor)
+- [x] Rinominare screen_sibilla.c/.h e tutti i riferimenti nel firmware in un nome più generico (es. screen_server o screen_monitor)
 - [ ] **Preparare CHANGELOG finale per prima release pubblica**: archiviare `[Unreleased]` come `[0.1.0-dev]`, scrivere voce pulita `[0.1.0]` dal punto di vista utente
 - [x] aumentare spazio titoli schermate per swipe (o altro metodo)
 - [x] NTP/Timezone: CET/CEST, passaggio ora legale automatico — POSIX TZ string via `setenv`/`tzset` in `indicator_time.c`; composta da zone offset + DST flag esistenti Seeed; nessun widget aggiuntivo

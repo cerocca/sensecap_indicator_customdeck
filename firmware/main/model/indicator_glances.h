@@ -23,7 +23,7 @@ typedef void (*glances_data_cb_t)(float cpu, float ram, float dsk,
 /* Registra handler IP_EVENT_STA_GOT_IP e legge config iniziale da NVS. */
 void indicator_glances_init(void);
 
-/* Registra la callback UI (chiamare da screen_sibilla_populate). */
+/* Registra la callback UI (chiamare da screen_server_populate). */
 void indicator_glances_set_callback(glances_data_cb_t cb);
 
 /* Avvia / sospende il polling (il task rimane in vita). */

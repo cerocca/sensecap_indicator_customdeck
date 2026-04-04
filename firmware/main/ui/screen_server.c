@@ -1,4 +1,4 @@
-#include "screen_sibilla.h"
+#include "screen_server.h"
 #include "indicator_glances.h"
 #include "indicator_uptime_kuma.h"
 #include "indicator_storage.h"
@@ -11,7 +11,7 @@
 
 /* ─── Screen object ───────────────────────────────────────────────────────── */
 
-lv_obj_t *ui_screen_sibilla;
+lv_obj_t *ui_screen_server;
 
 /* ─── Widget handles (validi solo dopo populate) ─────────────────────────── */
 
@@ -205,9 +205,9 @@ static void on_uptime_data(int total, int up,
 
 /* ─── Populate (lazy — prima del primo render) ────────────────────────────── */
 
-void screen_sibilla_populate(void)
+void screen_server_populate(void)
 {
-    lv_obj_t *scr = ui_screen_sibilla;
+    lv_obj_t *scr = ui_screen_server;
 
     /* ── Righe metriche Glances ── */
     make_metric_row(scr,  65, "CPU", &s_cpu_bar, &s_cpu_pct_lbl);
@@ -309,21 +309,21 @@ static void on_screen_load_start(lv_event_t *e)
 {
     if (lv_event_get_code(e) != LV_EVENT_SCREEN_LOAD_START) return;
     if (!s_populated)
-        screen_sibilla_populate();
+        screen_server_populate();
     refresh_header();
 }
 
 /* ─── Init (lightweight — solo schermo + header) ─────────────────────────── */
 
-void screen_sibilla_init(void)
+void screen_server_init(void)
 {
-    ui_screen_sibilla = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_screen_sibilla, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_style_bg_color(ui_screen_sibilla, lv_color_hex(0x0d1b2a),
+    ui_screen_server = lv_obj_create(NULL);
+    lv_obj_clear_flag(ui_screen_server, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(ui_screen_server, lv_color_hex(0x0d1b2a),
                                LV_PART_MAIN | LV_STATE_DEFAULT);
 
     /* Header: nome server — centrato verticalmente nei 55px superiori */
-    s_header_lbl = lv_label_create(ui_screen_sibilla);
+    s_header_lbl = lv_label_create(ui_screen_server);
     lv_label_set_text(s_header_lbl, APP_CFG_SERVER_NAME);
     lv_obj_set_style_text_color(s_header_lbl, lv_color_white(),
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -332,6 +332,6 @@ void screen_sibilla_init(void)
     lv_obj_align(s_header_lbl, LV_ALIGN_TOP_MID, 0, 10);
 
     /* Lazy populate + refresh header nome al caricamento schermata */
-    lv_obj_add_event_cb(ui_screen_sibilla, on_screen_load_start,
+    lv_obj_add_event_cb(ui_screen_server, on_screen_load_start,
                         LV_EVENT_SCREEN_LOAD_START, NULL);
 }

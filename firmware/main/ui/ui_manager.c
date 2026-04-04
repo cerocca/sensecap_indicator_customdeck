@@ -22,7 +22,7 @@ extern void ui_event_screen_setting(lv_event_t *e);
  * Navigazione:
  *
  * Orizzontale (swipe LEFT = avanti, swipe RIGHT = indietro):
- *  clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [sibilla(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
+ *  clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [server(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
  *
  * Verticale dal clock:
  *  swipe UP   → screen_settings_custom  (MOVE_TOP)
@@ -45,7 +45,7 @@ bool g_scr_wthr_enabled     = true;
 bool g_scr_traffic_enabled  = true;
 
 /* ─── screen order for skip logic ─────────────────────────────
- * Indici: 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic
+ * Indici: 0=clock, 1=sensors, 2=hue, 3=server, 4=launcher, 5=weather, 6=traffic
  * settings_custom è fuori dalla rotazione orizzontale.
  * ─────────────────────────────────────────────────────────────*/
 #define N_SCREENS 7
@@ -151,14 +151,14 @@ static void ensure_traffic_populated(void)
     }
 }
 
-/* ─── lazy init screen_sibilla ──────────────────────────────── */
-static bool s_sibilla_populated = false;
+/* ─── lazy init screen_server ───────────────────────────────── */
+static bool s_server_populated = false;
 
-static void ensure_sibilla_populated(void)
+static void ensure_server_populated(void)
 {
-    if (!s_sibilla_populated) {
-        screen_sibilla_populate();
-        s_sibilla_populated = true;
+    if (!s_server_populated) {
+        screen_server_populate();
+        s_server_populated = true;
     }
 }
 
@@ -169,7 +169,7 @@ static void ensure_sibilla_populated(void)
 static void ensure_populated(lv_obj_t *scr)
 {
     if      (scr == ui_screen_hue)      ensure_hue_populated();
-    else if (scr == ui_screen_sibilla)  ensure_sibilla_populated();
+    else if (scr == ui_screen_server)   ensure_server_populated();
     else if (scr == ui_screen_launcher) ensure_launcher_populated();
     else if (scr == ui_screen_weather)  ensure_weather_populated();
     else if (scr == ui_screen_traffic)  ensure_traffic_populated();
@@ -283,10 +283,10 @@ static void gesture_hue(lv_event_t *e)
     }
 }
 
-static void gesture_sibilla(lv_event_t *e)
+static void gesture_server(lv_event_t *e)
 {
     if (lv_event_get_code(e) != LV_EVENT_GESTURE) return;
-    if (lv_scr_act() != ui_screen_sibilla) return;
+    if (lv_scr_act() != ui_screen_server) return;
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_LEFT) {
         lv_obj_t *next = next_from(3, +1);
@@ -341,7 +341,7 @@ void ui_manager_init(void)
      * La populate avviene lazily al primo swipe verso settings_custom. */
     screen_settings_custom_init();
     screen_hue_init();
-    screen_sibilla_init();
+    screen_server_init();
     screen_launcher_init();
     screen_weather_init();
     screen_traffic_init();
@@ -352,11 +352,11 @@ void ui_manager_init(void)
      * fallirebbe silenziosamente. Sono chiamate da main.c dopo indicator_model_init(). */
 
     /* Popola la tabella degli indici schermata per next_from().
-     * 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic */
+     * 0=clock, 1=sensors, 2=hue, 3=server, 4=launcher, 5=weather, 6=traffic */
     s_scr[0] = ui_screen_time;
     s_scr[1] = ui_screen_sensor;
     s_scr[2] = ui_screen_hue;
-    s_scr[3] = ui_screen_sibilla;
+    s_scr[3] = ui_screen_server;
     s_scr[4] = ui_screen_launcher;
     s_scr[5] = ui_screen_weather;
     s_scr[6] = screen_traffic_get_screen();
@@ -392,7 +392,7 @@ void ui_manager_init(void)
 
     lv_obj_add_event_cb(ui_screen_traffic,  gesture_traffic,  LV_EVENT_GESTURE, NULL);
     lv_obj_add_event_cb(ui_screen_hue,      gesture_hue,      LV_EVENT_GESTURE, NULL);
-    lv_obj_add_event_cb(ui_screen_sibilla,  gesture_sibilla,  LV_EVENT_GESTURE, NULL);
+    lv_obj_add_event_cb(ui_screen_server,   gesture_server,   LV_EVENT_GESTURE, NULL);
     lv_obj_add_event_cb(ui_screen_launcher, gesture_launcher, LV_EVENT_GESTURE, NULL);
     lv_obj_add_event_cb(ui_screen_weather,  gesture_weather,  LV_EVENT_GESTURE, NULL);
 }

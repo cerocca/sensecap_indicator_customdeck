@@ -60,7 +60,7 @@ idf.py -p /dev/cu.usbserial-1110 monitor
 
 **Orizzontale** (swipe LEFT = avanti, swipe RIGHT = indietro):
 ```
-clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [sibilla(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
+clock(0) ↔ [sensors(1)] ↔ [hue(2)] ↔ [server(3)] ↔ [launcher(4)] ↔ [weather(5)] ↔ [traffic(6)] ↔ (clock)
 ```
 
 **Verticale dal clock:**
@@ -78,7 +78,7 @@ Clock (idx 0) è sempre abilitato. Sensors (idx 1) può essere disabilitata via 
 
 **Skip logic — `next_from(idx, dir)` in `ui_manager.c`:**
 ```c
-// Indici: 0=clock, 1=sensors, 2=hue, 3=sibilla, 4=launcher, 5=weather, 6=traffic
+// Indici: 0=clock, 1=sensors, 2=hue, 3=server, 4=launcher, 5=weather, 6=traffic
 // settings_custom è fuori dalla tabella s_scr[]
 static lv_obj_t *next_from(int cur, int dir) {
     for (int i = 1; i < N_SCREENS; i++) {
@@ -112,7 +112,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
 | 0 | `screen_clock` | Originale Seeed — NON toccare | — |
 | 1 | `screen_sensors` | Originale Seeed — NON toccare | CO2, temp, umidità; opzionale via flag |
 | 2 | `screen_hue` | Custom | Toggle ON/OFF + slider luminosità |
-| 3 | `screen_sibilla` | Custom | Glances + Uptime Kuma via proxy; top 5 container Docker per RAM |
+| 3 | `screen_server` | Custom | Glances + Uptime Kuma via proxy; top 5 container Docker per RAM |
 | 4 | `screen_launcher` | Custom | 4 pulsanti → proxy Mac |
 | 5 | `screen_weather` | Custom | Meteo OWM: temp, icona, umidità, vento, 4 slot forecast |
 | 6 | `screen_traffic` | Custom | Tempo percorrenza via Google Maps, delta vs normale |
@@ -141,7 +141,7 @@ Obbligatorio per evitare doppia chiamata a `_ui_screen_change` sullo stesso tick
         │   ├── ui_manager.c/.h            # navigazione schermate + init tutte le custom
         │   ├── screen_settings_custom.c/.h
         │   ├── screen_hue.c/.h
-        │   ├── screen_sibilla.c/.h
+        │   ├── screen_server.c/.h
         │   ├── screen_launcher.c/.h
         │   ├── screen_weather.c/.h
         │   └── screen_traffic.c/.h

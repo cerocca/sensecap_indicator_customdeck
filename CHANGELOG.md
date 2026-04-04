@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- `screen_sibilla.c/.h` rinominato in `screen_server.c/.h`; tutti i simboli `screen_sibilla_*` / `ui_screen_sibilla` / `gesture_sibilla` / `s_sibilla_populated` aggiornati in `ui_manager.c`, `ui_manager.h`, `indicator_glances.h`, `indicator_uptime_kuma.h`.
+
 ### Fixed
 - `sensedeck_proxy.py`: endpoint `/uptime` — usa due fetch sequenziali (`/api/status-page/active` per `name_map id→name`, poi `/api/status-page/heartbeat/active` per lo stato). `monitorList` in `/heartbeat/active` è assente in questa versione di Uptime Kuma; i nomi reali si trovano solo in `publicGroupList[].monitorList[]` di `/api/status-page/active`.
 - `indicator_config.c`: boot config fetch — delay iniziale 1500→3000ms; retry 3× con backoff 2000ms tra i tentativi. Il proxy potrebbe non essere pronto al boot; il retry garantisce il caricamento della config.

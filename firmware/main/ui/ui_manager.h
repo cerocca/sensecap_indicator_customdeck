@@ -2,7 +2,7 @@
 
 #include "screen_settings_custom.h"
 #include "screen_hue.h"
-#include "screen_sibilla.h"
+#include "screen_server.h"
 #include "screen_launcher.h"
 #include "screen_weather.h"
 #include "screen_traffic.h"
