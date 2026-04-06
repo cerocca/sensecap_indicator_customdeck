@@ -17,7 +17,7 @@
 
 static const char *TAG = "app_main";
 
-#define VERSION   "v1.0.0"
+#define VERSION   "v1.0.1"
 
 #define SENSECAP  "\n\
    _____                      _________    ____         \n\

@@ -235,7 +235,16 @@ static void on_save_server(lv_event_t *e)
 {
     nvs_write_ta(NVS_KEY_SERVER_IP,   ta_srv_ip);
     nvs_write_ta(NVS_KEY_SERVER_PORT, ta_srv_port);
-    nvs_write_ta(NVS_KEY_SERVER_NAME, ta_srv_name);
+    const char *srv_name_val = lv_textarea_get_text(ta_srv_name);
+    ESP_LOGI(TAG, "Salvo srv_name='%s' (key=%s)", srv_name_val ? srv_name_val : "(null)", NVS_KEY_SERVER_NAME);
+    esp_err_t srv_err = indicator_storage_write((char *)NVS_KEY_SERVER_NAME,
+                                                (void *)srv_name_val,
+                                                srv_name_val ? strlen(srv_name_val) + 1 : 1);
+    if (srv_err == ESP_OK) {
+        ESP_LOGI(TAG, "srv_name salvato OK");
+    } else {
+        ESP_LOGE(TAG, "srv_name save FAILED: 0x%x", srv_err);
+    }
     nvs_write_ta(NVS_KEY_BESZEL_PORT, ta_beszel_port);
     nvs_write_ta(NVS_KEY_UK_PORT,     ta_uk_port);
     ESP_LOGI(TAG, "Server config saved");

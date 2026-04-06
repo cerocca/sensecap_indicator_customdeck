@@ -44,7 +44,8 @@
 
 #define NVS_KEY_SERVER_IP       "srv_ip"
 #define NVS_KEY_SERVER_PORT     "srv_port"
-#define NVS_KEY_SERVER_NAME     "srv_name"      /* max 15 char valore */
+#define NVS_KEY_SERVER_NAME     "srv_name"      /* nome display — Settings/proxy */
+#define NVS_KEY_GLANCES_HOST    "glances_host"  /* hostname da Glances (indicator_system.c) */
 
 #define NVS_KEY_PROXY_IP        "proxy_ip"
 #define NVS_KEY_PROXY_PORT      "proxy_port"

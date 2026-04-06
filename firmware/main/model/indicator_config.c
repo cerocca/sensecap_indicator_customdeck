@@ -147,7 +147,24 @@ int config_fetch_from_proxy(void)
     save_json_str(root, "hue_light_4_id", NVS_KEY_HUE_LIGHT_4_ID);
     save_json_str(root, "server_ip",      NVS_KEY_SERVER_IP);
     save_json_str(root, "server_port",    NVS_KEY_SERVER_PORT);
-    save_json_str(root, "srv_name",       NVS_KEY_SERVER_NAME);
+    /* srv_name: applicato solo se il proxy invia un valore non vuoto E diverso dal
+     * default "LocalServer". "LocalServer" nel config.json significa campo mai
+     * valorizzato dall'utente (eredità del default precedente) → NVS invariato.
+     * Politica: proxy vince solo se l'utente ha esplicitamente impostato un nome
+     * diverso dal default nella Web UI del proxy. */
+    {
+        const char *srv_name_val = cJSON_GetStringValue(
+            cJSON_GetObjectItem(root, "srv_name"));
+        const bool is_empty   = (!srv_name_val || srv_name_val[0] == '\0');
+        const bool is_default = (!is_empty && strcmp(srv_name_val, APP_CFG_SERVER_NAME) == 0);
+        if (!is_empty && !is_default) {
+            ESP_LOGI(TAG, "srv_name dal proxy: '%s' → salvo in NVS", srv_name_val);
+            save_json_str(root, "srv_name", NVS_KEY_SERVER_NAME);
+        } else {
+            ESP_LOGI(TAG, "srv_name dal proxy '%s' (vuoto o default) → NVS invariato",
+                     srv_name_val ? srv_name_val : "");
+        }
+    }
     save_json_str(root, "proxy_ip",       NVS_KEY_PROXY_IP);
     save_json_str(root, "proxy_port",     NVS_KEY_PROXY_PORT);
     save_json_str(root, "launcher_url_1",  NVS_KEY_LNCH_URL_1);

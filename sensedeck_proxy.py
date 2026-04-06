@@ -41,7 +41,7 @@ DEFAULT_CONFIG = {
     "hue_light_4_id": "",
     "server_ip":      "192.168.1.69",
     "server_port":    "61208",
-    "srv_name":       "LocalServer",
+    "srv_name":       "",            # vuoto = il device mantiene il nome locale
     "proxy_ip":       "192.168.1.70",
     "proxy_port":     "8765",
     "launcher_url_1": "https://github.com/cerocca/",
@@ -415,7 +415,7 @@ def build_config_ui(cfg):
     )
 
     tab_localserver = (
-        field("Server Name",      "srv_name",    cfg.get("srv_name",""),    "LocalServer")
+        field("Server Name",      "srv_name",    cfg.get("srv_name",""),    "Leave empty to keep device value")
         + field("Server IP",      "server_ip",   cfg.get("server_ip",""),   "192.168.1.x")
         + field("Glances Port",   "server_port", cfg.get("server_port",""), "61208")
         + field("Uptime Kuma Port","uk_port",    cfg.get("uk_port",""),     "3001")

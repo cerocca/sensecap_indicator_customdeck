@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-04-06
+
+### Fixed
+
+- `indicator_system.c`: Glances hostname was written to `NVS_KEY_SERVER_NAME` ("srv_name"), overwriting the user-set display name; moved to separate key `NVS_KEY_GLANCES_HOST` ("glances_host")
+- `indicator_config.c`: proxy was sending `srv_name = "LocalServer"` (legacy default from old `config.json`) and firmware applied it on every reboot; added `strcmp != APP_CFG_SERVER_NAME` guard to treat the default value as "not explicitly set"
+- `screen_server.c`: added "DOWN" badge next to the name of DOWN Uptime Kuma services (red label `#FF4444`, font14, x=300); name labels constrained to 285px with `LV_LABEL_LONG_DOT`
+
+### Changed
+
+- `sensedeck_proxy.py` `DEFAULT_CONFIG`: `srv_name` changed from `"LocalServer"` to `""` — proxy no longer overwrites the local display name if the field was never explicitly set in the Web UI
+- `sensedeck_proxy.py` Web UI: "Server Name" field now shows placeholder `"Leave empty to keep device value"`
+- `app_config.h`: added `NVS_KEY_GLANCES_HOST "glances_host"`
+
 ## [1.0.0] — 2026-04-04
 
 First public release. Fully functional firmware with 7 screens, circular navigation,

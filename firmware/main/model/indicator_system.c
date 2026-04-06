@@ -130,26 +130,14 @@ static void system_fetch_task(void *arg)
     cJSON *hostname = cJSON_GetObjectItem(root, "hostname");
     if (cJSON_IsString(hostname) && hostname->valuestring &&
         hostname->valuestring[0] != '\0') {
-
-        /* Sovrascrive solo se NVS è vuoto o contiene il default "LocalServer".
-         * Un nome personalizzato impostato dall'utente non viene mai toccato. */
-        char current[32] = {0};
-        size_t cur_len = sizeof(current);
-        bool is_default = true;
-        if (indicator_storage_read((char *)NVS_KEY_SERVER_NAME, current, &cur_len) == 0
-                && cur_len > 1) {
-            current[sizeof(current) - 1] = '\0';
-            is_default = (strcmp(current, APP_CFG_SERVER_NAME) == 0);
-        }
-
-        if (is_default) {
-            indicator_storage_write((char *)NVS_KEY_SERVER_NAME,
-                                    hostname->valuestring,
-                                    strlen(hostname->valuestring) + 1);
-            ESP_LOGI(TAG, "hostname salvato in NVS: %s", hostname->valuestring);
-        } else {
-            ESP_LOGI(TAG, "nome server personalizzato (%s), hostname Glances ignorato", current);
-        }
+        /* Salva in NVS_KEY_GLANCES_HOST — key separata da NVS_KEY_SERVER_NAME
+         * (nome display impostato dall'utente via Settings o proxy).
+         * Non interferisce mai con il nome scelto dall'utente. */
+        indicator_storage_write((char *)NVS_KEY_GLANCES_HOST,
+                                hostname->valuestring,
+                                strlen(hostname->valuestring) + 1);
+        ESP_LOGI(TAG, "glances_host salvato in NVS (key=%s): %s",
+                 NVS_KEY_GLANCES_HOST, hostname->valuestring);
     } else {
         ESP_LOGD(TAG, "hostname vuoto o assente, NVS invariato");
     }

@@ -4,10 +4,13 @@
 #include "indicator_storage.h"
 #include "app_config.h"
 #include "lvgl/lvgl.h"
+#include "esp_log.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
+
+static const char *TAG = "screen_server";
 
 /* ─── Screen object ───────────────────────────────────────────────────────── */
 
@@ -26,6 +29,7 @@ static lv_obj_t *s_load_lbl;
 
 static lv_obj_t *s_services_lbl;
 static lv_obj_t *s_down_lbls[6];
+static lv_obj_t *s_down_tag_lbls[6];
 
 static lv_obj_t *s_topram_hdr_lbl;
 static lv_obj_t *s_topram_name_lbls[5];
@@ -39,10 +43,12 @@ static void refresh_header(void)
 {
     char name[32];
     size_t len = sizeof(name);
-    if (indicator_storage_read((char *)NVS_KEY_SERVER_NAME, name, &len) == 0
-        && len > 1) {
+    esp_err_t err = indicator_storage_read((char *)NVS_KEY_SERVER_NAME, name, &len);
+    if (err == ESP_OK && len > 1) {
         name[sizeof(name) - 1] = '\0';
+        ESP_LOGI(TAG, "refresh_header: NVS '%s' = '%s' (len=%d)", NVS_KEY_SERVER_NAME, name, (int)len);
     } else {
+        ESP_LOGI(TAG, "refresh_header: NVS read err=0x%x len=%d → fallback '%s'", err, (int)len, APP_CFG_SERVER_NAME);
         strncpy(name, APP_CFG_SERVER_NAME, sizeof(name) - 1);
         name[sizeof(name) - 1] = '\0';
     }
@@ -191,14 +197,16 @@ static void on_uptime_data(int total, int up,
     lv_obj_set_style_text_color(s_services_lbl, col,
                                  LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    /* Righe DOWN: mostra quelle usate, nasconde le altre */
+    /* Righe DOWN: mostra nome + badge "DOWN" per le usate, nasconde le altre */
     for (int i = 0; i < 6; i++) {
         if (i < n_down) {
             lv_label_set_text(s_down_lbls[i], names_down[i]);
             lv_obj_clear_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(s_down_tag_lbls[i], LV_OBJ_FLAG_HIDDEN);
         } else {
             lv_label_set_text(s_down_lbls[i], "");
             lv_obj_add_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
+            lv_obj_add_flag(s_down_tag_lbls[i], LV_OBJ_FLAG_HIDDEN);
         }
     }
 }
@@ -284,16 +292,30 @@ void screen_server_populate(void)
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_pos(s_services_lbl, 10, 372);
 
-    /* ── 6 label DOWN pre-allocate (nascoste) — y=394+i*14 ── */
+    /* ── 6 righe DOWN pre-allocate (nascoste) — y=394+i*14 ──
+     * Ogni riga: nome (x=10, width=285, LONG_DOT) + badge "DOWN" (x=300, rosso) */
     for (int i = 0; i < 6; i++) {
+        int y = 394 + i * 14;
+
         s_down_lbls[i] = lv_label_create(scr);
         lv_label_set_text(s_down_lbls[i], "");
         lv_obj_set_style_text_color(s_down_lbls[i], lv_color_hex(0xe07070),
                                      LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_text_font(s_down_lbls[i], &lv_font_montserrat_14,
                                     LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_pos(s_down_lbls[i], 10, 394 + i * 14);
+        lv_label_set_long_mode(s_down_lbls[i], LV_LABEL_LONG_DOT);
+        lv_obj_set_width(s_down_lbls[i], 285);
+        lv_obj_set_pos(s_down_lbls[i], 10, y);
         lv_obj_add_flag(s_down_lbls[i], LV_OBJ_FLAG_HIDDEN);
+
+        s_down_tag_lbls[i] = lv_label_create(scr);
+        lv_label_set_text(s_down_tag_lbls[i], "DOWN");
+        lv_obj_set_style_text_color(s_down_tag_lbls[i], lv_color_hex(0xFF4444),
+                                     LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_text_font(s_down_tag_lbls[i], &lv_font_montserrat_14,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_pos(s_down_tag_lbls[i], 300, y);
+        lv_obj_add_flag(s_down_tag_lbls[i], LV_OBJ_FLAG_HIDDEN);
     }
 
     /* Registra le callback: Glances e Uptime Kuma aggiornano i widget */
