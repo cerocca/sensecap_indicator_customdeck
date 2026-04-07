@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-04-07
+
+### Fixed
+
+- `indicator_uptime_kuma.c`: `UK_BUF_SIZE` 2048 → 8192 bytes (PSRAM) — response from `/uptime` with 10+ monitors exceeded 2 KB, causing JSON truncation, parse failure, and empty service list on `screen_server`
+- `indicator_uptime_kuma.c`: callback now called even when `total == 0` (removed `total > 0` guard) — ensures UI resets to empty state on fetch/parse failure instead of retaining stale content
+
 ## [1.0.1] — 2026-04-06
 
 ### Fixed

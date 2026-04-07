@@ -7,6 +7,7 @@
 #include "esp_event.h"
 #include "esp_wifi.h"       /* IP_EVENT, IP_EVENT_STA_GOT_IP */
 #include "esp_log.h"
+#include "esp_heap_caps.h"
 #include "cJSON.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -16,7 +17,7 @@
 
 static const char *TAG = "UPTIME";
 
-#define UK_BUF_SIZE  2048
+#define UK_BUF_SIZE  8192   /* /uptime può restituire >2KB con molti monitor */
 #define UK_POLL_MS   30000
 
 /* ─── Internal state ──────────────────────────────────────────────────────── */
@@ -26,6 +27,9 @@ static char              s_proxy_port[8];
 static bool              s_task_started = false;
 static volatile bool     s_poll_running = false;
 static uptime_kuma_cb_t  s_cb           = NULL;
+
+/* Buffer /uptime allocato in PSRAM — risposta può superare 2KB con molti monitor */
+static char *s_uk_buf = NULL;
 
 /* ─── NVS helper ──────────────────────────────────────────────────────────── */
 
@@ -95,10 +99,20 @@ static int uk_http_get(const char *url, char *buf, int buf_size)
 
 static void uk_poll_task(void *arg)
 {
+    /* Alloca buffer in PSRAM — 8KB evita pressione su DRAM statica */
+    if (!s_uk_buf) {
+        s_uk_buf = heap_caps_malloc(UK_BUF_SIZE,
+                                    MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+        if (!s_uk_buf) {
+            ESP_LOGE(TAG, "heap_caps_malloc uk_buf fallito — task terminato");
+            vTaskDelete(NULL);
+            return;
+        }
+    }
+
     /* Attende stabilizzazione: indicator_config (1.5s) + glances (3s) + margine */
     vTaskDelay(pdMS_TO_TICKS(8000));
 
-    static char s_buf[UK_BUF_SIZE];
     static char s_url[128];
     static char s_names_down[UK_MAX_DOWN][32];
 
@@ -119,13 +133,13 @@ static void uk_poll_task(void *arg)
         snprintf(s_url, sizeof(s_url), "http://%s:%s/uptime",
                  s_proxy_ip, s_proxy_port);
 
-        int len = uk_http_get(s_url, s_buf, UK_BUF_SIZE);
+        int len = uk_http_get(s_url, s_uk_buf, UK_BUF_SIZE);
 
         int total = 0, up = 0, n_down = 0;
         memset(s_names_down, 0, sizeof(s_names_down));
 
         if (len > 0) {
-            cJSON *root = cJSON_Parse(s_buf);
+            cJSON *root = cJSON_Parse(s_uk_buf);
             if (root && cJSON_IsArray(root)) {
                 int n = cJSON_GetArraySize(root);
                 for (int i = 0; i < n; i++) {
@@ -154,7 +168,7 @@ static void uk_poll_task(void *arg)
 
         ESP_LOGI(TAG, "%d/%d UP, %d DOWN", up, total, n_down);
 
-        if (s_cb && total > 0) {
+        if (s_cb) {
             lv_port_sem_take();
             s_cb(total, up, (const char (*)[32])s_names_down, n_down);
             lv_port_sem_give();
