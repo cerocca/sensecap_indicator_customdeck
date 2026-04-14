@@ -263,6 +263,7 @@ static void glances_poll_task(void *arg)
         snprintf(s_url, sizeof(s_url), "http://%s:%s/docker",
                  s_proxy_ip, s_proxy_port);
         int cont_len = glances_http_get(s_url, s_cont_buf, GLANCES_CONT_BUF_SIZE);
+        ESP_LOGI(TAG, "/docker fetch: len=%d url=%s", cont_len, s_url);
         if (cont_len > 0)
             parse_top_docker(s_cont_buf, s_top_docker);
 

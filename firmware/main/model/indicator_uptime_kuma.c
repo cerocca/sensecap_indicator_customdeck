@@ -117,6 +117,9 @@ static void uk_poll_task(void *arg)
     static char s_names_down[UK_MAX_DOWN][32];
 
     while (1) {
+        ESP_LOGI(TAG, "uk_poll_task: loop vivo, running=%d proxy=%s:%s",
+                 s_poll_running, s_proxy_ip, s_proxy_port);
+
         if (!s_poll_running) {
             vTaskDelay(pdMS_TO_TICKS(1000));
             continue;
