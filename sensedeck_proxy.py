@@ -73,7 +73,9 @@ LISTEN_PORT     = 8765
 
 # ── Beszel token cache ──────────────────────────────────────────────────────────
 
-_beszel_token = None
+_beszel_token      = None
+_beszel_token_time = 0       # epoch seconds — invalidato dopo 3600 s
+_BESZEL_TOKEN_TTL  = 3600
 
 # ── Config helpers ──────────────────────────────────────────────────────────────
 
@@ -146,8 +148,13 @@ def save_config(data):
 
 
 def get_beszel_token(cfg):
-    """Autentica su Beszel e cachea il token. Ritorna None se le credenziali mancano."""
-    global _beszel_token
+    """Autentica su Beszel e cachea il token con TTL di 3600 s."""
+    global _beszel_token, _beszel_token_time
+    import time
+    # Invalida il token se è più vecchio del TTL
+    if _beszel_token and (time.time() - _beszel_token_time) > _BESZEL_TOKEN_TTL:
+        print("[beszel] token TTL scaduto — rieseguo auth")
+        _beszel_token = None
     if _beszel_token:
         return _beszel_token
     user     = cfg.get("beszel_user", "")
@@ -162,7 +169,8 @@ def get_beszel_token(cfg):
                                   headers={"Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=5) as resp:
-            _beszel_token = json.loads(resp.read()).get("token")
+            _beszel_token      = json.loads(resp.read()).get("token")
+            _beszel_token_time = time.time()
             return _beszel_token
     except Exception as e:
         print(f"[beszel] auth error: {e}")
@@ -199,19 +207,17 @@ def get_beszel_docker():
     try:
         return fetch(token)
     except urllib.error.HTTPError as e:
-        if e.code == 401:
-            # Token scaduto — ri-autentica una volta
-            _beszel_token = None
-            token = get_beszel_token(cfg)
-            if not token:
-                return []
-            try:
-                return fetch(token)
-            except Exception as e2:
-                print(f"[beszel] docker retry error: {e2}")
-                return []
-        print(f"[beszel] docker error: {e}")
-        return []
+        # Su qualsiasi errore HTTP invalida il token e ritenta l'auth una volta
+        print(f"[beszel] docker HTTP {e.code} — invalido token e rieseguo auth")
+        _beszel_token = None
+        token = get_beszel_token(cfg)
+        if not token:
+            return []
+        try:
+            return fetch(token)
+        except Exception as e2:
+            print(f"[beszel] docker retry error: {e2}")
+            return []
     except Exception as e:
         print(f"[beszel] docker error: {e}")
         return []
