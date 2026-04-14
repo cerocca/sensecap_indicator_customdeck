@@ -1,2 +1,0 @@
-/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ar qc libbus.a CMakeFiles/__idf_bus.dir/8080_lcd_esp32s3.c.obj CMakeFiles/__idf_bus.dir/i2c_bus.c.obj CMakeFiles/__idf_bus.dir/i2s_lcd_esp32_driver.c.obj CMakeFiles/__idf_bus.dir/i2s_lcd_esp32s2_driver.c.obj CMakeFiles/__idf_bus.dir/spi_bus.c.obj
-/Users/ciru/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32s3-elf-ranlib libbus.a
