@@ -1,2 +1,6 @@
 config.json
 CLAUDE_personal.md
+firmware/.cache/
+.claude/settings.local.json
+firmware/.cache/
+.claude/settings.local.json
