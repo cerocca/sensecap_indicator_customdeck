@@ -4,3 +4,8 @@ firmware/.cache/
 .claude/settings.local.json
 firmware/.cache/
 .claude/settings.local.json
+__pycache__/
+firmware/.claude/
+firmware/build/
+sensedeck_proxy.log
+firmware/gmapsAPIkey.md
