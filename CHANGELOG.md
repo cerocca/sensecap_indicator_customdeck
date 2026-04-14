@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- fix: proxy Beszel token — TTL 1h + invalidazione automatica su errore HTTP
 - `indicator_uptime_kuma.c`: `UK_BUF_SIZE` 2048 → 8192 bytes (PSRAM) — response from `/uptime` with 10+ monitors exceeded 2 KB, causing JSON truncation, parse failure, and empty service list on `screen_server`
 - `indicator_uptime_kuma.c`: callback now called even when `total == 0` (removed `total > 0` guard) — ensures UI resets to empty state on fetch/parse failure instead of retaining stale content
 
