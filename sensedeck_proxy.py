@@ -75,7 +75,7 @@ LISTEN_PORT     = 8765
 
 _beszel_token      = None
 _beszel_token_time = 0       # epoch seconds — invalidato dopo 3600 s
-_BESZEL_TOKEN_TTL  = 3600
+_BESZEL_TOKEN_TTL  = 300
 
 # ── Config helpers ──────────────────────────────────────────────────────────────
 
