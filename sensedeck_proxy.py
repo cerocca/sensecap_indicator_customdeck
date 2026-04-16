@@ -789,7 +789,7 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
 _BESZEL_RENEW_INTERVAL = 240   # secondi — leggermente sotto il TTL di 300 s
 
 _BESZEL_RETRY_INTERVAL = 30   # secondi tra retry in caso di fallimento
-_BESZEL_MAX_RETRIES    = 10  # max tentativi prima di tornare al ciclo normale
+_BESZEL_MAX_RETRIES    = 20  # max tentativi prima di tornare al ciclo normale
 
 def _beszel_renew_loop():
     """Thread daemon: rinnova il token Beszel ogni _BESZEL_RENEW_INTERVAL secondi.
@@ -817,7 +817,8 @@ def _beszel_renew_loop():
             print(f"[beszel] retry {attempt}/{_BESZEL_MAX_RETRIES} fallito")
 
         if not recovered:
-            print("[beszel] rinnovo fallito dopo 10 tentativi — prossimo ciclo tra 240s")
+            print(f"[beszel] rinnovo fallito dopo {_BESZEL_MAX_RETRIES} tentativi — prossimo ciclo tra 60s")
+            time.sleep(60)
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
