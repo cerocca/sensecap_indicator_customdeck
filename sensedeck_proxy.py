@@ -18,6 +18,8 @@ import html
 import json
 import os
 import subprocess
+import threading
+import time
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -150,7 +152,6 @@ def save_config(data):
 def get_beszel_token(cfg):
     """Autentica su Beszel e cachea il token con TTL di 3600 s."""
     global _beszel_token, _beszel_token_time
-    import time
     # Invalida il token se è più vecchio del TTL
     if _beszel_token and (time.time() - _beszel_token_time) > _BESZEL_TOKEN_TTL:
         print("[beszel] token TTL scaduto — rieseguo auth")
@@ -783,11 +784,29 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             self.send_text("Not found", status=404)
 
 
+# ── Beszel token renewal thread ────────────────────────────────────────────────
+
+_BESZEL_RENEW_INTERVAL = 240   # secondi — leggermente sotto il TTL di 300 s
+
+def _beszel_renew_loop():
+    """Thread daemon: rinnova il token Beszel ogni _BESZEL_RENEW_INTERVAL secondi."""
+    global _beszel_token
+    while True:
+        time.sleep(_BESZEL_RENEW_INTERVAL)
+        cfg = load_config()
+        _beszel_token = None
+        token = get_beszel_token(cfg)
+        if token:
+            print("[beszel] token rinnovato")
+        else:
+            print("[beszel] rinnovo fallito")
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     cfg = load_config()
     server = http.server.HTTPServer(("0.0.0.0", LISTEN_PORT), ProxyHandler)
+    threading.Thread(target=_beszel_renew_loop, daemon=True, name="beszel-renew").start()
     print(f"sensedeck_proxy listening on port {LISTEN_PORT}")
     print(f"  /uptime     → Uptime Kuma {cfg.get('server_ip','?')}:{cfg.get('uk_port','?')}")
     print(f"  /traffic    → Google Maps Distance Matrix API")
