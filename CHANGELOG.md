@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- fix(proxy): retry infinito su Beszel token dopo reboot prolungato server
+
 ## [1.0.2] — 2026-04-07
 
 ### Fixed

@@ -817,8 +817,15 @@ def _beszel_renew_loop():
             print(f"[beszel] retry {attempt}/{_BESZEL_MAX_RETRIES} fallito")
 
         if not recovered:
-            print(f"[beszel] rinnovo fallito dopo {_BESZEL_MAX_RETRIES} tentativi — prossimo ciclo tra 60s")
-            time.sleep(60)
+            print(f"[beszel] rinnovo fallito dopo {_BESZEL_MAX_RETRIES} tentativi — retry infinito ogni {_BESZEL_RETRY_INTERVAL}s")
+            while True:
+                time.sleep(_BESZEL_RETRY_INTERVAL)
+                cfg = load_config()
+                token = get_beszel_token(cfg)
+                if token:
+                    print("[beszel] token recuperato — ritorno al ciclo normale")
+                    break
+                print("[beszel] retry infinito — ancora fallito")
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
