@@ -9,3 +9,4 @@ firmware/.claude/
 firmware/build/
 sensedeck_proxy.log
 firmware/gmapsAPIkey.md
+sensedeck_proxy.pid
