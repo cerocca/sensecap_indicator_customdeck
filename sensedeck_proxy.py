@@ -18,7 +18,6 @@ import html
 import json
 import os
 import subprocess
-import sys
 import threading
 import time
 import urllib.request
@@ -92,8 +91,8 @@ def _record_error():
     with _consecutive_errors_lock:
         _consecutive_errors += 1
         if _consecutive_errors >= _MAX_CONSECUTIVE_ERRORS:
-            print("[proxy] 10 errori consecutivi — auto-restart")
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            print("[proxy] 10 errori consecutivi — uscita per restart")
+            os._exit(42)
 
 
 def _record_success():

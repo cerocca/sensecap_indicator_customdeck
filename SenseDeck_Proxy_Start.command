@@ -1,7 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-# Kill eventuale istanza precedente
 EXISTING=$(pgrep -f sensedeck_proxy.py)
 if [ -n "$EXISTING" ]; then
     echo "Processo precedente trovato (PID $EXISTING), lo termino..."
@@ -9,9 +8,24 @@ if [ -n "$EXISTING" ]; then
     sleep 1
 fi
 
-# Avvio con nohup, log append per non perdere la sessione precedente
-nohup python3 -u sensedeck_proxy.py >> sensedeck_proxy.log 2>&1 &
-echo $! > "$(dirname "$0")/sensedeck_proxy.pid"
-echo "SenseDeck Proxy avviato (PID $!)"
-echo "Log: $(dirname "$0")/sensedeck_proxy.log"
-sleep 2
+echo "SenseDeck Proxy avviato con auto-restart wrapper"
+echo "Log: $(pwd)/sensedeck_proxy.log"
+
+PROXY_DIR="$(pwd)"
+nohup bash -c "
+  cd \"$PROXY_DIR\"
+  while true; do
+    python3 -u sensedeck_proxy.py >> sensedeck_proxy.log 2>&1
+    EXIT_CODE=\$?
+    if [ \$EXIT_CODE -eq 42 ]; then
+      echo \"[wrapper] proxy uscito con codice 42 — restart in 3s\" >> sensedeck_proxy.log
+      sleep 3
+    else
+      echo \"[wrapper] proxy uscito con codice \$EXIT_CODE — stop\" >> sensedeck_proxy.log
+      break
+    fi
+  done
+" &
+
+echo $! > sensedeck_proxy.pid
+echo "Wrapper PID: $!"
