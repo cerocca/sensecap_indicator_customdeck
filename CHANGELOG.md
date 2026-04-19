@@ -5,6 +5,8 @@
 ### Fixed
 
 - fix(proxy): retry infinito su Beszel token dopo reboot prolungato server
+- fix(proxy): auto-restart su 10 errori consecutivi No route to host (connessioni zombie dopo sleep Mac su en6)
+- fix(proxy): Start/Stop .command — kill duplicati, PID file, feedback
 
 ## [1.0.2] — 2026-04-07
 

@@ -18,6 +18,7 @@ import html
 import json
 import os
 import subprocess
+import sys
 import threading
 import time
 import urllib.request
@@ -78,6 +79,29 @@ LISTEN_PORT     = 8765
 _beszel_token      = None
 _beszel_token_time = 0       # epoch seconds — invalidato dopo 3600 s
 _BESZEL_TOKEN_TTL  = 300
+
+# ── Consecutive error counter (auto-restart su connessioni zombie dopo sleep) ──
+
+_consecutive_errors      = 0
+_consecutive_errors_lock = threading.Lock()
+_MAX_CONSECUTIVE_ERRORS  = 10
+
+
+def _record_error():
+    global _consecutive_errors
+    with _consecutive_errors_lock:
+        _consecutive_errors += 1
+        if _consecutive_errors >= _MAX_CONSECUTIVE_ERRORS:
+            print("[proxy] 10 errori consecutivi — auto-restart")
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+def _record_success():
+    global _consecutive_errors
+    with _consecutive_errors_lock:
+        if _consecutive_errors > 0:
+            print("[proxy] connessione ripristinata")
+            _consecutive_errors = 0
 
 # ── Config helpers ──────────────────────────────────────────────────────────────
 
@@ -172,9 +196,11 @@ def get_beszel_token(cfg):
         with urllib.request.urlopen(req, timeout=5) as resp:
             _beszel_token      = json.loads(resp.read()).get("token")
             _beszel_token_time = time.time()
+            _record_success()
             return _beszel_token
     except Exception as e:
         print(f"[beszel] auth error: {e}")
+        _record_error()
         return None
 
 
@@ -206,21 +232,28 @@ def get_beszel_docker():
     if not token:
         return []
     try:
-        return fetch(token)
+        result = fetch(token)
+        _record_success()
+        return result
     except urllib.error.HTTPError as e:
         # Su qualsiasi errore HTTP invalida il token e ritenta l'auth una volta
         print(f"[beszel] docker HTTP {e.code} — invalido token e rieseguo auth")
+        _record_error()
         _beszel_token = None
         token = get_beszel_token(cfg)
         if not token:
             return []
         try:
-            return fetch(token)
+            result = fetch(token)
+            _record_success()
+            return result
         except Exception as e2:
             print(f"[beszel] docker retry error: {e2}")
+            _record_error()
             return []
     except Exception as e:
         print(f"[beszel] docker error: {e}")
+        _record_error()
         return []
 
 
@@ -691,10 +724,12 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                         "up":   last["status"] == 1,
                     })
 
+                _record_success()
                 self.send_json(result)
 
             except Exception as e:
                 print(f"[uptime] error: {e}")
+                _record_error()
                 self.send_json({"error": str(e)}, status=502)
 
         # ── /open/<n> ──────────────────────────────────────────────────────────
