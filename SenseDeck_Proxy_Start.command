@@ -20,6 +20,11 @@ nohup bash -c "
     if [ \$EXIT_CODE -eq 42 ]; then
       echo \"[wrapper] proxy uscito con codice 42 — restart in 3s\" >> sensedeck_proxy.log
       sleep 3
+      echo \"[wrapper] attendo che Sibilla (192.168.1.69) sia raggiungibile...\" >> sensedeck_proxy.log
+      until ping -c 1 -W 2 192.168.1.69 > /dev/null 2>&1; do
+        sleep 5
+      done
+      echo \"[wrapper] Sibilla raggiungibile — avvio proxy\" >> sensedeck_proxy.log
     else
       echo \"[wrapper] proxy uscito con codice \$EXIT_CODE — stop\" >> sensedeck_proxy.log
       break

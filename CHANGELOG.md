@@ -8,6 +8,7 @@
 - fix(proxy): auto-restart su 10 errori consecutivi No route to host (connessioni zombie dopo sleep Mac su en6)
 - fix(proxy): Start/Stop .command — kill duplicati, PID file, feedback
 - fix(proxy): auto-restart via wrapper loop + os._exit(42) invece di os.execv (non funzionava con nohup)
+- fix(proxy): wrapper attende ping Sibilla (192.168.1.69) prima di rilanciare Python — evita socket corrotti ereditati dal processo precedente
 
 ## [1.0.2] — 2026-04-07
 
