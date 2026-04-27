@@ -92,7 +92,7 @@ def _record_error():
         _consecutive_errors += 1
         if _consecutive_errors >= _MAX_CONSECUTIVE_ERRORS:
             print("[proxy] 10 errori consecutivi — uscita per restart")
-            os._exit(42)
+            os._exit(0)
 
 
 def _record_success():

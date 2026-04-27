@@ -9,6 +9,7 @@
 - fix(proxy): Start/Stop .command — kill duplicati, PID file, feedback
 - fix(proxy): auto-restart via wrapper loop + os._exit(42) invece di os.execv (non funzionava con nohup)
 - fix(proxy): wrapper attende ping Sibilla (192.168.1.69) prima di rilanciare Python — evita socket corrotti ereditati dal processo precedente
+- fix(proxy): launchd per auto-restart affidabile — sostituisce wrapper bash; launchd riavvia Python da zero con fd puliti, elimina ereditarietà socket corrotti di en6 dopo sleep Mac
 
 ## [1.0.2] — 2026-04-07
 
